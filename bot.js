@@ -20,6 +20,8 @@ const commands = {
 	link: (msg) => link(msg),
 	shut: (msg) => shut(msg),
 	search: (msg) => search(msg),
+	//face: (msg) => face(msg), // ! Broken right now, caching on server
+	inspire: (msg) => inspire(msg),
 };
 
 for (let command in commands)
@@ -115,4 +117,24 @@ function search(msg) {
 		.setAuthor(`Searching "${args.join(' ')}" for ${msg.author}`)
 		.setDescription(`https://duckduckgo.com/?q=${args.join('+')}`)
 	msg.channel.send(embed);
+}
+
+function face(msg) {
+	let embed = new MessageEmbed()
+		.setColor(0x000000)
+		.setTitle('This person does not exist...')
+		.setImage(`https://thispersondoesnotexist.com/image`)
+		.setFooter('https://thispersondoesnotexist.com/');
+	msg.channel.send(embed);
+}
+
+function inspire(msg) {
+	fetch('https://inspirobot.me/api?generate=true')
+		.then((res) => res.text())
+		.then((text) => new MessageEmbed()
+			.setTitle('Be inspired...')
+			.setColor(0x1D8F0A)
+			.setImage(`${text}`)
+			.setFooter('https://inspirobot.me/'))
+		.then((embed) => msg.channel.send(embed));
 }
