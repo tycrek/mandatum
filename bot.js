@@ -44,7 +44,12 @@ function github(msg) {
 
 function namemc(msg) {
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
-	msg.channel.send(`https://namemc.com/s?${args[1]}`)
+	let embed = new MessageEmbed()
+		.setTitle(`${args[1]} on NameMC`)
+		.setColor(0x234875)
+		.setURL(`https://namemc.com/s?${args[1]}`)
+		.setAuthor('https://namemc.com');
+	msg.channel.send(embed);
 }
 
 function btc(msg) {
@@ -54,7 +59,8 @@ function btc(msg) {
 		.then((price) => new MessageEmbed()
 			.setTitle('Current Bitcoin Price (USD)')
 			.setColor(0xF79019)
-			.setDescription(`$${price}`))
+			.setDescription(`$${price}`)
+			.setAuthor('https://www.coindesk.com/coindesk-api'))
 		.then((embed) => msg.channel.send(embed));
 }
 
@@ -63,7 +69,8 @@ function mcskin(msg) {
 	let embed = new MessageEmbed()
 		.setTitle(`${args[1]}'s Minecraft skin`)
 		.setColor(0xFF4136)
-		.setImage(`https://minotar.net/armor/body/${args[1]}/150.png`);
+		.setImage(`https://minotar.net/armor/body/${args[1]}/150.png`)
+		.setAuthor('https://minotar.net');
 	msg.channel.send(embed);
 }
 
@@ -71,6 +78,7 @@ function source(msg) {
 	let embed = new MessageEmbed()
 		.setTitle(`Bot source code`)
 		.setColor(0x181A1B)
-		.setImage(`https://github.com/tycrek/mandatum`);
+		.setURL(`https://github.com/tycrek/mandatum`)
+		.setFooter('Check out my source code on GitHub!');
 	msg.channel.send(embed);
 }
