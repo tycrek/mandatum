@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 const client = new Client();
 client.once('ready', () => {
 	console.log('Ready!');
-	client.user.setActivity('with tycrek')
+	client.user.setActivity('with computers');
 });
 
 const prefix = '>';
