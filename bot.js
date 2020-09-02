@@ -13,11 +13,11 @@ const commands = {
 	namemc: (msg) => namemc(msg),
 	btc: (msg) => btc(msg),
 	mcskin: (msg) => mcskin(msg),
+	source: (msg) => source(msg)
 };
 
 for (let command in commands)
 	client.on('message', (msg) => msg.content.trim().split(/ +/)[0] === `${prefix}${command}` && commands[command](msg));
-
 
 client.login(fs.readJsonSync(require('path').join(__dirname, 'auth.json')).token);
 
@@ -29,7 +29,6 @@ function mCommands(msg) {
 		.setTitle('Bot commands')
 		.setColor(0xFFFF00)
 		.setDescription(text);
-
 	msg.channel.send(embed);
 }
 
@@ -65,6 +64,13 @@ function mcskin(msg) {
 		.setTitle(`${args[1]}'s Minecraft skin`)
 		.setColor(0xFF4136)
 		.setImage(`https://minotar.net/armor/body/${args[1]}/150.png`);
+	msg.channel.send(embed);
+}
 
+function mcskin(msg) {
+	let embed = new MessageEmbed()
+		.setTitle(`Bot source code`)
+		.setColor(0x181A1B)
+		.setImage(`https://github.com/tycrek/mandatum`);
 	msg.channel.send(embed);
 }
