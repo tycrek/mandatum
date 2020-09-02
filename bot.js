@@ -13,7 +13,8 @@ const commands = {
 	namemc: (msg) => namemc(msg),
 	btc: (msg) => btc(msg),
 	mcskin: (msg) => mcskin(msg),
-	source: (msg) => source(msg)
+	source: (msg) => source(msg),
+	link: (msg) => link(msg)
 };
 
 for (let command in commands)
@@ -81,4 +82,14 @@ function source(msg) {
 		.setURL(`https://github.com/tycrek/mandatum`)
 		.setFooter('Check out my source code on GitHub!');
 	msg.channel.send(embed);
+}
+
+function link(msg) {
+	const args = msg.content.slice(prefix.length).trim().split(/ +/);
+	let embed = new MessageEmbed()
+		.setTitle(args[1])
+		.setColor(0x455A64)
+		.setURL(`https://${args[1].toLowerCase()}`)
+	msg.channel.send(embed);
+	msg.delete();
 }
