@@ -3,7 +3,10 @@ const { Client, MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
 const client = new Client();
-client.once('ready', () => console.log('Ready!'));
+client.once('ready', () => {
+	console.log('Ready!');
+	client.user.setActivity('with tycrek')
+});
 
 const prefix = '>';
 const commands = {
@@ -15,7 +18,8 @@ const commands = {
 	mcskin: (msg) => mcskin(msg),
 	source: (msg) => source(msg),
 	link: (msg) => link(msg),
-	shut: (msg) => shut(msg)
+	shut: (msg) => shut(msg),
+	search: (msg) => search(msg),
 };
 
 for (let command in commands)
@@ -101,4 +105,14 @@ function shut(msg) {
 		.setImage(`https://shutplea.se/`)
 	msg.channel.send(embed);
 	msg.delete();
+}
+
+function search(msg) {
+	const args = msg.content.slice(prefix.length).trim().split(/ +/);
+	args.shift();
+	let embed = new MessageEmbed()
+		.setColor(0xE0632F)
+		.setAuthor(`Searching "${args.join(' ')}" for ${msg.author}`)
+		.setDescription(`https://duckduckgo.com/?q=${args.join('+')}`)
+	msg.channel.send(embed);
 }
