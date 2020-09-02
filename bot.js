@@ -14,7 +14,8 @@ const commands = {
 	btc: (msg) => btc(msg),
 	mcskin: (msg) => mcskin(msg),
 	source: (msg) => source(msg),
-	link: (msg) => link(msg)
+	link: (msg) => link(msg),
+	shut: (msg) => shut(msg)
 };
 
 for (let command in commands)
@@ -90,6 +91,14 @@ function link(msg) {
 		.setTitle(args[1])
 		.setColor(0x455A64)
 		.setURL(`https://${args[1].toLowerCase()}`)
+	msg.channel.send(embed);
+	msg.delete();
+}
+
+function shut(msg) {
+	let embed = new MessageEmbed()
+		.setColor(0x0B1308)
+		.setImage(`https://shutplea.se/`)
 	msg.channel.send(embed);
 	msg.delete();
 }
