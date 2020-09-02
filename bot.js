@@ -67,7 +67,7 @@ function mcskin(msg) {
 	msg.channel.send(embed);
 }
 
-function mcskin(msg) {
+function source(msg) {
 	let embed = new MessageEmbed()
 		.setTitle(`Bot source code`)
 		.setColor(0x181A1B)
