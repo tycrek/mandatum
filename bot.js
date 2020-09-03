@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+const path = require('path');
 const { Client, MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const UUID = require('uuid').v4;
@@ -25,12 +26,27 @@ const commands = {
 	inspire: (msg) => inspire(msg),
 	uuid: (msg) => uuid(msg),
 	meme: (msg) => meme(msg),
+	//release: (msg) => release(msg)
 };
 
 for (let command in commands)
-	client.on('message', (msg) => msg.content.trim().split(/ +/)[0] === `${prefix}${command}` && commands[command](msg));
+	client.on('message', (msg) => {
+		if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+		msg.content.trim().split(/ +/)[0] === `${prefix}${command}` && commands[command](msg);
+	});
 
-client.login(fs.readJsonSync(require('path').join(__dirname, 'auth.json')).token);
+client.on('message', (msg) => {
+	let swears = fs.readJsonSync(path.join(__dirname, 'swears.json')).swears;
+	for (let i = 0; i < swears.length; i++) {
+		if (msg.author.bot) return;
+		if (msg.content.toLowerCase().includes(swears[i])) {
+			msg.channel.send(`Watch your fucking language ${msg.author.toString()}.`);
+			break;
+		}
+	}
+});
+
+client.login(fs.readJsonSync(path.join(__dirname, 'auth.json')).token);
 
 function mCommands(msg) {
 	let text = '';
@@ -117,7 +133,7 @@ function search(msg) {
 	args.shift();
 	let embed = new MessageEmbed()
 		.setColor(0xE0632F)
-		.setAuthor(`Searching "${args.join(' ')}" for ${msg.author}`)
+		.setAuthor(`Searching "${args.join(' ')}" for ${msg.author.username}`)
 		.setDescription(`https://duckduckgo.com/?q=${args.join('+')}`)
 	msg.channel.send(embed);
 }
@@ -159,4 +175,25 @@ function meme(msg) {
 			.setImage(`https://i.imgflip.com/${meme}.jpg`)
 			.setFooter('https://imgflip.com'))
 		.then((embed) => msg.channel.send(embed));
+}
+
+function release(msg) {
+	const args = msg.content.slice(prefix.length).trim().split(/ +/);
+	let project = args[1];
+	let version = args[2];
+	let change = args[3];
+	let fix = args[4];
+
+	let changeText = change.split('##').join('\n- ');
+	let fixText = fix.split('##').join('\n- ');
+
+	let embed = new MessageEmbed()
+		.setColor(0x03A9F4)
+		.setThumbnail('https://raw.githubusercontent.com/tycrek/jmoore.dev/master/client/images/profile/profile-normal-small.jpg')
+		.setTitle(`${project} v${version}`)
+		.addFields(
+			{ name: 'Changes', value: changeText },
+			{ name: 'Fixed', value: fixText },
+		);
+	msg.channel.send(embed);
 }
