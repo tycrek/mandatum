@@ -23,7 +23,8 @@ const commands = {
 	search: (msg) => search(msg),
 	//face: (msg) => face(msg), // ! Broken right now, caching on server
 	inspire: (msg) => inspire(msg),
-	uuid: (msg) => uuid(msg)
+	uuid: (msg) => uuid(msg),
+	meme: (msg) => meme(msg),
 };
 
 for (let command in commands)
@@ -58,7 +59,7 @@ function namemc(msg) {
 		.setTitle(`${args[1]} on NameMC`)
 		.setColor(0x234875)
 		.setURL(`https://namemc.com/s?${args[1]}`)
-		.setAuthor('https://namemc.com');
+		.setFooter('https://namemc.com');
 	msg.channel.send(embed);
 }
 
@@ -70,7 +71,7 @@ function btc(msg) {
 			.setTitle('Current Bitcoin Price (USD)')
 			.setColor(0xF79019)
 			.setDescription(`$${price}`)
-			.setAuthor('https://www.coindesk.com/coindesk-api'))
+			.setFooter('https://www.coindesk.com/coindesk-api'))
 		.then((embed) => msg.channel.send(embed));
 }
 
@@ -80,7 +81,7 @@ function mcskin(msg) {
 		.setTitle(`${args[1]}'s Minecraft skin`)
 		.setColor(0xFF4136)
 		.setImage(`https://minotar.net/armor/body/${args[1]}/150.png`)
-		.setAuthor('https://minotar.net');
+		.setFooter('https://minotar.net');
 	msg.channel.send(embed);
 }
 
@@ -147,4 +148,15 @@ function uuid(msg) {
 		.setColor(0x000000)
 		.setDescription(`\`${UUID()}\``)
 	msg.channel.send(embed);
+}
+
+function meme(msg) {
+	fetch('https://imgflip.com/ajax_img_flip')
+		.then((res) => res.text())
+		.then((text) => text.split('/')[2])
+		.then((meme) => new MessageEmbed()
+			.setColor(0x004daa)
+			.setImage(`https://i.imgflip.com/${meme}.jpg`)
+			.setFooter('https://imgflip.com'))
+		.then((embed) => msg.channel.send(embed));
 }
