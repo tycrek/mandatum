@@ -19,6 +19,7 @@
   "dependencies": {
     "discord.js": "^12.3.1",
     "fs-extra": "^9.0.1",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "uuid": "^8.3.0"
   }
 }

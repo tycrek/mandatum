@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const { Client, MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
+const UUID = require('uuid').v4;
 
 const client = new Client();
 client.once('ready', () => {
@@ -22,6 +23,7 @@ const commands = {
 	search: (msg) => search(msg),
 	//face: (msg) => face(msg), // ! Broken right now, caching on server
 	inspire: (msg) => inspire(msg),
+	uuid: (msg) => uuid(msg)
 };
 
 for (let command in commands)
@@ -137,4 +139,12 @@ function inspire(msg) {
 			.setImage(`${text}`)
 			.setFooter('https://inspirobot.me/'))
 		.then((embed) => msg.channel.send(embed));
+}
+
+function uuid(msg) {
+	let embed = new MessageEmbed()
+		.setTitle('Here\'s your UUID:')
+		.setColor(0x000000)
+		.setDescription(`\`${UUID()}\``)
+	msg.channel.send(embed);
 }
