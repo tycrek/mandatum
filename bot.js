@@ -57,7 +57,7 @@ client.on('message', (msg) => {
 	for (let i = 0; i < swears.length; i++) {
 		if (msg.author.bot) return;
 		if (msg.content.toLowerCase().includes(swears[i])) {
-			msg.channel.send(`Watch your fucking language ${msg.author.toString()}.`);
+			//msg.channel.send(`Watch your fucking language ${msg.author.toString()}.`);
 			break;
 		}
 	}
