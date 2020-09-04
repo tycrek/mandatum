@@ -4,12 +4,21 @@ const { Client, MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const schedule = require('node-schedule');
 const UUID = require('uuid').v4;
+const moment = require('moment');
+
+let lastSwear;
 
 const client = new Client();
 client.once('ready', () => {
 	console.log('Ready!');
 	client.user.setActivity('with computers');
 
+	return;
+	schedule.scheduleJob('*/10 * * * * *', () => {
+		client.guilds.fetch('750773045974663208')
+			.then((guild) => guild.channels.cache.find(channel => channel.name === 'general'))
+			.then((guildChannel) => guildChannel.send(moment().format('X')));
+	});
 	return;
 	schedule.scheduleJob('*/10 * * * *', () => {
 		fetch('https://api.coindesk.com/v1/bpi/currentprice.json')
@@ -56,9 +65,11 @@ for (let command in commands)
 client.on('message', (msg) => {
 	let swears = fs.readJsonSync(path.join(__dirname, 'swears.json')).swears;
 	for (let i = 0; i < swears.length; i++) {
-		if (msg.author.bot) return;
+		if (msg.author.bot || msg.guild.id != '750773045974663208') break;
 		if (msg.content.toLowerCase().includes(swears[i])) {
-			//msg.channel.send(`Watch your fucking language ${msg.author.toString()}.`);
+			if (lastSwear != null && (moment().format('X') - lastSwear) < 30) return;
+			msg.channel.send(`Watch your fucking language ${msg.author.toString()}.`);
+			lastSwear = moment().format('X')
 			break;
 		}
 	}
