@@ -2,12 +2,29 @@ const fs = require('fs-extra');
 const path = require('path');
 const { Client, MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
+const schedule = require('node-schedule');
 const UUID = require('uuid').v4;
 
 const client = new Client();
 client.once('ready', () => {
 	console.log('Ready!');
 	client.user.setActivity('with computers');
+
+
+	return; //! Need to use GuildChannels or something https://discord.js.org/#/docs/main/stable/class/GuildChannel
+	schedule.scheduleJob('*/10 * * * * *', () => {
+		fetch('https://api.coindesk.com/v1/bpi/currentprice.json')
+			.then((res) => res.json())
+			.then((json) => json.bpi.USD.rate)
+			.then((price) => new MessageEmbed()
+				.setTitle('Current Bitcoin Price (USD)')
+				.setColor(0xF79019)
+				.setDescription(`$${price}`)
+				.setFooter('https://www.coindesk.com/coindesk-api'))
+			.then((embed) => [client.channels.fetch('750773046620454924'), embed])
+			.then((data) => console.log(data));
+		//.then((embed) => client.channels.cache.find(channel => channel.name === 'general').send(embed));
+	});
 });
 
 const prefix = '>';
