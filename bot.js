@@ -10,9 +10,8 @@ client.once('ready', () => {
 	console.log('Ready!');
 	client.user.setActivity('with computers');
 
-
-	return; //! Need to use GuildChannels or something https://discord.js.org/#/docs/main/stable/class/GuildChannel
-	schedule.scheduleJob('*/10 * * * * *', () => {
+	return;
+	schedule.scheduleJob('*/10 * * * *', () => {
 		fetch('https://api.coindesk.com/v1/bpi/currentprice.json')
 			.then((res) => res.json())
 			.then((json) => json.bpi.USD.rate)
@@ -21,9 +20,11 @@ client.once('ready', () => {
 				.setColor(0xF79019)
 				.setDescription(`$${price}`)
 				.setFooter('https://www.coindesk.com/coindesk-api'))
-			.then((embed) => [client.channels.fetch('750773046620454924'), embed])
-			.then((data) => console.log(data));
-		//.then((embed) => client.channels.cache.find(channel => channel.name === 'general').send(embed));
+			.then((embed) => {
+				client.guilds.fetch('750773045974663208')
+					.then((guild) => guild.channels.cache.find(channel => channel.name === 'general'))
+					.then((guildChannel) => guildChannel.send(embed));
+			});
 	});
 });
 
