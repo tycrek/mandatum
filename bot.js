@@ -103,7 +103,8 @@ client.on('message', (msg) => {
 
 	let command = msg.content.trim().split(/ +/)[0];
 
-	Object.keys(commands).find(key => command === `${prefix}${key}`) != null && commands[command];
+	try { commands[Object.keys(commands).find(key => command === `${prefix}${key}`)](msg) }
+	catch (err) { !(err instanceof TypeError) && log.warn(err) }
 });
 
 client.on('message', (msg) => {
