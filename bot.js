@@ -56,20 +56,23 @@ const commands = {
 	//release: (msg) => release(msg)
 };
 
-for (let command in commands)
-	client.on('message', (msg) => {
-		if (!msg.content.startsWith(prefix) || msg.author.bot) return;
-		msg.content.trim().split(/ +/)[0] === `${prefix}${command}` && commands[command](msg);
-	});
+client.on('message', (msg) => {
+	if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+
+	let command = msg.content.trim().split(/ +/)[0];
+
+	Object.keys(commands).find(key => command === `${prefix}${key}`) != null && commands[command];
+});
 
 client.on('message', (msg) => {
 	let swears = fs.readJsonSync(path.join(__dirname, 'swears.json')).swears;
 	for (let i = 0; i < swears.length; i++) {
 		if (msg.author.bot || !(msg.guild.id == '750773045974663208' || msg.guild.id == '751793035565727816')) break;
+
 		if (new RegExp(`\\b${swears[i]}\\b`, 'gi').test(msg.content.toLowerCase())) {
 			if (lastSwear != null && (moment().format('X') - lastSwear) < 30) return;
 			msg.channel.send(`Watch your fucking language ${msg.author.toString()}.`);
-			lastSwear = moment().format('X')
+			lastSwear = moment().format('X');
 			break;
 		}
 	}
