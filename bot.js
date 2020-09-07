@@ -98,17 +98,17 @@ const commands = {
 	//release: (msg) => release(msg)
 };
 
+// Command processor
 client.on('message', (msg) => {
 	if (!msg.content.startsWith(prefix) || msg.author.bot) return;
-
-	let command = msg.content.trim().split(/ +/)[0];
-
-	try { commands[Object.keys(commands).find(key => command === `${prefix}${key}`)](msg) }
+	try { commands[Object.keys(commands).find(key => msg.content.trim().substr(1).split(/ +/)[0] === key)](msg) }
 	catch (err) { !(err instanceof TypeError) && log.warn(err) }
 });
 
+// Swear word processor
 client.on('message', (msg) => {
 	let swears = fs.readJsonSync(path.join(__dirname, 'swears.json')).swears;
+
 	for (let i = 0; i < swears.length; i++) {
 		if (msg.author.bot || !(msg.guild.id == '750773045974663208' || msg.guild.id == '751793035565727816')) break;
 
