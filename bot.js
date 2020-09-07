@@ -10,12 +10,26 @@
  * > github.com/tycrek
  * 
  */
-const fs = require('fs-extra');
-const path = require('path');
+
+/* Imports */
+
+// discord.js for Discord API
 const { Client, MessageEmbed } = require('discord.js');
+
+// path & fs-extra for filesystem operations
+const path = require('path');
+const fs = require('fs-extra');
+
+// for fetching data from the net
 const fetch = require('node-fetch');
+
+// for scheduling automated messages
 const schedule = require('node-schedule');
+
+// for fun :)
 const UUID = require('uuid').v4;
+
+// anything time related such as the cooldown
 const moment = require('moment');
 
 let lastSwear;
