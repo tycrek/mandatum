@@ -33,7 +33,10 @@ const UUID = require('uuid').v4;
 const moment = require('moment');
 
 // Good logging tool
-const log = require('pino')({ prettyPrint: true });
+const log = require('pino')({
+	prettyPrint: true,
+	timestamp: () => `,"time": ${moment().format('YYYY-MM-DD hh:mm:ss A')} `
+});
 
 /* Variables */
 
