@@ -3,6 +3,8 @@
  * 
  * A Discord bot
  * 
+ * GNU GPL 3.0
+ * 
  * Written by tycrek
  * > jmoore.dev
  * > github.com/tycrek
