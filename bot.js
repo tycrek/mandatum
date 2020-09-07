@@ -35,11 +35,21 @@ const moment = require('moment');
 // Good logging tool
 const log = require('pino')({ prettyPrint: true });
 
+/* Variables */
+
+// Cooldown timer for last swear in channel
+//! currently behaves globally (swear in 1 server affects cooldown in another server)
 let lastSwear;
 
+/* Client setup */
+
 const client = new Client();
+
+// When client is ready (after it logs in)
 client.once('ready', () => {
-	log.info('mandatum ready')
+	log.info('mandatum ready');
+
+	// Custom status
 	client.user.setActivity('the world burn (>)', { type: "WATCHING" });
 
 	return;
