@@ -1,3 +1,13 @@
+/**
+ * mandatum
+ * 
+ * A Discord bot
+ * 
+ * Written by tycrek
+ * > jmoore.dev
+ * > github.com/tycrek
+ * 
+ */
 const fs = require('fs-extra');
 const path = require('path');
 const { Client, MessageEmbed } = require('discord.js');
