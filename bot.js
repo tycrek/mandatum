@@ -32,10 +32,14 @@ const UUID = require('uuid').v4;
 // anything time related such as the cooldown
 const moment = require('moment');
 
+// Good logging tool
+const log = require('pino')({ prettyPrint: true });
+
 let lastSwear;
 
 const client = new Client();
 client.once('ready', () => {
+	log.info('mandatum ready')
 	client.user.setActivity('the world burn (>)', { type: "WATCHING" });
 
 	return;
