@@ -10,8 +10,7 @@ let lastSwear;
 
 const client = new Client();
 client.once('ready', () => {
-	console.log('Ready!');
-	client.user.setActivity('with computers');
+	client.user.setActivity('the world burn (>)', { type: "WATCHING" });
 
 	return;
 	schedule.scheduleJob('*/10 * * * * *', () => {
