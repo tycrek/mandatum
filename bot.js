@@ -91,13 +91,13 @@ client.once('ready', () => {
 	client.user.setActivity('the world burn (>)', { type: "WATCHING" });
 
 	// Scheduled message test
-	schedule.scheduleJob('* */1 * * *', () => {
+	schedule.scheduleJob('0 */1 * * *', () => {
 		let embed = new MessageEmbed()
 			.setTitle(`Clock strikes ${moment().format('h')}!`)
 			.setColor(0xFFFFFF)
 			.setDescription(printTime())
 		client.guilds.fetch(guilds.bt)
-			.then((guild) => guild.channels.cache.find(channel => channel.id === '752679477787623544'))
+			.then((guild) => guild.channels.cache.find(channel => channel.id === '752898408834138145'))
 			.then((guildChannel) => guildChannel.send(embed));
 	});
 });
