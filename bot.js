@@ -49,7 +49,7 @@ const guilds = {
 };
 
 // Cooldown timer for last swear in channel //! currently behaves globally (swear in 1 server affects cooldown in another server)
-let lastSwear;
+let lastSwear = {};
 
 // Prefix for bot commands
 const prefix = '>';
@@ -111,9 +111,9 @@ client.on('message', (msg) => {
 		if (msg.author.bot || !filterGuild(msg, [guilds.t, guilds.bt])) break;
 
 		if (new RegExp(`\\b${swears[i]}\\b`, 'gi').test(msg.content.toLowerCase())) {
-			if (lastSwear != null && (moment().format('X') - lastSwear) < 30) return;
+			if (lastSwear[msg.channel.id] != null && (moment().format('X') - lastSwear[msg.channel.id]) < 30) return;
 			msg.channel.send(`Watch your fucking language ${msg.author.toString()}.`);
-			lastSwear = moment().format('X');
+			lastSwear[msg.channel.id] = moment().format('X');
 			break;
 		}
 	}
