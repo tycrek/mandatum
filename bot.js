@@ -117,6 +117,14 @@ function printTime() {
 	return moment().format('h:mm:ss a, MMMM Do, YYYY')
 }
 
+function filterGuild(msg, guildId) {
+	log.warn('Not implemented yet!');
+}
+
+function filterChannel(msg, channelId) {
+	return (channelId instanceof Array && channelId.find(id => id === msg.channel.id) && true) || msg.channel.id === channelId;
+}
+
 // command functions
 
 function mCommands(msg) {
