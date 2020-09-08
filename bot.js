@@ -79,15 +79,15 @@ const client = new Client();
 
 // When client is ready (after it logs in)
 client.once('ready', () => {
-	log.info('mandatum ready');
+	log.info('Beep, boop! mandatum is ready :)');
 
 	// Custom status
 	client.user.setActivity('the world burn (>)', { type: "WATCHING" });
 
 	// Scheduled message test
-	schedule.scheduleJob('*/10 * * * * *', () => {
+	schedule.scheduleJob('* */1 * * *', () => {
 		let embed = new MessageEmbed()
-			.setTitle('Current time')
+			.setTitle(`Clock strikes ${moment().format('h')}!`)
 			.setColor(0xFFFFFF)
 			.setDescription(printTime())
 		client.guilds.fetch(guilds.bt)
