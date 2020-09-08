@@ -32,11 +32,7 @@ const UUID = require('uuid').v4;
 // anything time related such as the cooldown
 const moment = require('moment');
 
-// Good logging tool
-const log = require('pino')({
-	prettyPrint: true,
-	timestamp: () => `,"time": ${moment().format('YYYY-MM-DD hh:mm:ss A')} `
-});
+const { log, printTime, filter, noPermission } = require('./utils');
 
 /* Variables */
 
@@ -119,7 +115,7 @@ client.on('message', (msg) => {
 	let swears = fs.readJsonSync(path.join(__dirname, 'swears.json')).swears;
 
 	for (let i = 0; i < swears.length; i++) {
-		if (msg.author.bot || !filterGuild(msg, [guilds.t, guilds.bt]) || filterCategory(msg, '750773557239349259')) break;
+		if (msg.author.bot || !filter.guild(msg, [guilds.t, guilds.bt]) || filter.category(msg, '750773557239349259')) break;
 
 		if (new RegExp(`\\b${swears[i]}\\b`, 'gi').test(msg.content.toLowerCase())) {
 
@@ -140,58 +136,11 @@ client.on('message', (msg) => {
 // Log in to Discord using token
 client.login(fs.readJsonSync(path.join(__dirname, 'auth.json')).token);
 
+module.exports = {
+	client: client
+};
+
 /* Functions */
-
-// Print the time in a nice format: 6:57:30 pm, September 7th, 2020
-function printTime() {
-	return moment().format('h:mm:ss a, MMMM Do, YYYY')
-}
-
-// Filter message by guild
-// Returns true if message is the guild ID (can also be an array of guild IDs)
-function filterGuild(msg, guildId) {
-	return (guildId instanceof Array && guildId.find(id => id === msg.guild.id) && true) || msg.guild.id === guildId;
-}
-
-// Filter message by category
-// Returns true if message is the category ID (can also be an array of channes IDs)
-function filterCategory(msg, categoryId) {
-	return (categoryId instanceof Array && categoryId.find(id => id === msg.channel.parent.id) && true) || msg.channel.parent.id === categoryId;
-}
-
-// Filter message by channel
-// Returns true if message is the channel ID (can also be an array of channel IDs)
-function filterChannel(msg, channelId) {
-	return (channelId instanceof Array && channelId.find(id => id === msg.channel.id) && true) || msg.channel.id === channelId;
-}
-
-// Filter message by channel
-// Returns true if message is the channel ID (can also be an array of channel IDs)
-function filterAuthor(msg, authorId) {
-	return (authorId instanceof Array && authorId.find(id => id === msg.author.id) && true) || msg.author.id === authorId;
-}
-
-// Filter message by role
-// Returns true if message is the role ID (does NOT support arrays yet)
-function filterRole(msg, roleId) {
-	return (!(roleId instanceof Array) && msg.member.roles.cache.some(role => role.id === roleId));
-}
-
-function readJson(filepath) {
-	return fs.readJsonSync(path.join(__dirname, filepath));
-}
-
-function writeJson(filepath, json) {
-	return fs.writeJsonSync(path.join(__dirname, filepath), json, { spaces: '\t' });
-}
-
-// author does not have permission to use command
-function noPermission(msg) {
-	msg.reply('sorry, but you don\'t have permission to do that.');
-}
-
-
-// Command functions
 
 function mCommands(msg) {
 	let text = '';
@@ -323,7 +272,7 @@ function meme(msg) {
 }
 
 function release(msg) {
-	if (!filterAuthor(msg, owner)) return noPermission(msg);
+	if (!filter.author(msg, owner)) return noPermission(msg);
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
 	let project = args[1];
 	let version = args[2];
@@ -347,8 +296,8 @@ function release(msg) {
 
 function clear(msg) {
 	// first if is role filter, second is user filter
-	//if (!filterRole(msg, '752752772100653198')) return noPermission(msg);
-	if (!filterAuthor(msg, owner)) return noPermission(msg);
+	//if (!filter.role(msg, '752752772100653198')) return noPermission(msg);
+	if (!filter.author(msg, owner)) return noPermission(msg);
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
 	let channel = msg.channel;
 
@@ -426,7 +375,7 @@ function clear(msg) {
 }
 
 function kick(msg) {
-	if (!filterAuthor(msg, owner)) return noPermission(msg);
+	if (!filter.author(msg, owner)) return noPermission(msg);
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
 
 	args.shift(); // Remove the command
@@ -444,7 +393,7 @@ function kick(msg) {
 }
 
 function send(msg) {
-	if (!filterAuthor(msg, owner)) return noPermission(msg);
+	if (!filter.author(msg, owner)) return noPermission(msg);
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
 	let count = parseInt(args[1]);
 
