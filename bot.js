@@ -174,9 +174,9 @@ function mcskin(msg) {
 
 function source(msg) {
 	let embed = new MessageEmbed()
-		.setTitle(`Bot source code`)
+		.setTitle('Bot source code')
 		.setColor(0x181A1B)
-		.setURL(`https://github.com/tycrek/mandatum`)
+		.setURL('https://github.com/tycrek/mandatum')
 		.setFooter('Check out my source code on GitHub!');
 	msg.channel.send(embed);
 }
@@ -194,7 +194,7 @@ function link(msg) {
 function shut(msg) {
 	let embed = new MessageEmbed()
 		.setColor(0x0B1308)
-		.setImage(`https://shutplea.se/`)
+		.setImage('https://shutplea.se/')
 	msg.channel.send(embed);
 	msg.delete();
 }
@@ -213,7 +213,7 @@ function face(msg) {
 	let embed = new MessageEmbed()
 		.setColor(0x000000)
 		.setTitle('This person does not exist...')
-		.setImage(`https://thispersondoesnotexist.com/image`)
+		.setImage('https://thispersondoesnotexist.com/image')
 		.setFooter('https://thispersondoesnotexist.com/');
 	msg.channel.send(embed);
 }
