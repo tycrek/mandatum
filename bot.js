@@ -111,9 +111,16 @@ client.on('message', (msg) => {
 		if (msg.author.bot || !filterGuild(msg, [guilds.t, guilds.bt])) break;
 
 		if (new RegExp(`\\b${swears[i]}\\b`, 'gi').test(msg.content.toLowerCase())) {
+
+			// Return if we are within the cooldown period
 			if (lastSwear[msg.channel.id] != null && (moment().format('X') - lastSwear[msg.channel.id]) < 30) return;
+
+			// Curse thee heathen!
 			msg.channel.send(`Watch your fucking language ${msg.author.toString()}.`);
+
+			// Update the cooldown and log the time updated
 			lastSwear[msg.channel.id] = moment().format('X');
+			log.info(`Setting guild:channel [${msg.guild.id}:${msg.channel.id}] swear cooldown at ${lastSwear[msg.channel.id]}`);
 			break;
 		}
 	}
