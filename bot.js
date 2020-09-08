@@ -55,27 +55,22 @@ client.once('ready', () => {
 	// Custom status
 	client.user.setActivity('the world burn (>)', { type: "WATCHING" });
 
-	return;
-	schedule.scheduleJob('*/10 * * * * *', () => {
+	/*
+	schedule.scheduleJob('*\/10 * * * * *', () => {
 		client.guilds.fetch('750773045974663208')
 			.then((guild) => guild.channels.cache.find(channel => channel.name === 'general'))
 			.then((guildChannel) => guildChannel.send(moment().format('X')));
 	});
-	return;
-	schedule.scheduleJob('*/10 * * * *', () => {
-		fetch('https://api.coindesk.com/v1/bpi/currentprice.json')
-			.then((res) => res.json())
-			.then((json) => json.bpi.USD.rate)
-			.then((price) => new MessageEmbed()
-				.setTitle('Current Bitcoin Price (USD)')
-				.setColor(0xF79019)
-				.setDescription(`$${price}`)
-				.setFooter('https://www.coindesk.com/coindesk-api'))
-			.then((embed) => {
-				client.guilds.fetch('750773045974663208')
-					.then((guild) => guild.channels.cache.find(channel => channel.name === 'general'))
-					.then((guildChannel) => guildChannel.send(embed));
-			});
+	*/
+	//return;
+	schedule.scheduleJob('*/10 * * * * *', () => {
+		let embed = new MessageEmbed()
+			.setTitle('Current time')
+			.setColor(0xFFFFFF)
+			.setDescription(printTime())
+		client.guilds.fetch('751793035565727816')
+			.then((guild) => guild.channels.cache.find(channel => channel.id === '752679477787623544'))
+			.then((guildChannel) => guildChannel.send(embed));
 	});
 });
 
