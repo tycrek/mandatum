@@ -40,8 +40,7 @@ const log = require('pino')({
 
 /* Variables */
 
-// Cooldown timer for last swear in channel
-//! currently behaves globally (swear in 1 server affects cooldown in another server)
+// Cooldown timer for last swear in channel //! currently behaves globally (swear in 1 server affects cooldown in another server)
 let lastSwear;
 
 /* Client setup */
