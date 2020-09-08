@@ -177,6 +177,14 @@ function filterRole(msg, roleId) {
 	return (!(roleId instanceof Array) && msg.member.roles.cache.some(role => role.id === roleId));
 }
 
+function readJson(filepath) {
+	return fs.readJsonSync(path.join(__dirname, filepath));
+}
+
+function writeJson(filepath, json) {
+	return fs.writeJsonSync(path.join(__dirname, filepath), json, { spaces: '\t' });
+}
+
 // author does not have permission to use command
 function noPermission(msg) {
 	msg.reply('sorry, but you don\'t have permission to do that.');
