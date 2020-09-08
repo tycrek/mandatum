@@ -76,6 +76,7 @@ const commands = {
 	release: (msg) => release(msg),
 	clear: (msg) => clear(msg),
 	kick: (msg) => kick(msg),
+	send: (msg) => send(msg),
 };
 
 /* Client setup */
@@ -361,4 +362,17 @@ function kick(msg) {
 		log.info(result);
 		msg.reply(result);
 	});
+}
+
+function send(msg) {
+	if (!filterAuthor(msg, owner)) return noPermission(msg);
+	const args = msg.content.slice(prefix.length).trim().split(/ +/);
+	let count = parseInt(args[1]);
+
+	log.info(`Sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`);
+
+	for (let i = 0; i < count; i++) msg.channel.send(`Message ${i + 1}`);
+
+	msg.reply(`${count} messages created`);
+	//log.info(`Completed sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`); // log is broken
 }
