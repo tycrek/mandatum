@@ -116,7 +116,16 @@ client.on('message', (msg) => {
 	}
 });
 
+// Log in to Discord using token
 client.login(fs.readJsonSync(path.join(__dirname, 'auth.json')).token);
+
+/* Functions */
+
+function printTime() {
+	return moment().format('h:mm:ss a, MMMM Do, YYYY')
+}
+
+// command functions
 
 function mCommands(msg) {
 	let text = '';
