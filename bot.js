@@ -70,7 +70,8 @@ const commands = {
 	inspire: (msg) => inspire(msg),
 	uuid: (msg) => uuid(msg),
 	meme: (msg) => meme(msg),
-	release: (msg) => release(msg)
+	release: (msg) => release(msg),
+	clear: (msg) => clear(msg)
 };
 
 /* Client setup */
@@ -152,6 +153,12 @@ function filterCategory(msg, categoryId) {
 // Returns true if message is the channel ID (can also be an array of channel IDs)
 function filterChannel(msg, channelId) {
 	return (channelId instanceof Array && channelId.find(id => id === msg.channel.id) && true) || msg.channel.id === channelId;
+}
+
+// Filter message by channel
+// Returns true if message is the channel ID (can also be an array of channel IDs)
+function filterAuthor(msg, authorId) {
+	return (authorId instanceof Array && authorId.find(id => id === msg.author.id) && true) || msg.author.id === authorId;
 }
 
 // Command functions
@@ -306,4 +313,15 @@ function release(msg) {
 			{ name: 'Fixed', value: fixText, inline: true },
 		);
 	msg.channel.send(embed);
+}
+
+function clear(msg) {
+	if (!filterAuthor(msg, '324679696182673408')) return msg.reply('sorry, but you don\'t have permission to do that.');
+	const args = msg.content.slice(prefix.length).trim().split(/ +/);
+	msg.channel.bulkDelete(parseInt(args[1]) + 1)
+		.then((messages) => log.info(`Deleted ${messages.size - 1} (${messages.size}) messages`));
+	msg.channel.send(`Deleted ${args[1]} messages!`)
+		.then((msg2) => {
+			setTimeout(() => msg2.delete(), 1500);
+		});
 }
