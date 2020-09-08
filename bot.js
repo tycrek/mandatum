@@ -70,7 +70,7 @@ const commands = {
 	inspire: (msg) => inspire(msg),
 	uuid: (msg) => uuid(msg),
 	meme: (msg) => meme(msg),
-	//release: (msg) => release(msg)
+	release: (msg) => release(msg)
 };
 
 /* Client setup */
@@ -286,6 +286,7 @@ function meme(msg) {
 }
 
 function release(msg) {
+	if (!filterCategory(msg, ['750773557239349259', '750774193234378763'])) return; //* Welcome & Project categories in "~ tycrek ~" server
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
 	let project = args[1];
 	let version = args[2];
@@ -300,8 +301,9 @@ function release(msg) {
 		.setThumbnail('https://raw.githubusercontent.com/tycrek/jmoore.dev/master/client/images/profile/profile-normal-small.jpg')
 		.setTitle(`${project} v${version}`)
 		.addFields(
-			{ name: 'Changes', value: changeText },
-			{ name: 'Fixed', value: fixText },
+			{ name: 'Changes', value: changeText, inline: true },
+			{ name: '\u200B', value: '\u200B', inline: true },
+			{ name: 'Fixed', value: fixText, inline: true },
 		);
 	msg.channel.send(embed);
 }
