@@ -48,6 +48,9 @@ const guilds = {
 	y: '333972588567068672'
 };
 
+// bot owner, has access to everything
+const owner = '324679696182673408';
+
 // Cooldown timer for last swear in channel //! currently behaves globally (swear in 1 server affects cooldown in another server)
 let lastSwear = {};
 
@@ -306,7 +309,7 @@ function meme(msg) {
 }
 
 function release(msg) {
-	if (!filterAuthor(msg, '32467969618267340a8')) return noPermission(msg);
+	if (!filterAuthor(msg, owner)) return noPermission(msg);
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
 	let project = args[1];
 	let version = args[2];
@@ -331,7 +334,7 @@ function release(msg) {
 function clear(msg) {
 	// first if is role filter, second is user filter
 	//if (!filterRole(msg, '752752772100653198')) return noPermission(msg);
-	if (!filterAuthor(msg, '324679696182673408')) return noPermission(msg);
+	if (!filterAuthor(msg, owner)) return noPermission(msg);
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
 	msg.channel.bulkDelete(parseInt(args[1]) + 1).then((messages) => {
 		log.info(`Deleted ${messages.size - 1} (${messages.size}) messages`);
@@ -341,7 +344,7 @@ function clear(msg) {
 }
 
 function kick(msg) {
-	if (!filterAuthor(msg, '324679696182673408')) return noPermission(msg);
+	if (!filterAuthor(msg, owner)) return noPermission(msg);
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
 	args.shift();
 	args.shift();
