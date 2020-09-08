@@ -161,6 +161,18 @@ function filterAuthor(msg, authorId) {
 	return (authorId instanceof Array && authorId.find(id => id === msg.author.id) && true) || msg.author.id === authorId;
 }
 
+// Filter message by role
+// Returns true if message is the role ID (does NOT support arrays yet)
+function filterRole(msg, roleId) {
+	return (!(roleId instanceof Array) && msg.member.roles.cache.some(role => role.id === roleId));
+}
+
+// author does not have permission to use command
+function noPermission(msg) {
+	msg.reply('sorry, but you don\'t have permission to do that.');
+}
+
+
 // Command functions
 
 function mCommands(msg) {
@@ -316,11 +328,12 @@ function release(msg) {
 }
 
 function clear(msg) {
-	if (!filterAuthor(msg, '324679696182673408')) return msg.reply('sorry, but you don\'t have permission to do that.');
+	// first if is role filter, second is user filter
+	//if (!filterRole(msg, '752752772100653198')) return msg.reply('sorry, but you don\'t have permission to do that.');
+	if (!filterAuthor(msg, '324679696182673408')) return noPermission(msg);
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
-	msg.channel.bulkDelete(parseInt(args[1]) + 1)
-		.then((messages) => log.info(`Deleted ${messages.size - 1} (${messages.size}) messages`));
-	msg.channel.send(`Deleted ${args[1]} messages!`)
+	msg.channel.bulkDelete(parseInt(args[1]) + 1).then((messages) => log.info(`Deleted ${messages.size - 1} (${messages.size}) messages`));
+	msg.channel.send(`:bomb: Deleted **\`${args[1]}\`** messages!`)
 		.then((msg2) => {
 			setTimeout(() => msg2.delete(), 1500);
 		});
