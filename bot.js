@@ -88,6 +88,10 @@ const client = new Client();
 client.once('ready', () => {
 	log.info('Beep, boop! mandatum is ready :)');
 
+	client.guilds.fetch(guilds.bt)
+		.then((guild) => guild.channels.cache.find(channel => channel.id === '752664709408227518'))
+		.then((guildChannel) => guildChannel.send('`Beep, boop! mandatum is ready :)`'));
+
 	// Custom status
 	client.user.setActivity('the world burn (>)', { type: "WATCHING" });
 
