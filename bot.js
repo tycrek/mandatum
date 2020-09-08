@@ -305,7 +305,7 @@ function meme(msg) {
 }
 
 function release(msg) {
-	if (!filterCategory(msg, ['750773557239349259', '750774193234378763'])) return; //* Welcome & Project categories in "~ tycrek ~" server
+	if (!filterAuthor(msg, '32467969618267340a8')) return noPermission(msg);
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
 	let project = args[1];
 	let version = args[2];
@@ -329,7 +329,7 @@ function release(msg) {
 
 function clear(msg) {
 	// first if is role filter, second is user filter
-	//if (!filterRole(msg, '752752772100653198')) return msg.reply('sorry, but you don\'t have permission to do that.');
+	//if (!filterRole(msg, '752752772100653198')) return noPermission(msg);
 	if (!filterAuthor(msg, '324679696182673408')) return noPermission(msg);
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
 	msg.channel.bulkDelete(parseInt(args[1]) + 1).then((messages) => {
