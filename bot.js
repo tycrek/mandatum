@@ -449,11 +449,31 @@ function send(msg) {
 	let count = parseInt(args[1]);
 
 	log.info(`Sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`);
+	msg.delete();
 
-	for (let i = 0; i < count; i++) msg.channel.send(`Message ${i + 1}`);
+	// Generate our message objects and populate the array
+	let messages = [];
+	for (let i = 0; i < count; i++)
+		messages.push(() =>
+			new Promise((resolve) =>
 
-	msg.reply(`${count} messages created`);
-	//log.info(`Completed sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`); // log is broken
+				// Send the message
+				msg.channel.send(`Message ${i + 1}`)
+
+					// Recursively call the next message event after sending
+					.then(() => messages[i + 1]())
+
+					// Previous line will eventually return itself as a promise
+					.then(() => resolve())
+
+					// The last message has an error at [i + 1] so we can exploit this as our exit condition
+					.catch(() => resolve())));
+
+	// Call the first message in the batch to kick off the loop
+	messages[0]()
+		.then(() => log.info(`Completed sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`))
+		.then(() => msg.member.createDM())
+		.then((channel) => channel.send(`**${count}** messages created!`));
 }
 
 function uptime(msg) {
