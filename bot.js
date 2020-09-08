@@ -55,14 +55,7 @@ client.once('ready', () => {
 	// Custom status
 	client.user.setActivity('the world burn (>)', { type: "WATCHING" });
 
-	/*
-	schedule.scheduleJob('*\/10 * * * * *', () => {
-		client.guilds.fetch('750773045974663208')
-			.then((guild) => guild.channels.cache.find(channel => channel.name === 'general'))
-			.then((guildChannel) => guildChannel.send(moment().format('X')));
-	});
-	*/
-	//return;
+	// Scheduled message test
 	schedule.scheduleJob('*/10 * * * * *', () => {
 		let embed = new MessageEmbed()
 			.setTitle('Current time')
