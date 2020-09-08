@@ -40,6 +40,14 @@ const log = require('pino')({
 
 /* Variables */
 
+// servers where the bot is active
+const guilds = {
+	t: '750773045974663208',
+	d: '742574545612963870',
+	bt: '751793035565727816',
+	y: '333972588567068672'
+};
+
 // Cooldown timer for last swear in channel //! currently behaves globally (swear in 1 server affects cooldown in another server)
 let lastSwear;
 
@@ -82,7 +90,7 @@ client.once('ready', () => {
 			.setTitle('Current time')
 			.setColor(0xFFFFFF)
 			.setDescription(printTime())
-		client.guilds.fetch('751793035565727816')
+		client.guilds.fetch(guilds.bt)
 			.then((guild) => guild.channels.cache.find(channel => channel.id === '752679477787623544'))
 			.then((guildChannel) => guildChannel.send(embed));
 	});
@@ -100,7 +108,7 @@ client.on('message', (msg) => {
 	let swears = fs.readJsonSync(path.join(__dirname, 'swears.json')).swears;
 
 	for (let i = 0; i < swears.length; i++) {
-		if (msg.author.bot || !filterGuild(msg, ['750773045974663208', '751793035565727816'])) break;
+		if (msg.author.bot || !filterGuild(msg, [guilds.t, guilds.bt])) break;
 
 		if (new RegExp(`\\b${swears[i]}\\b`, 'gi').test(msg.content.toLowerCase())) {
 			if (lastSwear != null && (moment().format('X') - lastSwear) < 30) return;
