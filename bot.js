@@ -77,6 +77,7 @@ const commands = {
 	clear: (msg) => clear(msg),
 	kick: (msg) => kick(msg),
 	send: (msg) => send(msg),
+	uptime: (msg) => uptime(msg),
 };
 
 /* Client setup */
@@ -441,4 +442,14 @@ function send(msg) {
 
 	msg.reply(`${count} messages created`);
 	//log.info(`Completed sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`); // log is broken
+}
+
+function uptime(msg) {
+	let totalSeconds = client.uptime / 1000;
+	let hours = (totalSeconds / (60 * 60)).toString().split('.')[0];
+	let minutes = (totalSeconds / 60 % 60).toString().split('.')[0];
+	let seconds = (totalSeconds % 60).toString().split('.')[0];
+
+	let embed = new MessageEmbed().setTitle(`Bot has been active for ${hours} hours, ${minutes} minutes, ${seconds} seconds`);
+	msg.channel.send(embed);
 }
