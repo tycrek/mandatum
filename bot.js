@@ -108,7 +108,7 @@ client.on('message', (msg) => {
 	let swears = fs.readJsonSync(path.join(__dirname, 'swears.json')).swears;
 
 	for (let i = 0; i < swears.length; i++) {
-		if (msg.author.bot || !filterGuild(msg, [guilds.t, guilds.bt])) break;
+		if (msg.author.bot || !filterGuild(msg, [guilds.t, guilds.bt]) || filterCategory(msg, '750773557239349259')) break;
 
 		if (new RegExp(`\\b${swears[i]}\\b`, 'gi').test(msg.content.toLowerCase())) {
 
@@ -142,8 +142,14 @@ function filterGuild(msg, guildId) {
 	return (guildId instanceof Array && guildId.find(id => id === msg.guild.id) && true) || msg.guild.id === guildId;
 }
 
+// Filter message by category
+// Returns true if message is the category ID (can also be an array of channes IDs)
+function filterCategory(msg, categoryId) {
+	return (categoryId instanceof Array && categoryId.find(id => id === msg.channel.parent.id) && true) || msg.channel.parent.id === categoryId;
+}
+
 // Filter message by channel
-// Returns true if message is the channels ID (can also be an array of channes IDs)
+// Returns true if message is the channel ID (can also be an array of channel IDs)
 function filterChannel(msg, channelId) {
 	return (channelId instanceof Array && channelId.find(id => id === msg.channel.id) && true) || msg.channel.id === channelId;
 }
