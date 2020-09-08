@@ -88,25 +88,6 @@ client.once('ready', () => {
 	});
 });
 
-const prefix = '>';
-const commands = {
-	commands: (msg) => mCommands(msg),
-	website: (msg) => website(msg),
-	github: (msg) => github(msg),
-	namemc: (msg) => namemc(msg),
-	btc: (msg) => btc(msg),
-	mcskin: (msg) => mcskin(msg),
-	source: (msg) => source(msg),
-	link: (msg) => link(msg),
-	shut: (msg) => shut(msg),
-	search: (msg) => search(msg),
-	//face: (msg) => face(msg), // ! Broken right now, caching on server
-	inspire: (msg) => inspire(msg),
-	uuid: (msg) => uuid(msg),
-	meme: (msg) => meme(msg),
-	//release: (msg) => release(msg)
-};
-
 // Command processor
 client.on('message', (msg) => {
 	if (!msg.content.startsWith(prefix) || msg.author.bot) return;
@@ -135,19 +116,24 @@ client.login(fs.readJsonSync(path.join(__dirname, 'auth.json')).token);
 
 /* Functions */
 
+// Print the time in a nice format: 6:57:30 pm, September 7th, 2020
 function printTime() {
 	return moment().format('h:mm:ss a, MMMM Do, YYYY')
 }
 
+// Filter message by guild
+// Returns true if message is the guild ID (can also be an array of guild IDs)
 function filterGuild(msg, guildId) {
 	return (guildId instanceof Array && guildId.find(id => id === msg.guild.id) && true) || msg.guild.id === guildId;
 }
 
+// Filter message by channel
+// Returns true if message is the channels ID (can also be an array of channes IDs)
 function filterChannel(msg, channelId) {
 	return (channelId instanceof Array && channelId.find(id => id === msg.channel.id) && true) || msg.channel.id === channelId;
 }
 
-// command functions
+// Command functions
 
 function mCommands(msg) {
 	let text = '';
