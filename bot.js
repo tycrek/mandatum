@@ -336,6 +336,8 @@ function clear(msg) {
 	//if (!filterRole(msg, '752752772100653198')) return noPermission(msg);
 	if (!filterAuthor(msg, owner)) return noPermission(msg);
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
+
+	// Delete the messages
 	msg.channel.bulkDelete(parseInt(args[1]) + 1).then((messages) => {
 		log.info(`Deleted ${messages.size - 1} (${messages.size}) messages`);
 		msg.channel.send(`:bomb: Deleted **\`${args[1]}\`** messages!`)
@@ -346,12 +348,14 @@ function clear(msg) {
 function kick(msg) {
 	if (!filterAuthor(msg, owner)) return noPermission(msg);
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
-	args.shift();
-	args.shift();
 
+	args.shift(); // Remove the command
+	args.shift(); // Remove the user
 	let reason = args.join(' ');
+
 	let nick = msg.mentions.members.first().user.username;
 
+	// Kick the user
 	msg.mentions.members.first().kick(reason).then(() => {
 		let result = `Kicked **${nick}** for: *${reason}*`;
 		log.info(result);
