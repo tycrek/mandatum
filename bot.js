@@ -332,9 +332,9 @@ function clear(msg) {
 	//if (!filterRole(msg, '752752772100653198')) return msg.reply('sorry, but you don\'t have permission to do that.');
 	if (!filterAuthor(msg, '324679696182673408')) return noPermission(msg);
 	const args = msg.content.slice(prefix.length).trim().split(/ +/);
-	msg.channel.bulkDelete(parseInt(args[1]) + 1).then((messages) => log.info(`Deleted ${messages.size - 1} (${messages.size}) messages`));
-	msg.channel.send(`:bomb: Deleted **\`${args[1]}\`** messages!`)
-		.then((msg2) => {
-			setTimeout(() => msg2.delete(), 1500);
-		});
+	msg.channel.bulkDelete(parseInt(args[1]) + 1).then((messages) => {
+		log.info(`Deleted ${messages.size - 1} (${messages.size}) messages`);
+		msg.channel.send(`:bomb: Deleted **\`${args[1]}\`** messages!`)
+			.then((msg2) => setTimeout(() => msg2.delete(), 1500));
+	});
 }
