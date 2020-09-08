@@ -43,6 +43,28 @@ const log = require('pino')({
 // Cooldown timer for last swear in channel //! currently behaves globally (swear in 1 server affects cooldown in another server)
 let lastSwear;
 
+// Prefix for bot commands
+const prefix = '>';
+
+// Bot commands
+const commands = {
+	commands: (msg) => mCommands(msg),
+	website: (msg) => website(msg),
+	github: (msg) => github(msg),
+	namemc: (msg) => namemc(msg),
+	btc: (msg) => btc(msg),
+	mcskin: (msg) => mcskin(msg),
+	source: (msg) => source(msg),
+	link: (msg) => link(msg),
+	shut: (msg) => shut(msg),
+	search: (msg) => search(msg),
+	//face: (msg) => face(msg), // ! Broken right now, caching on server
+	inspire: (msg) => inspire(msg),
+	uuid: (msg) => uuid(msg),
+	meme: (msg) => meme(msg),
+	//release: (msg) => release(msg)
+};
+
 /* Client setup */
 
 const client = new Client();
