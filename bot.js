@@ -97,7 +97,7 @@ client.on('message', (msg) => {
 	let swears = fs.readJsonSync(path.join(__dirname, 'swears.json')).swears;
 
 	for (let i = 0; i < swears.length; i++) {
-		if (msg.author.bot || !(msg.guild.id == '750773045974663208' || msg.guild.id == '751793035565727816')) break;
+		if (msg.author.bot || !filterGuild(msg, ['750773045974663208', '751793035565727816'])) break;
 
 		if (new RegExp(`\\b${swears[i]}\\b`, 'gi').test(msg.content.toLowerCase())) {
 			if (lastSwear != null && (moment().format('X') - lastSwear) < 30) return;
@@ -118,7 +118,7 @@ function printTime() {
 }
 
 function filterGuild(msg, guildId) {
-	log.warn('Not implemented yet!');
+	return (guildId instanceof Array && guildId.find(id => id === msg.guild.id) && true) || msg.guild.id === guildId;
 }
 
 function filterChannel(msg, channelId) {
