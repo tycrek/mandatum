@@ -71,7 +71,8 @@ const commands = {
 	uuid: (msg) => uuid(msg),
 	meme: (msg) => meme(msg),
 	release: (msg) => release(msg),
-	clear: (msg) => clear(msg)
+	clear: (msg) => clear(msg),
+	kick: (msg) => kick(msg),
 };
 
 /* Client setup */
@@ -336,5 +337,21 @@ function clear(msg) {
 		log.info(`Deleted ${messages.size - 1} (${messages.size}) messages`);
 		msg.channel.send(`:bomb: Deleted **\`${args[1]}\`** messages!`)
 			.then((msg2) => setTimeout(() => msg2.delete(), 1500));
+	});
+}
+
+function kick(msg) {
+	if (!filterAuthor(msg, '324679696182673408')) return noPermission(msg);
+	const args = msg.content.slice(prefix.length).trim().split(/ +/);
+	args.shift();
+	args.shift();
+
+	let reason = args.join(' ');
+	let nick = msg.mentions.members.first().user.username;
+
+	msg.mentions.members.first().kick(reason).then(() => {
+		let result = `Kicked **${nick}** for: *${reason}*`;
+		log.info(result);
+		msg.reply(result);
 	});
 }
