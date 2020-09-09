@@ -24,21 +24,9 @@ module.exports = {
 			.setFooter('Created by tycrek')
 			.addFields(
 				{ name: 'Info', value: info.join('\n') || 'None', inline: true },
-				{ name: '\u200B', value: '\u200B', inline: true },
 				{ name: 'Fun', value: fun.join('\n') || 'None', inline: true },
-
-				{ name: '\u200B', value: '\u200B', inline: true },
-				{ name: '\u200B', value: '\u200B', inline: true },
-				{ name: '\u200B', value: '\u200B', inline: true },
-
 				{ name: 'Utility', value: utility.join('\n') || 'None', inline: true },
-				{ name: '\u200B', value: '\u200B', inline: true },
 				{ name: 'Moderator', value: moderator.join('\n') || 'None', inline: true },
-
-				{ name: '\u200B', value: '\u200B', inline: true },
-				{ name: '\u200B', value: '\u200B', inline: true },
-				{ name: '\u200B', value: '\u200B', inline: true },
-
 				{ name: 'Admin', value: admin.join('\n') || 'None', inline: true },
 			));
 	},
