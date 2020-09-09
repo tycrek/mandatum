@@ -45,7 +45,7 @@ module.exports = {
 				new Promise((resolve) =>
 
 					// Send the message
-					msg.channel.send(`Message ${i + 1}`)
+					msg.channel.send(`**Automessage in progress...** (${i + 1}/${count})`)
 
 						// Recursively call the next message event after sending
 						.then(() => messages[i + 1]())
