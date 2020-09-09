@@ -97,18 +97,17 @@ client.once('ready', () => {
 
 // Command processor
 client.on('message', (msg) => {
-	if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+	if (!msg.content.startsWith(prefix) || msg.channel.type === 'dm' || msg.author.bot) return;
 	try { commands[Object.keys(commands).find(key => msg.content.trim().substr(1).split(/ +/)[0] === key)](msg) }
 	catch (err) { !(err instanceof TypeError) && log.warn(err) }
 });
 
 // Swear word processor
 client.on('message', (msg) => {
+	if (msg.author.bot || msg.channel.type === 'dm' || !filter.guild(msg, [guilds.t, guilds.bt]) || filter.category(msg, '750773557239349259')) return;
+
 	let swears = fs.readJsonSync(path.join(__dirname, 'swears.json')).swears;
-
 	for (let i = 0; i < swears.length; i++) {
-		if (msg.author.bot || !filter.guild(msg, [guilds.t, guilds.bt]) || filter.category(msg, '750773557239349259')) break;
-
 		if (new RegExp(`\\b${swears[i]}\\b`, 'gi').test(msg.content.toLowerCase())) {
 
 			// Return if we are within the cooldown period
@@ -119,7 +118,7 @@ client.on('message', (msg) => {
 
 			// Update the cooldown and log the time updated
 			lastSwear[msg.channel.id] = moment().format('X');
-			log.info(`Setting guild:channel [${msg.guild.id}:${msg.channel.id}] swear cooldown at ${lastSwear[msg.channel.id]}`);
+			log.info(`Setting ${msg.guild.name}: ${msg.channel.name} swear cooldown at ${lastSwear[msg.channel.id]}`);
 			break;
 		}
 	}
