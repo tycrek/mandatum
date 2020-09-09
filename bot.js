@@ -95,6 +95,9 @@ client.once('ready', () => {
 	});
 });
 
+client.on('warn', (warn) => log.warn(warn));
+client.on('error', (error) => log.error(error));
+
 // Command processor
 client.on('message', (msg) => {
 	if (!msg.content.startsWith(prefix) || msg.channel.type === 'dm' || msg.author.bot) return;
