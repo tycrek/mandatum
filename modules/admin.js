@@ -27,7 +27,8 @@ module.exports = {
 				{ name: '\u200B', value: '\u200B', inline: true },
 				{ name: 'Fixed', value: fixText, inline: true },
 			);
-		msg.channel.send(embed);
+		msg.channel.send(embed)
+			.catch((err) => log.warn(err));
 	},
 
 	send: (msg) => {
@@ -36,7 +37,7 @@ module.exports = {
 		let count = parseInt(args[1]);
 
 		log.info(`Sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`);
-		msg.delete();
+		msg.delete().catch((err) => log.warn(err));
 
 		// Generate our message objects and populate the array
 		let messages = [];
@@ -60,7 +61,8 @@ module.exports = {
 		messages[0]()
 			.then(() => log.info(`Completed sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`))
 			.then(() => msg.member.createDM())
-			.then((channel) => channel.send(`**${count}** messages created!`));
+			.then((channel) => channel.send(`**${count}** messages created!`))
+			.catch((err) => log.warn(err));
 	},
 
 	steal: (msg) => {
@@ -72,7 +74,8 @@ module.exports = {
 		for (let arg of args) {
 			let url = `https://cdn.discordapp.com/emojis/${arg.split(':')[2].replace('>', '')}${arg.startsWith('<a:') ? '.gif?v=1' : '.png?v=1'}`;
 			msg.guild.emojis.create(url, arg.split(':')[1])
-				.then((emoji) => msg.reply(`added ${emoji}`));
+				.then((emoji) => msg.reply(`added ${emoji}`))
+				.catch((err) => log.warn(err));
 		}
 	}
 }

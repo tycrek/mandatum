@@ -15,22 +15,24 @@ module.exports = {
 				name: category[0].toUpperCase() + category.slice(1), // crappy way to capitalize 1st letter
 				value: Object.keys(require('./' + category)).map(c => `\`>${c}\``).join('\n'),
 				inline: true
-			})))),
+			}))))
+			.catch((err) => log.warn(err)),
 
-	website: (msg) => {
-		msg.channel.send('Visit: https://jmoore.dev/');
-		msg.delete();
-	},
+	website: (msg) =>
+		msg.channel.send('Visit: https://jmoore.dev/')
+			.then(() => msg.delete())
+			.catch((err) => log.warn(err)),
 
-	github: (msg) => {
-		msg.channel.send('Visit: https://github.com/tycrek');
-		msg.delete();
-	},
+	github: (msg) =>
+		msg.channel.send('Visit: https://github.com/tycrek')
+			.then(() => msg.delete())
+			.catch((err) => log.warn(err)),
 
 	source: (msg) =>
 		msg.channel.send(new MessageEmbed()
 			.setTitle('Bot source code')
 			.setColor(0x181A1B)
 			.setURL('https://github.com/tycrek/mandatum')
-			.setFooter('Check out my source code on GitHub!')),
+			.setFooter('Check out my source code on GitHub!'))
+			.catch((err) => log.warn(err)),
 }

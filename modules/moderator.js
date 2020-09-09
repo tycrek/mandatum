@@ -34,7 +34,8 @@ module.exports = {
 			})
 
 			// Delete the bot message after 1.5 seconds
-			.then((bombMessage) => setTimeout(() => bombMessage.delete(), 1500));
+			.then((bombMessage) => setTimeout(() => bombMessage.delete(), 1500))
+			.catch((err) => log.warn(err));
 
 		// Deletes more than 100 messages
 		function hundredPlus(amount) {
@@ -82,7 +83,8 @@ module.exports = {
 					.then((result) => {
 						log.info(`Bulk deletion task complete! Deleted ${result} messages out of ${amount} total`);
 						setTimeout(() => resolve(result), 2000);
-					});
+					})
+					.catch((err) => log.warn(err));
 			});
 		}
 	},
@@ -98,10 +100,12 @@ module.exports = {
 		let nick = msg.mentions.members.first().user.username;
 
 		// Kick the user
-		msg.mentions.members.first().kick(reason).then(() => {
-			let result = `Kicked **${nick}** for: *${reason}*`;
-			log.info(result);
-			msg.reply(result);
-		});
+		msg.mentions.members.first().kick(reason)
+			.then(() => {
+				let result = `Kicked **${nick}** for: *${reason}*`;
+				log.info(result);
+				return msg.reply(result);
+			})
+			.catch((err) => log.warn(err));
 	}
 }

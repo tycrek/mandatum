@@ -12,8 +12,9 @@ module.exports = {
 		msg.channel.send(new MessageEmbed()
 			.setTitle(args[1])
 			.setColor(0x455A64)
-			.setURL(`https://${args[1].toLowerCase()}`));
-		msg.delete();
+			.setURL(`https://${args[1].toLowerCase()}`))
+			.then(() => msg.delete())
+			.catch((err) => log.warn(err));
 	},
 
 	search: (msg) => {
@@ -22,14 +23,16 @@ module.exports = {
 		msg.channel.send(new MessageEmbed()
 			.setColor(0xE0632F)
 			.setAuthor(`Searching "${args.join(' ')}" for ${msg.author.username}`)
-			.setDescription(`https://duckduckgo.com/?q=${args.join('+')}`));
+			.setDescription(`https://duckduckgo.com/?q=${args.join('+')}`))
+			.catch((err) => log.warn(err));
 	},
 
 	uuid: (msg) =>
 		msg.channel.send(new MessageEmbed()
 			.setTitle('Here\'s your UUID:')
 			.setColor(0x000000)
-			.setDescription(`\`${UUID()}\``)),
+			.setDescription(`\`${UUID()}\``))
+			.catch((err) => log.warn(err)),
 
 	uptime: (msg) => {
 		let totalSeconds = client.uptime / 1000;
@@ -37,7 +40,7 @@ module.exports = {
 		let minutes = (totalSeconds / 60 % 60).toString().split('.')[0];
 		let seconds = (totalSeconds % 60).toString().split('.')[0];
 
-		let embed = new MessageEmbed().setTitle(`Bot has been active for ${hours} hours, ${minutes} minutes, ${seconds} seconds`);
-		msg.channel.send(embed);
+		msg.channel.send(new MessageEmbed().setTitle(`Bot has been active for ${hours} hours, ${minutes} minutes, ${seconds} seconds`))
+			.catch((err) => log.warn(err));
 	}
 }

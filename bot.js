@@ -76,23 +76,23 @@ module.exports.commands = commands;
 client.once('ready', () => {
 	log.info('Beep, boop! mandatum is ready :)');
 
-	client.guilds.fetch(guilds.bt)
-		.then((guild) => guild.channels.cache.find(channel => channel.id === '752664709408227518'))
+	//client.guilds.fetch(guilds.bt)
+	//	.then((guild) => guild.channels.cache.find(channel => channel.id === '752664709408227518'))
 	//.then((guildChannel) => guildChannel.send('`Beep, boop! mandatum is ready :)`'));
 
 	// Custom status
-	client.user.setActivity('the world burn (>)', { type: "WATCHING" });
+	client.user.setActivity('the world burn (>)', { type: "WATCHING" })
+		.catch((err) => log.warn(err));
 
 	// Scheduled message test
-	schedule.scheduleJob('0 */1 * * *', () => {
-		let embed = new MessageEmbed()
-			.setTitle(`Clock strikes ${moment().format('h')}!`)
-			.setColor(0xFFFFFF)
-			.setDescription(printTime())
+	schedule.scheduleJob('0 */1 * * *', () =>
 		client.guilds.fetch(guilds.bt)
 			.then((guild) => guild.channels.cache.find(channel => channel.id === '752898408834138145'))
-			.then((guildChannel) => guildChannel.send(embed));
-	});
+			.then((guildChannel) => guildChannel.send(new MessageEmbed()
+				.setTitle(`Clock strikes ${moment().format('h')}!`)
+				.setColor(0xFFFFFF)
+				.setDescription(printTime())))
+			.catch((err) => log.warn(err)));
 });
 
 client.on('warn', (warn) => log.warn(warn));
@@ -117,7 +117,8 @@ client.on('message', (msg) => {
 			if (lastSwear[msg.channel.id] != null && (moment().format('X') - lastSwear[msg.channel.id]) < 30) return;
 
 			// Curse thee heathen!
-			msg.channel.send(`Watch your fucking language ${msg.author.toString()}.`);
+			msg.channel.send(`Watch your fucking language ${msg.author.toString()}.`)
+				.catch((err) => log.warn(err));
 
 			// Update the cooldown and log the time updated
 			lastSwear[msg.channel.id] = moment().format('X');
@@ -128,4 +129,5 @@ client.on('message', (msg) => {
 });
 
 // Log in to Discord using token
-client.login(fs.readJsonSync(path.join(__dirname, 'auth.json')).token);
+client.login(fs.readJsonSync(path.join(__dirname, 'auth.json')).token)
+	.catch((err) => log.warn(err));

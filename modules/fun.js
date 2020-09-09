@@ -12,7 +12,8 @@ module.exports = {
 			.setTitle(`${args[1]} on NameMC`)
 			.setColor(0x234875)
 			.setURL(`https://namemc.com/s?${args[1]}`)
-			.setFooter('https://namemc.com'));
+			.setFooter('https://namemc.com'))
+			.catch((err) => log.warn(err));
 	},
 
 	btc: (msg) =>
@@ -24,7 +25,8 @@ module.exports = {
 				.setColor(0xF79019)
 				.setDescription(`$${price}`)
 				.setFooter('https://www.coindesk.com/coindesk-api'))
-			.then((embed) => msg.channel.send(embed)),
+			.then((embed) => msg.channel.send(embed))
+			.catch((err) => log.warn(err)),
 
 	mcskin: (msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
@@ -32,14 +34,16 @@ module.exports = {
 			.setTitle(`${args[1]}'s Minecraft skin`)
 			.setColor(0xFF4136)
 			.setImage(`https://minotar.net/armor/body/${args[1]}/150.png`)
-			.setFooter('https://minotar.net'));
+			.setFooter('https://minotar.net'))
+			.catch((err) => log.warn(err));
 	},
 
 	shut: (msg) => {
 		msg.channel.send(new MessageEmbed()
 			.setColor(0x0B1308)
-			.setImage('https://shutplea.se/'));
-		msg.delete();
+			.setImage('https://shutplea.se/'))
+			.then(() => msg.delete())
+			.catch((err) => log.warn(err));
 	},
 
 	/*
@@ -59,7 +63,8 @@ module.exports = {
 				.setColor(0x1D8F0A)
 				.setImage(`${text}`)
 				.setFooter('https://inspirobot.me/'))
-			.then((embed) => msg.channel.send(embed)),
+			.then((embed) => msg.channel.send(embed))
+			.catch((err) => log.warn(err)),
 
 	meme: (msg) =>
 		fetch('https://imgflip.com/ajax_img_flip')
@@ -70,5 +75,5 @@ module.exports = {
 				.setImage(`https://i.imgflip.com/${meme}.jpg`)
 				.setFooter('https://imgflip.com'))
 			.then((embed) => msg.channel.send(embed))
-
+			.catch((err) => log.warn(err))
 }
