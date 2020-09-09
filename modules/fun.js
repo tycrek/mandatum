@@ -42,12 +42,14 @@ module.exports = {
 		msg.delete();
 	},
 
+	/*
 	face: (msg) =>
 		msg.channel.send(new MessageEmbed()
 			.setColor(0x000000)
 			.setTitle('This person does not exist...')
 			.setImage('https://thispersondoesnotexist.com/image')
 			.setFooter('https://thispersondoesnotexist.com/')),
+	*/
 
 	inspire: (msg) =>
 		fetch('https://inspirobot.me/api?generate=true')
