@@ -20,19 +20,13 @@ const { Client, MessageEmbed } = require('discord.js');
 const path = require('path');
 const fs = require('fs-extra');
 
-// for fetching data from the net
-const fetch = require('node-fetch');
-
 // for scheduling automated messages
 const schedule = require('node-schedule');
-
-// for fun :)
-const UUID = require('uuid').v4;
 
 // anything time related such as the cooldown
 const moment = require('moment');
 
-const { log, printTime, filter, noPermission } = require('./utils');
+const { log, printTime, filter } = require('./utils');
 
 /* Variables */
 
@@ -53,32 +47,30 @@ let lastSwear = {};
 // Prefix for bot commands
 const prefix = '>';
 
-// Bot commands
-const commands = {
-	commands: (msg) => mCommands(msg),
-	website: (msg) => website(msg),
-	github: (msg) => github(msg),
-	namemc: (msg) => namemc(msg),
-	btc: (msg) => btc(msg),
-	mcskin: (msg) => mcskin(msg),
-	source: (msg) => source(msg),
-	link: (msg) => link(msg),
-	shut: (msg) => shut(msg),
-	search: (msg) => search(msg),
-	//face: (msg) => face(msg), // ! Broken right now, caching on server
-	inspire: (msg) => inspire(msg),
-	uuid: (msg) => uuid(msg),
-	meme: (msg) => meme(msg),
-	release: (msg) => release(msg),
-	clear: (msg) => clear(msg),
-	kick: (msg) => kick(msg),
-	send: (msg) => send(msg),
-	uptime: (msg) => uptime(msg),
+// client
+const client = new Client();
+
+//* (1/3) Export everything
+module.exports = {
+	client: client,
+	owner: owner,
+	guilds: guilds,
+	prefix: prefix
 };
 
-/* Client setup */
+//* (2/3) Set up commands
+var commands = {
+	...require('./modules/info'),
+	...require('./modules/fun'),
+	...require('./modules/utility'),
+	...require('./modules/moderator'),
+	...require('./modules/admin')
+};
 
-const client = new Client();
+//* (3/3) Add commands to exports
+module.exports.commands = commands;
+
+/* client events */
 
 // When client is ready (after it logs in)
 client.once('ready', () => {
@@ -86,7 +78,7 @@ client.once('ready', () => {
 
 	client.guilds.fetch(guilds.bt)
 		.then((guild) => guild.channels.cache.find(channel => channel.id === '752664709408227518'))
-		.then((guildChannel) => guildChannel.send('`Beep, boop! mandatum is ready :)`'));
+	//.then((guildChannel) => guildChannel.send('`Beep, boop! mandatum is ready :)`'));
 
 	// Custom status
 	client.user.setActivity('the world burn (>)', { type: "WATCHING" });
@@ -135,302 +127,3 @@ client.on('message', (msg) => {
 
 // Log in to Discord using token
 client.login(fs.readJsonSync(path.join(__dirname, 'auth.json')).token);
-
-module.exports = {
-	client: client
-};
-
-/* Functions */
-
-function mCommands(msg) {
-	let text = '';
-	for (let command in commands) text = `${text}\`>${command}\`\n`;
-
-	let embed = new MessageEmbed()
-		.setTitle('Bot commands')
-		.setColor(0xFFFF00)
-		.setDescription(text);
-	msg.channel.send(embed);
-}
-
-function website(msg) {
-	msg.channel.send('Visit: https://jmoore.dev/');
-	msg.delete();
-}
-
-function github(msg) {
-	msg.channel.send('Visit: https://github.com/tycrek');
-	msg.delete();
-}
-
-function namemc(msg) {
-	const args = msg.content.slice(prefix.length).trim().split(/ +/);
-	let embed = new MessageEmbed()
-		.setTitle(`${args[1]} on NameMC`)
-		.setColor(0x234875)
-		.setURL(`https://namemc.com/s?${args[1]}`)
-		.setFooter('https://namemc.com');
-	msg.channel.send(embed);
-}
-
-function btc(msg) {
-	fetch('https://api.coindesk.com/v1/bpi/currentprice.json')
-		.then((res) => res.json())
-		.then((json) => json.bpi.USD.rate)
-		.then((price) => new MessageEmbed()
-			.setTitle('Current Bitcoin Price (USD)')
-			.setColor(0xF79019)
-			.setDescription(`$${price}`)
-			.setFooter('https://www.coindesk.com/coindesk-api'))
-		.then((embed) => msg.channel.send(embed));
-}
-
-function mcskin(msg) {
-	const args = msg.content.slice(prefix.length).trim().split(/ +/);
-	let embed = new MessageEmbed()
-		.setTitle(`${args[1]}'s Minecraft skin`)
-		.setColor(0xFF4136)
-		.setImage(`https://minotar.net/armor/body/${args[1]}/150.png`)
-		.setFooter('https://minotar.net');
-	msg.channel.send(embed);
-}
-
-function source(msg) {
-	let embed = new MessageEmbed()
-		.setTitle('Bot source code')
-		.setColor(0x181A1B)
-		.setURL('https://github.com/tycrek/mandatum')
-		.setFooter('Check out my source code on GitHub!');
-	msg.channel.send(embed);
-}
-
-function link(msg) {
-	const args = msg.content.slice(prefix.length).trim().split(/ +/);
-	let embed = new MessageEmbed()
-		.setTitle(args[1])
-		.setColor(0x455A64)
-		.setURL(`https://${args[1].toLowerCase()}`)
-	msg.channel.send(embed);
-	msg.delete();
-}
-
-function shut(msg) {
-	let embed = new MessageEmbed()
-		.setColor(0x0B1308)
-		.setImage('https://shutplea.se/')
-	msg.channel.send(embed);
-	msg.delete();
-}
-
-function search(msg) {
-	const args = msg.content.slice(prefix.length).trim().split(/ +/);
-	args.shift();
-	let embed = new MessageEmbed()
-		.setColor(0xE0632F)
-		.setAuthor(`Searching "${args.join(' ')}" for ${msg.author.username}`)
-		.setDescription(`https://duckduckgo.com/?q=${args.join('+')}`)
-	msg.channel.send(embed);
-}
-
-function face(msg) {
-	let embed = new MessageEmbed()
-		.setColor(0x000000)
-		.setTitle('This person does not exist...')
-		.setImage('https://thispersondoesnotexist.com/image')
-		.setFooter('https://thispersondoesnotexist.com/');
-	msg.channel.send(embed);
-}
-
-function inspire(msg) {
-	fetch('https://inspirobot.me/api?generate=true')
-		.then((res) => res.text())
-		.then((text) => new MessageEmbed()
-			.setTitle('Be inspired...')
-			.setColor(0x1D8F0A)
-			.setImage(`${text}`)
-			.setFooter('https://inspirobot.me/'))
-		.then((embed) => msg.channel.send(embed));
-}
-
-function uuid(msg) {
-	let embed = new MessageEmbed()
-		.setTitle('Here\'s your UUID:')
-		.setColor(0x000000)
-		.setDescription(`\`${UUID()}\``)
-	msg.channel.send(embed);
-}
-
-function meme(msg) {
-	fetch('https://imgflip.com/ajax_img_flip')
-		.then((res) => res.text())
-		.then((text) => text.split('/')[2])
-		.then((meme) => new MessageEmbed()
-			.setColor(0x004daa)
-			.setImage(`https://i.imgflip.com/${meme}.jpg`)
-			.setFooter('https://imgflip.com'))
-		.then((embed) => msg.channel.send(embed));
-}
-
-function release(msg) {
-	if (!filter.author(msg, owner)) return noPermission(msg);
-	const args = msg.content.slice(prefix.length).trim().split(/ +/);
-	let project = args[1];
-	let version = args[2];
-	let change = args[3];
-	let fix = args[4];
-
-	let changeText = change.split('##').join('\n- ');
-	let fixText = fix.split('##').join('\n- ');
-
-	let embed = new MessageEmbed()
-		.setColor(0x03A9F4)
-		.setThumbnail('https://raw.githubusercontent.com/tycrek/jmoore.dev/master/client/images/profile/profile-normal-small.jpg')
-		.setTitle(`${project} v${version}`)
-		.addFields(
-			{ name: 'Changes', value: changeText, inline: true },
-			{ name: '\u200B', value: '\u200B', inline: true },
-			{ name: 'Fixed', value: fixText, inline: true },
-		);
-	msg.channel.send(embed);
-}
-
-function clear(msg) {
-	// first if is role filter, second is user filter
-	//if (!filter.role(msg, '752752772100653198')) return noPermission(msg);
-	if (!filter.author(msg, owner)) return noPermission(msg);
-	const args = msg.content.slice(prefix.length).trim().split(/ +/);
-	let channel = msg.channel;
-
-	// amount is total user wants deleted plus the message calling the command
-	let amount = parseInt(args[1]) + 1;
-
-	// leftover is messages when amount is below 100, or the remainder when amount > 100
-	// This is required since bulkDelete only deletes 100 at a time
-	let leftover = amount % 100;
-
-	// Discord API won't let us delete more than 100 messages at a time
-	hundredPlus(amount)
-
-		// Delete the messages not included in the bulk delete (this is always less than 100)
-		.then(() => channel.bulkDelete(leftover))
-
-		// Tell the user we deleted all the messages
-		.then(() => {
-			log.info(`Deleted ${amount - 1} (${amount}) messages`);
-			return channel.send(`:bomb: Deleted **\`${args[1]}\`** messages!`);
-		})
-
-		// Delete the bot message after 1.5 seconds
-		.then((bombMessage) => setTimeout(() => bombMessage.delete(), 1500));
-
-	// Deletes more than 100 messages
-	function hundredPlus(amount) {
-		// Resolves once we have deleted x hundred messages
-		return new Promise((resolve) => {
-
-			// If requested amount can be done all at once, resolve
-			if (amount < 100) return resolve(0);
-
-			// How many times we will need to delete 100 messages
-			let iterations = parseInt((amount / 100).toString().split('.')[0]);
-
-			// Used for logging purposes
-			let completed = 0;
-			let total = iterations * 100;
-
-			// Each set of 100 is a separate Promise
-			let promises = [];
-
-			// Create the promisese
-			for (let i = 0; i < iterations; i++) {
-				promises.push(() => new Promise((resolve) => {
-					log.info(`Bulk deletion task section [${i}] is running!`);
-
-					// Delete bulk messages
-					channel.bulkDelete(100)
-						.then(() => {
-
-							// Update completed and log progress
-							completed += 100;
-							log.info(`Bulk deletion task section [${i}] completed: Deleted ${completed} / ${total} bulk messages (${amount} total)`);
-
-							// Wait two seconds before continuing. Two possible scenarios:
-							//  1. We are on the last task and want to resolve everything back out of promises[0]
-							//       completed === total ? resolve(total)
-							//  2. We are not on the last task and need to recursively call the next task
-							//       promises[i + 1]().then((result) => resolve(result))
-							setTimeout(() => completed === total ? resolve(total) : promises[i + 1]().then((result) => resolve(result)), 2000);
-						});
-				}));
-			}
-
-			// Wait for all deletion tasks to complete
-			promises[0]()
-				.then((result) => {
-					log.info(`Bulk deletion task complete! Deleted ${result} messages out of ${amount} total`);
-					setTimeout(() => resolve(result), 2000);
-				});
-		});
-	}
-}
-
-function kick(msg) {
-	if (!filter.author(msg, owner)) return noPermission(msg);
-	const args = msg.content.slice(prefix.length).trim().split(/ +/);
-
-	args.shift(); // Remove the command
-	args.shift(); // Remove the user
-	let reason = args.join(' ');
-
-	let nick = msg.mentions.members.first().user.username;
-
-	// Kick the user
-	msg.mentions.members.first().kick(reason).then(() => {
-		let result = `Kicked **${nick}** for: *${reason}*`;
-		log.info(result);
-		msg.reply(result);
-	});
-}
-
-function send(msg) {
-	if (!filter.author(msg, owner)) return noPermission(msg);
-	const args = msg.content.slice(prefix.length).trim().split(/ +/);
-	let count = parseInt(args[1]);
-
-	log.info(`Sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`);
-	msg.delete();
-
-	// Generate our message objects and populate the array
-	let messages = [];
-	for (let i = 0; i < count; i++)
-		messages.push(() =>
-			new Promise((resolve) =>
-
-				// Send the message
-				msg.channel.send(`Message ${i + 1}`)
-
-					// Recursively call the next message event after sending
-					.then(() => messages[i + 1]())
-
-					// Previous line will eventually return itself as a promise
-					.then(() => resolve())
-
-					// The last message has an error at [i + 1] so we can exploit this as our exit condition
-					.catch(() => resolve())));
-
-	// Call the first message in the batch to kick off the loop
-	messages[0]()
-		.then(() => log.info(`Completed sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`))
-		.then(() => msg.member.createDM())
-		.then((channel) => channel.send(`**${count}** messages created!`));
-}
-
-function uptime(msg) {
-	let totalSeconds = client.uptime / 1000;
-	let hours = (totalSeconds / (60 * 60)).toString().split('.')[0];
-	let minutes = (totalSeconds / 60 % 60).toString().split('.')[0];
-	let seconds = (totalSeconds % 60).toString().split('.')[0];
-
-	let embed = new MessageEmbed().setTitle(`Bot has been active for ${hours} hours, ${minutes} minutes, ${seconds} seconds`);
-	msg.channel.send(embed);
-}
