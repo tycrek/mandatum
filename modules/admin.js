@@ -61,5 +61,18 @@ module.exports = {
 			.then(() => log.info(`Completed sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`))
 			.then(() => msg.member.createDM())
 			.then((channel) => channel.send(`**${count}** messages created!`));
+	},
+
+	steal: (msg) => {
+		if (!filter.author(msg, owner)) return noPermission(msg);
+		const args = msg.content.slice(prefix.length).trim().split(/ +/);
+		args.shift(); // Remove command from args
+
+		// iterate through the added emoji (must be seperated with a space in message)
+		for (let arg of args) {
+			let url = `https://cdn.discordapp.com/emojis/${arg.split(':')[2].replace('>', '')}${arg.startsWith('<a:') ? '.gif?v=1' : '.png?v=1'}`;
+			msg.guild.emojis.create(url, arg.split(':')[1])
+				.then((emoji) => msg.reply(`added ${emoji}`));
+		}
 	}
 }
