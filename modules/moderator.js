@@ -109,6 +109,18 @@ module.exports = {
 			.catch((err) => log.warn(err));
 	},
 
+	drole: (msg) => {
+		if (!filter.author(msg, owner)) return noPermission(msg);
+
+		let roleId = msg.mentions.roles.first().id;
+		let roleName = msg.mentions.roles.first().name;
+
+		msg.guild.roles.fetch(roleId)
+			.then((role) => role.delete())
+			.then(() => msg.channel.send(`Deleted role ${roleName}`))
+			.catch((err) => log.warn(err));
+	},
+
 	crole: (msg) => {
 		if (!filter.author(msg, owner)) return noPermission(msg);
 		let args = msg.content.slice(prefix.length).trim().split(/ +/);
