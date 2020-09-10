@@ -71,11 +71,9 @@ module.exports = {
 		args.shift(); // Remove command from args
 
 		// iterate through the added emoji (must be seperated with a space in message)
-		for (let arg of args) {
-			let url = `https://cdn.discordapp.com/emojis/${arg.split(':')[2].replace('>', '')}${arg.startsWith('<a:') ? '.gif?v=1' : '.png?v=1'}`;
-			msg.guild.emojis.create(url, arg.split(':')[1])
+		for (let arg of args)
+			msg.guild.emojis.create(`https://cdn.discordapp.com/emojis/${arg.split(':')[2].replace('>', '')}${arg.startsWith('<a:') ? '.gif?v=1' : '.png?v=1'}`, arg.split(':')[1])
 				.then((emoji) => msg.reply(`added ${emoji}`))
 				.catch((err) => log.warn(err));
-		}
 	}
 }
