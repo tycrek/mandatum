@@ -107,5 +107,47 @@ module.exports = {
 				return msg.reply(result);
 			})
 			.catch((err) => log.warn(err));
+	},
+
+	crole: (msg) => {
+		if (!filter.author(msg, owner)) return noPermission(msg);
+		let args = msg.content.slice(prefix.length).trim().split(/ +/);
+		args.shift(); // Remove the command
+
+		// Sort the args by quotes
+		args = args.join(' ').split(/" "+/);
+
+		// Remove quote on the first argument
+		args[0] = args[0].substring(1);
+
+		// Remove quote on the last argument
+		let lastArg = args[args.length - 1];
+		args[args.length - 1] = lastArg.substring(0, lastArg.length - 1);
+
+		// Check if the command has the required number of arguments
+		if (args.length < 4 || args.length > 4) return msg.channel.send(new MessageEmbed()
+			.setTitle('Usage')
+			.setDescription(
+				'`>crole "<name>" "<color>" "<permissions>" "<mentionable>"`' + '\n\n' +
+				'`> name           ` String. Can have spaces.' + '\n' +
+				'`> color          ` Must be a [ColorResolvable](https://discord.js.org/#/docs/main/stable/typedef/ColorResolvable)' + '\n' +
+				'`> permissions    ` Must be `NONE` or a [PermissionResolvable](https://discord.js.org/#/docs/main/stable/typedef/PermissionResolvable)' + '\n' +
+				'`> mentionable    ` Boolean.' + '\n' +
+				'' + '\n' +
+				'Note: All parameters must be contained within "quotes"'
+			));
+
+		// Create the role!
+		msg.guild.roles.create(
+			{
+				data: {
+					name: args[0],
+					color: args[1],
+					permissions: args[2] === 'NONE' ? 0 : /\d/g.test(args[2]) ? parseInt(args[2]) : args[2],
+					mentionable: args[3] == 'true'
+				}
+			})
+			.then((role) => msg.channel.send(`role [${role.toString()}] created`))
+			.catch((err) => log.warn(err));
 	}
 }
