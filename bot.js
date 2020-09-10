@@ -131,6 +131,3 @@ client.on('message', (msg) => {
 // Log in to Discord using token
 client.login(fs.readJsonSync(path.join(__dirname, 'auth.json')).token)
 	.catch((err) => log.warn(err));
-
-
-// Create a new client with the same token as the old one
