@@ -137,7 +137,7 @@ module.exports = {
 		args[args.length - 1] = lastArg.substring(0, lastArg.length - 1);
 
 		// Check if the command has the required number of arguments
-		if (args.length < 4 || args.length > 4) return msg.channel.send(new MessageEmbed()
+		if (args.length != 4) return msg.channel.send(new MessageEmbed()
 			.setTitle('Usage')
 			.setDescription(
 				'`>crole "<name>" "<color>" "<permissions>" "<mentionable>"`' + '\n\n' +
