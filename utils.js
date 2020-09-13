@@ -104,7 +104,16 @@ function neoFilter(msg) {
 				// Check admin/moderator commands. These commands MUST have roles assigned
 				for (let module in modules) {
 					module = modules[module];
-					if ((module.module === 'admin' || module.module === 'moderator') && ((config.admins.length === 0 && (!settings || !settings.roles || settings.roles.length === 0))))
+					if (
+						// First check: is the current iteration admin or moderator
+						(module.module === 'admin' || module.module === 'moderator') &&
+
+						// Second check: does the current module iteration have the command being run
+						module.commands.includes(cmd) &&
+
+						// Third check: both admins and roles don't exist for this guild/command
+						((config.admins.length === 0) && (!settings || !settings.roles || settings.roles.length === 0))
+					)
 						return resolve(false);
 				}
 
