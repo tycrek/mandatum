@@ -101,6 +101,13 @@ module.exports = {
 	},
 
 	urban: (msg) =>
-		fetch('https://www.urbandictionary.com/random.php?page=0')
-			.then((res) => msg.channel.send(res.url))
+		fetch('https://api.urbandictionary.com/v0/random')
+			.then((res) => res.json())
+			.then((json) => json.list[0])
+			.then((word) => msg.channel.send(new MessageEmbed()
+				.setTitle(word.word)
+				.setURL(word.permalink)
+				.setDescription(`${word.definition.replace(/[\[\]]/g, '').substring(0, 200)}\n>>> ${word.example.replace(/[\[\]]/g, '').substring(0, 200)}`)
+				.setTimestamp(word.written_on)
+				.setFooter(`Definition by: ${word.author}`)))
 }
