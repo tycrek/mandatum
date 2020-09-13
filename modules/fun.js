@@ -93,5 +93,10 @@ module.exports = {
 						? (`${v1.replace('f', '')} Fahrenheit is ${((parseInt(v1.replace('f', '')) - 32) / 1.8).toFixed(2)} Celsius`)
 						: 'No units specified')
 		}
+	},
+
+	badword: (msg) => {
+		let words = require('../badwords.json');
+		msg.channel.send(words[Math.floor(Math.random() * words.length)]);
 	}
 }
