@@ -26,7 +26,7 @@ const schedule = require('node-schedule');
 // anything time related such as the cooldown
 const moment = require('moment');
 
-const { log, printTime, filter, readJson, writeJson } = require('./utils');
+const { log, printTime, filter, readJson, writeJson, neoFilter, noPermission } = require('./utils');
 
 /* Variables */
 
@@ -112,8 +112,15 @@ client.on('error', (error) => log.error(error));
 // Command processor
 client.on('message', (msg) => {
 	if (!msg.content.startsWith(prefix) || msg.channel.type === 'dm' || msg.author.bot) return;
-	try { commands[Object.keys(commands).find(key => msg.content.trim().substr(1).split(/ +/)[0] === key)](msg) }
-	catch (err) { !(err instanceof TypeError) && log.warn(err) }
+
+	// Filter the command using the new filter system
+	neoFilter(msg)
+		.then((allowed) => {
+			if (!allowed) return noPermission(msg);
+			try { commands[Object.keys(commands).find(key => msg.content.trim().substr(1).split(/ +/)[0] === key)](msg) }
+			catch (err) { !(err instanceof TypeError) && log.warn(err) }
+		})
+		.catch((err) => log.warn(err));
 });
 
 // Swear word processor
