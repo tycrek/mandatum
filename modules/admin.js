@@ -27,7 +27,11 @@ module.exports = {
 			// Check if settings already exist
 			.then(() => config.settings[command] ? config.settings[command] : null)
 			.then((settings) => {
-				if (!settings) config.settings[command] = {};
+				if (!settings && command) config.settings[command] = {};
+
+				// Send current config if no changes specified
+				if (!command || !setting)
+					msg.channel.send(`Config for \`${!command ? msg.guild.name : command}\`:\n\`\`\`json\n${JSON.stringify(!command ? config : config.settings[command], null, 2)}\`\`\``);
 
 				// Change command roles property
 				if (setting === 'roles') {
