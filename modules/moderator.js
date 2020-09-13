@@ -159,7 +159,7 @@ module.exports = {
 					mentionable: args[3] == 'true'
 				}
 			})
-			.then((role) => msg.channel.send(`role [${role.toString()}] created`))
+			.then((role) => msg.channel.send(`Role [${role.toString()}] created`))
 			.catch((err) => log.warn(err));
 	}
 }
