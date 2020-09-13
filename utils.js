@@ -82,7 +82,7 @@ function neoFilter(msg) {
 		let roles = msg.member.roles.cache;
 
 		// Owner can always run everything
-		let forceTest = false; // true = dev mode, false = production
+		let forceTest = false; //* true = dev mode, false = production
 		if (require('./bot').owner === author && !forceTest) return resolve(true);
 
 		// Read server config
