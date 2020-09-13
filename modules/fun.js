@@ -98,5 +98,9 @@ module.exports = {
 	badword: (msg) => {
 		let words = require('../badwords.json');
 		msg.channel.send(words[Math.floor(Math.random() * words.length)]);
-	}
+	},
+
+	urban: (msg) =>
+		fetch('https://www.urbandictionary.com/random.php?page=0')
+			.then((res) => msg.channel.send(res.url))
 }
