@@ -77,6 +77,7 @@ function neoFilter(msg) {
 		// Prep ID's for later use
 		let guild = msg.guild.id;
 		let channel = msg.channel.id;
+		let category = msg.channel.parentID;
 		let author = msg.member.id;
 		let roles = msg.member.roles.cache;
 
@@ -92,10 +93,11 @@ function neoFilter(msg) {
 			// Check if a config for this command actually exists
 			.then(() => config.settings[cmd] ? config.settings[cmd] : null)
 
-			// Process the filter
+			// Process the filters
 			.then((settings) => {
 
-				// get a list of modules
+				//! STEP 1
+				// Get a list of modules
 				let modules = ['info', 'fun', 'utility', 'moderator', 'admin'].map(category => ({
 					module: category,
 					commands: Object.keys(require('./modules/' + category))
@@ -105,18 +107,31 @@ function neoFilter(msg) {
 				for (let module in modules) {
 					module = modules[module];
 					if (
-						// First check: is the current iteration admin or moderator
+						//* First check: is the current iteration admin or moderator
 						(module.module === 'admin' || module.module === 'moderator') &&
 
-						// Second check: does the current module iteration have the command being run
+						//* Second check: does the current module iteration have the command being run
 						module.commands.includes(cmd) &&
 
-						// Third check: both admins and roles don't exist for this guild/command
+						//* Third check: both admins and roles don't exist for this guild/command
 						((config.admins.length === 0) && (!settings || !settings.roles || settings.roles.length === 0))
 					)
 						return resolve(false);
 				}
 
+				//! STEP 2: Is user admin
+				// Admins as they can run everything
+				let isAdmin = false;
+				config.admins.length !== 0 && !isAdmin && roles.each((role) => !isAdmin && config.admins.includes(role.id) || config.admins.includes(author) ? isAdmin = true : {});
+				if (isAdmin)
+					return resolve(true);
+
+				//! STEP 3: Excluded channel/category
+				// Check if channel or category is excluded
+				if (settings.excludedChannels && (settings.excludedChannels.includes(channel) || settings.excludedChannels.includes(category)))
+					return resolve(false);
+
+				//! STEP 4: Check roles
 				// If no roles are assigned, assume everyone can run the command
 				if (!settings || !settings.roles || settings.roles.length === 0) resolve(true);
 				else {
@@ -124,9 +139,6 @@ function neoFilter(msg) {
 
 					// If the user has a role matching the roles permitted to run the command, we have a match
 					roles.each((role) => !match && settings.roles.includes(role.id) ? match = true : {});
-
-					// Also check admins as they can run everything
-					config.admins.length !== 0 && !match && roles.each((role) => !match && config.admins.includes(role.id) || config.admins.includes(author) ? match = true : {});
 
 					// Return to the command processor
 					resolve(match);
