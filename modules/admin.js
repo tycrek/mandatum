@@ -44,6 +44,20 @@ module.exports = {
 
 					// Tell the user what happened
 					msg.channel.send(`${operation === '+' ? 'Added' : 'Removed'} role \`${roleId}\` ${operation === '+' ? 'to' : 'from'} command \`${command}\` in ${msg.guild.name}`);
+				} else if (setting === 'exclude') {
+
+					// value should be one of "+12345678" (add) or "-12345678" (remove)
+					let operation = value.split('').shift(); // Get the operation (either + or -)
+					let roleId = value.substring(1); // Get the channel ID
+
+					// Create empty channels array if it doesn't exist
+					if (!config.settings[command].excludedChannels) config.settings[command].excludedChannels = [];
+
+					// Add or remove the channel ID based on what operation is used
+					operation === '+' ? config.settings[command].excludedChannels.push(roleId) : config.settings[command].excludedChannels.splice(config.settings[command].excludedChannels.indexOf(roleId), 1);
+
+					// Tell the user what happened
+					msg.channel.send(`${operation === '+' ? 'Added' : 'Removed'} exclusion for channel \`${roleId}\` ${operation === '+' ? 'to' : 'from'} command \`${command}\` in ${msg.guild.name}`);
 				}
 
 				// Return config to next Promise to write it
