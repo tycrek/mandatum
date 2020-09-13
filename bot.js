@@ -31,21 +31,16 @@ const { log, printTime, filter } = require('./utils');
 /* Variables */
 
 // servers where the bot is active
-const guilds = {
-	t: '750773045974663208',
-	d: '742574545612963870',
-	bt: '751793035565727816',
-	y: '333972588567068672'
-};
+const guilds = require('./config/guilds');
 
 // bot owner, has access to everything
-const owner = '324679696182673408';
+const owner = require('./config/config').owner;
 
 // Cooldown timer for last swear in channel //! currently behaves globally (swear in 1 server affects cooldown in another server)
 let lastSwear = {};
 
 // Prefix for bot commands
-const prefix = '>';
+const prefix = require('./config/config').prefix;
 
 // client
 const client = new Client();
@@ -81,7 +76,7 @@ client.once('ready', () => {
 	//.then((guildChannel) => guildChannel.send('`Beep, boop! mandatum is ready :)`'));
 
 	// Custom status
-	client.user.setActivity('the world burn (>)', { type: "WATCHING" })
+	client.user.setActivity(`the world burn (${prefix})`, { type: "WATCHING" })
 		.catch((err) => log.warn(err));
 
 	// Scheduled message test
