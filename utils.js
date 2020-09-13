@@ -84,10 +84,14 @@ function neoFilter(msg) {
 		if (require('./bot').owner === author) resolve(true);
 
 		// Read server config
+		let config;
 		fs.readJson(path.join(__dirname, `/config/servers/guild.${guild}.json`))
+			.then((mConfig) => config = mConfig)
 
 			// Check if a config for this command actually exists
-			.then((settings) => settings.settings[cmd] ? settings.settings[cmd] : null)
+			.then(() => config.settings[cmd] ? config.settings[cmd] : null)
+
+			// Process the filter
 			.then((settings) => {
 				if (!settings || !settings.roles || settings.roles.length === 0) resolve(true);
 				else {
@@ -95,6 +99,9 @@ function neoFilter(msg) {
 
 					// If the user has a role matching the roles permitted to run the command, we have a match
 					roles.each((role) => !match && settings.roles.includes(role.id) ? match = true : {});
+
+					// Also check admins as they can run everything
+					config.admins.length !== 0 && !match && roles.each((role) => !match && config.admins.includes(role.id) || config.admins.includes(author) ? match = true : {});
 
 					// Return to the command processor
 					resolve(match);

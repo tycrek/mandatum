@@ -1,11 +1,58 @@
 /* Imports */
 const { Client, MessageEmbed } = require('discord.js');
+const fs = require('fs-extra');
+const path = require('path');
 const { log, printTime, filter, noPermission } = require('../utils');
 const prefix = require('../bot').prefix;
 const owner = require('../bot').owner;
 
 // export command functions
 module.exports = {
+
+	config: (msg) => {
+		if (!filter.author(msg, owner)) return noPermission(msg);
+		const args = msg.content.slice(prefix.length).trim().split(/ +/);
+		args.shift();
+
+		let configPath = path.join(__dirname, `../config/servers/guild.${msg.guild.id}.json`);
+
+		let command = args[0]; // Any command the bot runs (crole, btc, release, etc.)
+		let setting = args[1]; // The setting/option that will be changed
+		let value = args[2]; // Value to apply to the setting
+
+		let config;
+		fs.readJson(configPath)
+			.then((mConfig) => config = mConfig)
+
+			// Check if settings already exist
+			.then(() => config.settings[command] ? config.settings[command] : null)
+			.then((settings) => {
+				if (!settings) config.settings[command] = {};
+
+				// Change command roles property
+				if (setting === 'roles') {
+
+					// value should be one of "+12345678" (add) or "-12345678" (remove)
+					let operation = value.split('').shift(); // Get the operation (either + or -)
+					let roleId = value.substring(1); // Get the role ID
+
+					// Create empty roles array if it doesn't exist
+					if (!config.settings[command].roles) config.settings[command].roles = [];
+
+					// Add or remove the role ID based on what operation is used
+					operation === '+' ? config.settings[command].roles.push(roleId) : config.settings[command].roles.splice(config.settings[command].roles.indexOf(roleId), 1);
+
+					// Tell the user what happened
+					msg.channel.send(`${operation === '+' ? 'Added' : 'Removed'} role \`${roleId}\` ${operation === '+' ? 'to' : 'from'} command \`${command}\` in ${msg.guild.name}`);
+				}
+
+				// Return config to next Promise to write it
+				return config;
+			})
+			.then((config) => fs.writeJson(configPath, config, { spaces: '\t' }))
+			.catch((err) => log.warn(err));
+
+	},
 
 	release: (msg) => {
 		if (!filter.author(msg, owner)) return noPermission(msg);
