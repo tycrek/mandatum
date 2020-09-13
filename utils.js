@@ -55,10 +55,10 @@ module.exports = {
 	},
 
 	// Reads a json file
-	readJson: (filepath) => fs.readJsonSync(path.join(__dirname, filepath)),
+	readJson: (filepath) => fs.readJsonSync(filepath),
 
 	// Writes a json file
-	writeJson: (filepath, json) => fs.writeJsonSync(path.join(__dirname, filepath), json, { spaces: '\t' }),
+	writeJson: (filepath, json) => fs.writeJsonSync(filepath, json, { spaces: '\t' }),
 
 	// author does not have permission to use command
 	noPermission: (msg) => msg.reply('sorry, but you don\'t have permission to do that.'),

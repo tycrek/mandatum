@@ -26,7 +26,7 @@ const schedule = require('node-schedule');
 // anything time related such as the cooldown
 const moment = require('moment');
 
-const { log, printTime, filter } = require('./utils');
+const { log, printTime, filter, readJson, writeJson } = require('./utils');
 
 /* Variables */
 
@@ -74,6 +74,22 @@ client.once('ready', () => {
 	//client.guilds.fetch(guilds.bt)
 	//	.then((guild) => guild.channels.cache.find(channel => channel.id === '752664709408227518'))
 	//.then((guildChannel) => guildChannel.send('`Beep, boop! mandatum is ready :)`'));
+
+	// Check configurations
+	client.guilds.cache.each((guild) => {
+		let configPath = path.join(__dirname, `config/servers/guild.${guild.id}.json`);
+		fs.exists(configPath)
+			.then((exists) => {
+				if (!exists) {
+					let template = readJson(path.join(__dirname, 'config/servers/__template.json'));
+					template.name = guild.name;
+					template.id = guild.id;
+					writeJson(configPath, template);
+					log.info(`Wrote new config for guild ${guild.name} (${guild.id})`);
+				}
+				else log.info(`Found config for guild ${guild.name} (${guild.id})`);
+			});
+	});
 
 	// Custom status
 	client.user.setActivity(`the world burn (${prefix})`, { type: "WATCHING" })
