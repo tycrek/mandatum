@@ -94,6 +94,21 @@ function neoFilter(msg) {
 
 			// Process the filter
 			.then((settings) => {
+
+				// get a list of modules
+				let modules = ['info', 'fun', 'utility', 'moderator', 'admin'].map(category => ({
+					module: category,
+					commands: Object.keys(require('./modules/' + category))
+				}));
+
+				// Check admin/moderator commands. These commands MUST have roles assigned
+				for (let module in modules) {
+					module = modules[module];
+					if ((module.module === 'admin' || module.module === 'moderator') && ((config.admins.length === 0 && (!settings || !settings.roles || settings.roles.length === 0))))
+						return resolve(false);
+				}
+
+				// If no roles are assigned, assume everyone can run the command
 				if (!settings || !settings.roles || settings.roles.length === 0) resolve(true);
 				else {
 					let match = false;
