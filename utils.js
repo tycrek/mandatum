@@ -128,7 +128,7 @@ function neoFilter(msg) {
 
 				//! STEP 3: Excluded channel/category
 				// Check if channel or category is excluded
-				if (settings.excludedChannels && (settings.excludedChannels.includes(channel) || settings.excludedChannels.includes(category)))
+				if (settings && settings.excludedChannels && (settings.excludedChannels.includes(channel) || settings.excludedChannels.includes(category)))
 					return resolve(false);
 
 				//! STEP 4: Check roles
