@@ -131,19 +131,5 @@ module.exports = {
 			.then(() => msg.member.createDM())
 			.then((channel) => channel.send(`**${count}** messages created!`))
 			.catch((err) => log.warn(err));
-	},
-
-	steal: (msg) => {
-		const args = msg.content.slice(prefix.length).trim().split(/ +/);
-		args.shift(); // Remove command from args
-
-		if (args < 1)
-			return msg.channel.send(new UsageEmbed('steal', '', false, [':emoji:'], ['Emoji to steal and add to current server'], ['To steal multiple emoji, separate each with a space', 'Both static and animated emoji can be stolen']));
-
-		// iterate through the added emoji (must be seperated with a space in message)
-		for (let arg of args)
-			msg.guild.emojis.create(`https://cdn.discordapp.com/emojis/${arg.split(':')[2].replace('>', '')}${arg.startsWith('<a:') ? '.gif?v=1' : '.png?v=1'}`, arg.split(':')[1])
-				.then((emoji) => msg.reply(`added ${emoji}`))
-				.catch((err) => log.warn(err));
 	}
 }
