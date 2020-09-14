@@ -1,11 +1,11 @@
 
 <div align="center">
-<p>
-    <img width="80" style="border-radius: 32px" src="https://cdn.discordapp.com/avatars/750806884914692207/d38112a55f14509e68e9823871ecf2eb.png?size=64">
-</p>
+	<p>
+    	<img width="80" style="border-radius: 32px" src="https://cdn.discordapp.com/avatars/750806884914692207/d38112a55f14509e68e9823871ecf2eb.png?size=64">
+	</p>
 	<h1>mandatum</h1>
+</div>
 
----
 
 An open-source Discord bot.
 
