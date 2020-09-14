@@ -3,6 +3,7 @@ const { Client, MessageEmbed } = require('discord.js');
 const { log, filter, noPermission } = require('../utils');
 const prefix = require('../bot').prefix;
 const owner = require('../bot').owner;
+const UsageEmbed = require('../UsageEmbed');
 
 // export command functions
 module.exports = {
@@ -124,7 +125,7 @@ module.exports = {
 	crole: (msg) => {
 		if (!filter.author(msg, owner)) return noPermission(msg);
 		let args = msg.content.slice(prefix.length).trim().split(/ +/);
-		args.shift(); // Remove the command
+		let command = args.shift(); // Remove the command
 
 		// Sort the args by quotes
 		args = args.join(' ').split(/" "+/);
@@ -137,17 +138,18 @@ module.exports = {
 		args[args.length - 1] = lastArg.substring(0, lastArg.length - 1);
 
 		// Check if the command has the required number of arguments
-		if (args.length != 4) return msg.channel.send(new MessageEmbed()
-			.setTitle('Usage')
-			.setDescription(
-				'`>crole "<name>" "<color>" "<permissions>" "<mentionable>"`' + '\n\n' +
-				'`> name           ` String. Can have spaces.' + '\n' +
-				'`> color          ` Must be a [ColorResolvable](https://discord.js.org/#/docs/main/stable/typedef/ColorResolvable)' + '\n' +
-				'`> permissions    ` Must be `NONE` or a [PermissionResolvable](https://discord.js.org/#/docs/main/stable/typedef/PermissionResolvable)' + '\n' +
-				'`> mentionable    ` Boolean.' + '\n' +
-				'' + '\n' +
-				'Note: All parameters must be contained within "quotes"'
-			));
+		if (args.length != 4)
+			return msg.channel.send(
+				new UsageEmbed(command, '" "', true,
+					['name', 'color', 'permissions', 'mentionable'],
+					[
+						'String. Can have spaces.',
+						'Must be a [ColorResolvable](https://discord.js.org/#/docs/main/stable/typedef/ColorResolvable)',
+						'Must be `NONE` or a [PermissionResolvable](https://discord.js.org/#/docs/main/stable/typedef/PermissionResolvable)',
+						'Boolean.'
+					],
+					['All parameters must be contained within "quotes"']
+				));
 
 		// Create the role!
 		msg.guild.roles.create(
