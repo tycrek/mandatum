@@ -98,7 +98,6 @@ module.exports = {
 	},
 
 	send: (msg) => {
-		if (!filter.author(msg, owner)) return noPermission(msg);
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let count = parseInt(args[1]);
 
@@ -135,7 +134,6 @@ module.exports = {
 	},
 
 	steal: (msg) => {
-		if (!filter.author(msg, owner)) return noPermission(msg);
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		args.shift(); // Remove command from args
 

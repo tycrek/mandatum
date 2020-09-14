@@ -9,9 +9,6 @@ const UsageEmbed = require('../UsageEmbed');
 module.exports = {
 
 	clear: (msg) => {
-		// first if is role filter, second is user filter
-		//if (!filter.role(msg, '752752772100653198')) return noPermission(msg);
-		if (!filter.author(msg, owner)) return noPermission(msg);
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let channel = msg.channel;
 
@@ -94,7 +91,6 @@ module.exports = {
 	},
 
 	kick: (msg) => {
-		if (!filter.author(msg, owner)) return noPermission(msg);
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 
 		if (args.length < 3)
@@ -117,8 +113,6 @@ module.exports = {
 	},
 
 	drole: (msg) => {
-		if (!filter.author(msg, owner)) return noPermission(msg);
-
 		let roleId, roleName;
 		try {
 			roleId = msg.mentions.roles.first().id;
@@ -135,7 +129,6 @@ module.exports = {
 	},
 
 	crole: (msg) => {
-		if (!filter.author(msg, owner)) return noPermission(msg);
 		let args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let command = args.shift(); // Remove the command
 
