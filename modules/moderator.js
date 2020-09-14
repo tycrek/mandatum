@@ -113,8 +113,15 @@ module.exports = {
 	drole: (msg) => {
 		if (!filter.author(msg, owner)) return noPermission(msg);
 
-		let roleId = msg.mentions.roles.first().id;
-		let roleName = msg.mentions.roles.first().name;
+		let roleId, roleName;
+		try {
+			roleId = msg.mentions.roles.first().id;
+			roleName = msg.mentions.roles.first().name;
+		} catch (err) {
+			log.warn(err);
+			return msg.channel.send(new UsageEmbed('drole', '', false, ['@role'], ['Role to delete from the server'], null));
+		}
+
 
 		msg.guild.roles.fetch(roleId)
 			.then((role) => role.delete())
