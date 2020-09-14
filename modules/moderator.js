@@ -119,7 +119,7 @@ module.exports = {
 			roleName = msg.mentions.roles.first().name;
 		} catch (err) {
 			log.warn(err);
-			return msg.channel.send(new UsageEmbed('drole', '', false, ['@role'], ['Role to delete from the server'], null));
+			return msg.channel.send(new UsageEmbed('drole', '', false, ['@role'], ['Role to delete from the server']));
 		}
 
 

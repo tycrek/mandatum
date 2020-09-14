@@ -18,7 +18,7 @@ class UsageEmbed extends MessageEmbed {
 	 * @param {string[]} descriptions Descriptions of each parameter
 	 * @param {string[]} notes Notes/tips on using the command
 	 */
-	constructor(command, separator, wrap, parameters, descriptions, notes) {
+	constructor(command, separator, wrap, parameters, descriptions, notes = null) {
 		let prefix = require('./bot').prefix; // * Copy/pasting? This line may be different for you
 
 		//! STEP 1: First line
