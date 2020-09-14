@@ -20,12 +20,10 @@ module.exports = {
 
 	website: (msg) =>
 		msg.channel.send('Visit: https://jmoore.dev/')
-			.then(() => msg.delete())
 			.catch((err) => log.warn(err)),
 
 	github: (msg) =>
 		msg.channel.send('Visit: https://github.com/tycrek')
-			.then(() => msg.delete())
 			.catch((err) => log.warn(err)),
 
 	source: (msg) =>

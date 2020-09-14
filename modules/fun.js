@@ -2,16 +2,22 @@
 const { Client, MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const prefix = require('../bot').prefix;
+const UsageEmbed = require('../UsageEmbed');
 
 // export command functions
 module.exports = {
 
 	namemc: (msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
+		let command = args.shift();
+
+		if (args.length === 0)
+			return msg.channel.send(new UsageEmbed(command, '', false, ['username'], ['Minecraft username to get a link from NameMC']));
+
 		msg.channel.send(new MessageEmbed()
-			.setTitle(`${args[1]} on NameMC`)
+			.setTitle(`${args[0]} on NameMC`)
 			.setColor(0x234875)
-			.setURL(`https://namemc.com/s?${args[1]}`)
+			.setURL(`https://namemc.com/s?${args[0]}`)
 			.setFooter('https://namemc.com'))
 			.catch((err) => log.warn(err));
 	},
@@ -30,21 +36,25 @@ module.exports = {
 
 	mcskin: (msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
+		let command = args.shift();
+
+		if (args.length === 0)
+			return msg.channel.send(new UsageEmbed(command, '', false, ['username'], ['Minecraft username to display a skin for']));
+
 		msg.channel.send(new MessageEmbed()
-			.setTitle(`${args[1]}'s Minecraft skin`)
+			.setTitle(`${args[0]}'s Minecraft skin`)
 			.setColor(0xFF4136)
-			.setImage(`https://minotar.net/armor/body/${args[1]}/150.png`)
+			.setImage(`https://minotar.net/armor/body/${args[0]}/150.png`)
 			.setFooter('https://minotar.net'))
 			.catch((err) => log.warn(err));
 	},
 
-	shut: (msg) => {
+	shut: (msg) =>
 		msg.channel.send(new MessageEmbed()
 			.setColor(0x0B1308)
 			.setImage('https://shutplea.se/'))
 			.then(() => msg.delete())
-			.catch((err) => log.warn(err));
-	},
+			.catch((err) => log.warn(err)),
 
 	/*
 	face: (msg) =>
@@ -85,14 +95,13 @@ module.exports = {
 		let v1 = args[1].toLowerCase();
 		let v2 = args[2] && args[2].toLowerCase();
 
-		if (type === 'temp') {
+		if (type === 'temp')
 			msg.reply(
 				v1.includes('c')
 					? (`${v1.replace('c', '')} Celsius is ${((parseInt(v1.replace('c', '')) * 1.8) + 32).toFixed(2)} Fahrenheit`)
 					: (v1.includes('f'))
 						? (`${v1.replace('f', '')} Fahrenheit is ${((parseInt(v1.replace('f', '')) - 32) / 1.8).toFixed(2)} Celsius`)
-						: 'No units specified')
-		}
+						: 'No units specified');
 	},
 
 	badword: (msg) => {

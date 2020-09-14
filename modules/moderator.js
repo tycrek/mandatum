@@ -15,6 +15,9 @@ module.exports = {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let channel = msg.channel;
 
+		if (args.length !== 2)
+			return msg.channel.send(new UsageEmbed('clear', '', false, ['amount'], ['How many messages to delete from the channel'], ['No maximum (that I know of :wink:)']));
+
 		// amount is total user wants deleted plus the message calling the command
 		let amount = parseInt(args[1]) + 1;
 
@@ -94,6 +97,9 @@ module.exports = {
 		if (!filter.author(msg, owner)) return noPermission(msg);
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 
+		if (args.length < 3)
+			return msg.channel.send(new UsageEmbed('kick', ' ', false, ['@user', 'reason'], ['User to kick (must be a mention)', 'Reason to kick user'], ['Reason does not have to be wrapped in quotes (" ")']));
+
 		args.shift(); // Remove the command
 		args.shift(); // Remove the user
 		let reason = args.join(' ');
@@ -121,7 +127,6 @@ module.exports = {
 			log.warn(err);
 			return msg.channel.send(new UsageEmbed('drole', '', false, ['@role'], ['Role to delete from the server']));
 		}
-
 
 		msg.guild.roles.fetch(roleId)
 			.then((role) => role.delete())

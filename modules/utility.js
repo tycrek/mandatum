@@ -3,12 +3,17 @@ const { Client, MessageEmbed } = require('discord.js');
 const UUID = require('uuid').v4;
 const client = require('../bot').client;
 const prefix = require('../bot').prefix;
+const UsageEmbed = require('../UsageEmbed');
 
 // export command functions
 module.exports = {
 
 	link: (msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
+
+		if (args.length < 2)
+			return msg.channel.send(new UsageEmbed('link', '', false, ['url'], ['A URL without `https://` (example: `>link example.com`)']));
+
 		msg.channel.send(new MessageEmbed()
 			.setTitle(args[1])
 			.setColor(0x455A64)
@@ -19,6 +24,10 @@ module.exports = {
 
 	search: (msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
+
+		if (args.length < 2)
+			return msg.channel.send(new UsageEmbed('search', '', false, ['query'], ['Searches `query` using DuckDuckGo'], ['You can use [DuckDuckGo Bangs](https://duckduckgo.com/bang) to redirect your search']));
+
 		args.shift();
 		msg.channel.send(new MessageEmbed()
 			.setColor(0xE0632F)

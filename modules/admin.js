@@ -70,7 +70,6 @@ module.exports = {
 			})
 			.then((config) => fs.writeJson(configPath, config, { spaces: '\t' }))
 			.catch((err) => log.warn(err));
-
 	},
 
 	release: (msg) => {
@@ -93,6 +92,7 @@ module.exports = {
 				{ name: '\u200B', value: '\u200B', inline: true },
 				{ name: 'Fixed', value: fixText, inline: true },
 			);
+
 		msg.channel.send(embed)
 			.catch((err) => log.warn(err));
 	},
@@ -103,7 +103,7 @@ module.exports = {
 		let count = parseInt(args[1]);
 
 		if (!count || count < 1)
-			return msg.channel.send(new UsageEmbed('send', '', false, ['count'], ['How many messages to send']))
+			return msg.channel.send(new UsageEmbed('send', '', false, ['count'], ['How many messages to send']));
 
 		log.info(`Sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`);
 		msg.delete().catch((err) => log.warn(err));
@@ -138,6 +138,9 @@ module.exports = {
 		if (!filter.author(msg, owner)) return noPermission(msg);
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		args.shift(); // Remove command from args
+
+		if (args < 1)
+			return msg.channel.send(new UsageEmbed('steal', '', false, [':emoji:'], ['Emoji to steal and add to current server'], ['To steal multiple emoji, separate each with a space', 'Both static and animated emoji can be stolen']));
 
 		// iterate through the added emoji (must be seperated with a space in message)
 		for (let arg of args)
