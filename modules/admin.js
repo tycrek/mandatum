@@ -5,6 +5,7 @@ const path = require('path');
 const { log, printTime, filter, noPermission } = require('../utils');
 const prefix = require('../bot').prefix;
 const owner = require('../bot').owner;
+const UsageEmbed = require('../UsageEmbed');
 
 // export command functions
 module.exports = {
@@ -100,6 +101,9 @@ module.exports = {
 		if (!filter.author(msg, owner)) return noPermission(msg);
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let count = parseInt(args[1]);
+
+		if (!count || count < 1)
+			return msg.channel.send(new UsageEmbed('send', '', false, ['count'], ['How many messages to send']))
 
 		log.info(`Sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`);
 		msg.delete().catch((err) => log.warn(err));
