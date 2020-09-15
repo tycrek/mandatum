@@ -118,5 +118,42 @@ module.exports = {
 				.setURL(word.permalink)
 				.setDescription(`${word.definition.replace(/[\[\]]/g, '').substring(0, 200)}\n>>> ${word.example.replace(/[\[\]]/g, '').substring(0, 200)}`)
 				.setTimestamp(word.written_on)
-				.setFooter(`Definition by: ${word.author}`)))
+				.setFooter(`Definition by: ${word.author}`))),
+
+	morse: (msg) => {
+		let args = msg.content.slice(prefix.length).trim().split(/ +/);
+		let command = args.shift();
+		let max = 30;
+
+		// Strip anything but letters, numbers, and space
+		args = args.join(' ').toLowerCase().replace(/[^a-z0-9 ]/g, '').trim();
+
+		if (args === '' || args.length > max)
+			return msg.channel.send(new UsageEmbed(command, '', false, ['text'], ['String of words to convert to morse'], [`Max of \`${max}\` characters`]))
+
+		// Thanks @Cerbrus https://stackoverflow.com/a/26059399/9665770
+		let morseCode = {
+			'a': '.-', 'b': '-...', 'c': '-.-.', 'd': '-..', 'e': '.', 'f': '..-.', 'g': '--.',
+			'h': '....', 'i': '..', 'j': '.---', 'k': '-.-', 'l': '.-..', 'm': '--', 'n': '-.',
+			'o': '---', 'p': '.--.', 'q': '--.-', 'r': '.-.', 's': '...', 't': '-', 'u': '..-',
+			'v': '...-', 'w': '.--', 'x': '-..-', 'y': '-.--', 'z': '--..', ' ': '/', '1': '.----',
+			'2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...',
+			'8': '---..', '9': '----.', '0': '-----',
+		};
+
+		let paddedOriginal = [];
+		let converted = [];
+
+		for (i = 0; i < args.length; i++) {
+			// Convert character at i
+			converted.push(morseCode[args[i]]);
+
+			// Pad the original character
+			let morseLength = converted[i].length;
+			let cutLength = morseLength === 1 ? 0 : morseLength < 4 ? 1 : 2;
+			paddedOriginal.push(args[i].padStart(parseInt(morseLength - cutLength), ' ').padEnd(morseLength, ' '));
+		}
+
+		msg.channel.send(`\`${paddedOriginal.join('  ')}\`\n\`${converted.join('  ')}\``);
+	}
 }
