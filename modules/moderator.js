@@ -185,5 +185,15 @@ module.exports = {
 			msg.guild.emojis.create(`https://cdn.discordapp.com/emojis/${arg.split(':')[2].replace('>', '')}${arg.startsWith('<a:') ? '.gif?v=1' : '.png?v=1'}`, arg.split(':')[1])
 				.then((emoji) => msg.reply(`added ${emoji}`))
 				.catch((err) => log.warn(err));
+	},
+
+	vote: (msg) => {
+		const args = msg.content.slice(prefix.length).trim().split(/ +/);
+		args.shift(); // Remove command from args
+
+		msg.channel.send(new MessageEmbed()
+			.setTitle('Vote now!')
+			.setDescription(args.join(' ')))
+			.then((msg) => Promise.all([msg.react('👍'), msg.react('👎')]));
 	}
 }
