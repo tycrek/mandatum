@@ -24,7 +24,7 @@ const fs = require('fs-extra');
 const schedule = require('node-schedule');
 
 // anything time related such as the cooldown
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 const { log, printTime, filter, readJson, writeJson, neoFilter, noPermission } = require('./utils');
 

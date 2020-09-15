@@ -4,6 +4,8 @@ const { log, filter, noPermission } = require('../utils');
 const prefix = require('../bot').prefix;
 const owner = require('../bot').owner;
 const UsageEmbed = require('../UsageEmbed');
+const moment = require('moment-timezone');
+moment.tz.setDefault('UTC');
 
 // export command functions
 module.exports = {

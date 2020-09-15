@@ -17,7 +17,7 @@ const fs = require('fs-extra');
 //const UUID = require('uuid').v4;
 
 // anything time related such as the cooldown
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 // Good logging tool
 const log = require('pino')({
