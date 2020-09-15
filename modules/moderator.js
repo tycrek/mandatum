@@ -179,6 +179,7 @@ module.exports = {
 		if (args.length < 1)
 			return msg.channel.send(new UsageEmbed('steal', '', false, [':emoji:'], ['Emoji to steal and add to current server'], ['To steal multiple emoji, separate each with a space', 'Both static and animated emoji can be stolen']));
 
+		//! MASSIVE rate limit if you do this too fast
 		if (args.length > 5)
 			return msg.reply('slow down, buckaroo! Only do 5 emoji at a time.');
 
