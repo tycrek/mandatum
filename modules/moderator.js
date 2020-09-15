@@ -247,4 +247,23 @@ module.exports = {
 			.then((editedMsg) => editedMsg.reactions.removeAll())
 			.catch((err) => log.error(err));
 	},
+
+	// poll: (msg) => {
+	// 	let args = msg.content.slice(prefix.length).trim().split(/ +/);
+	// 	let command = args.shift(); // Remove the command
+
+	// 	// Sort the args by quotes
+	// 	args = args.join(' ').split(/" "+/);
+
+	// 	// Remove quote on the first argument
+	// 	args[0] = args[0].substring(1);
+
+	// 	// Remove quote on the last argument
+	// 	let lastArg = args[args.length - 1];
+	// 	args[args.length - 1] = lastArg.substring(0, lastArg.length - 1);
+
+	// 	// Check if the command has the required number of arguments
+	// 	if (args.length != 4)
+	// 		return msg.channel.send(new UsageEmbed(command, '" "', true))
+	// }
 }
