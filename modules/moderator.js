@@ -74,7 +74,7 @@ module.exports = {
 								//       completed === total ? resolve(total)
 								//  2. We are not on the last task and need to recursively call the next task
 								//       promises[i + 1]().then((result) => resolve(result))
-								setTimeout(() => completed === total ? resolve(total) : promises[i + 1]().then((result) => resolve(result)), 2000);
+								setTimeout(() => completed === total ? resolve(total) : promises[i + 1]().then((result) => resolve(result)), 2500);
 							});
 					}));
 				}
@@ -83,7 +83,7 @@ module.exports = {
 				promises[0]()
 					.then((result) => {
 						log.info(`Bulk deletion task complete! Deleted ${result} messages out of ${amount} total`);
-						setTimeout(() => resolve(result), 2000);
+						setTimeout(() => resolve(result), 2500);
 					})
 					.catch((err) => log.warn(err));
 			});
