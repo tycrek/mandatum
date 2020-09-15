@@ -44,3 +44,5 @@ module.exports = {
 		})
 			.setThumbnail('https://cdn.discordapp.com/avatars/750806884914692207/d38112a55f14509e68e9823871ecf2eb.png?size=4096'))
 }
+
+module.exports.commands = module.exports.help;
