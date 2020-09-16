@@ -4,6 +4,7 @@ const UUID = require('uuid').v4;
 const client = require('../bot').client;
 const prefix = require('../bot').prefix;
 const UsageEmbed = require('../UsageEmbed');
+const { trash } = require('../utils');
 
 // export command functions
 module.exports = {
@@ -33,6 +34,7 @@ module.exports = {
 			.setColor(0xE0632F)
 			.setAuthor(`Searching "${args.join(' ')}" for ${msg.author.username}`)
 			.setDescription(`https://duckduckgo.com/?q=${args.join('+')}`))
+			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
 	},
 
@@ -41,6 +43,7 @@ module.exports = {
 			.setTitle('Here\'s your UUID:')
 			.setColor(0x000000)
 			.setDescription(`\`${UUID()}\``))
+			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err)),
 
 	uptime: (msg) => {
@@ -49,7 +52,7 @@ module.exports = {
 		let minutes = (totalSeconds / 60 % 60).toString().split('.')[0];
 		let seconds = (totalSeconds % 60).toString().split('.')[0];
 
-		msg.channel.send(new MessageEmbed().setTitle(`Bot has been active for ${hours} hours, ${minutes} minutes, ${seconds} seconds`))
+			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
 	}
 }

@@ -2,7 +2,7 @@
 const { Client, MessageEmbed } = require('discord.js');
 const fs = require('fs-extra');
 const path = require('path');
-const { log, printTime, filter, noPermission } = require('../utils');
+const { log, trash, filter, noPermission } = require('../utils');
 const prefix = require('../bot').prefix;
 const owner = require('../bot').owner;
 const UsageEmbed = require('../UsageEmbed');
@@ -32,7 +32,8 @@ module.exports = {
 
 				// Send current config if no changes specified
 				if (!command || !setting)
-					msg.channel.send(`Config for \`${!command ? msg.guild.name : command}\`:\n\`\`\`json\n${JSON.stringify(!command ? config : config.settings[command], null, 2)}\`\`\``);
+					msg.channel.send(`Config for \`${!command ? msg.guild.name : command}\`:\n\`\`\`json\n${JSON.stringify(!command ? config : config.settings[command], null, 2)}\`\`\``)
+						.then((botMsg) => trash(msg, botMsg));
 
 				// Change command roles property
 				if (setting === 'roles') {
@@ -48,7 +49,8 @@ module.exports = {
 					operation === '+' ? config.settings[command].roles.push(roleId) : config.settings[command].roles.splice(config.settings[command].roles.indexOf(roleId), 1);
 
 					// Tell the user what happened
-					msg.channel.send(`${operation === '+' ? 'Added' : 'Removed'} role \`${roleId}\` ${operation === '+' ? 'to' : 'from'} command \`${command}\` in ${msg.guild.name}`);
+					msg.channel.send(`${operation === '+' ? 'Added' : 'Removed'} role \`${roleId}\` ${operation === '+' ? 'to' : 'from'} command \`${command}\` in ${msg.guild.name}`)
+						.then((botMsg) => trash(msg, botMsg));
 				} else if (setting === 'exclude') {
 
 					// value should be one of "+12345678" (add) or "-12345678" (remove)
@@ -62,7 +64,8 @@ module.exports = {
 					operation === '+' ? config.settings[command].excludedChannels.push(roleId) : config.settings[command].excludedChannels.splice(config.settings[command].excludedChannels.indexOf(roleId), 1);
 
 					// Tell the user what happened
-					msg.channel.send(`${operation === '+' ? 'Added' : 'Removed'} exclusion for channel \`${roleId}\` ${operation === '+' ? 'to' : 'from'} command \`${command}\` in ${msg.guild.name}`);
+					msg.channel.send(`${operation === '+' ? 'Added' : 'Removed'} exclusion for channel \`${roleId}\` ${operation === '+' ? 'to' : 'from'} command \`${command}\` in ${msg.guild.name}`)
+						.then((botMsg) => trash(msg, botMsg));
 				}
 
 				// Return config to next Promise to write it

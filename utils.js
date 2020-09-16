@@ -64,7 +64,13 @@ module.exports = {
 	noPermission: (msg) => msg.reply('sorry, but you don\'t have permission to do that.'),
 
 	// New filter system
-	neoFilter: neoFilter
+	neoFilter: neoFilter,
+
+	trash: (userMsg, botMsg) =>
+		botMsg.react('🗑️')
+			.then(() => botMsg.awaitReactions((reaction, user) => reaction.emoji.name === '🗑️' && user.id === userMsg.author.id, { max: 1 }))
+			.then((_collected) => Promise.all([userMsg.delete(), botMsg.delete()]))
+			.catch(log.warn)
 };
 
 function neoFilter(msg) {

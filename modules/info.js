@@ -1,5 +1,6 @@
 /* Imports */
 const { Client, MessageEmbed } = require('discord.js');
+const { trash } = require('../utils');
 
 // export command functions
 module.exports = {
@@ -16,14 +17,17 @@ module.exports = {
 				value: Object.keys(require('./' + category)).map(c => `\`>${c}\``).join('\n'),
 				inline: true
 			}))))
+			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err)),
 
 	website: (msg) =>
 		msg.channel.send('Visit: https://jmoore.dev/')
+			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err)),
 
 	github: (msg) =>
 		msg.channel.send('Visit: https://github.com/tycrek')
+			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err)),
 
 	source: (msg) =>
@@ -32,6 +36,7 @@ module.exports = {
 			.setColor(0x181A1B)
 			.setURL('https://github.com/tycrek/mandatum')
 			.setFooter('Check out my source code on GitHub!'))
+			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err)),
 
 	about: (msg) =>
@@ -43,6 +48,7 @@ module.exports = {
 			"thumbnail": "https://cdn.discordapp.com/avatars/750806884914692207/d38112a55f14509e68e9823871ecf2eb.png?size=4096"
 		})
 			.setThumbnail('https://cdn.discordapp.com/avatars/750806884914692207/d38112a55f14509e68e9823871ecf2eb.png?size=4096'))
+			.then((botMsg) => trash(msg, botMsg))
 }
 
 module.exports.commands = module.exports.help;

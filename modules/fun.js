@@ -3,6 +3,7 @@ const { Client, MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const prefix = require('../bot').prefix;
 const UsageEmbed = require('../UsageEmbed');
+const { trash } = require('../utils');
 
 // export command functions
 module.exports = {
@@ -19,6 +20,7 @@ module.exports = {
 			.setColor(0x234875)
 			.setURL(`https://namemc.com/s?${args[0]}`)
 			.setFooter('https://namemc.com'))
+			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
 	},
 
@@ -32,6 +34,7 @@ module.exports = {
 				.setDescription(`$${price}`)
 				.setFooter('https://www.coindesk.com/coindesk-api'))
 			.then((embed) => msg.channel.send(embed))
+			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err)),
 
 	mcskin: (msg) => {
@@ -46,6 +49,7 @@ module.exports = {
 			.setColor(0xFF4136)
 			.setImage(`https://minotar.net/armor/body/${args[0]}/150.png`)
 			.setFooter('https://minotar.net'))
+			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
 	},
 
@@ -74,6 +78,7 @@ module.exports = {
 				.setImage(`${text}`)
 				.setFooter('https://inspirobot.me/'))
 			.then((embed) => msg.channel.send(embed))
+			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err)),
 
 	meme: (msg) =>
@@ -85,6 +90,7 @@ module.exports = {
 				.setImage(`https://i.imgflip.com/${meme}.jpg`)
 				.setFooter('https://imgflip.com'))
 			.then((embed) => msg.channel.send(embed))
+			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err)),
 
 	convert: (msg) => {
