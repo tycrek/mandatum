@@ -104,11 +104,6 @@ module.exports = {
 						: 'No units specified');
 	},
 
-	badword: (msg) => {
-		let words = require('../badwords.json');
-		msg.channel.send(words[Math.floor(Math.random() * words.length)]);
-	},
-
 	urban: (msg) =>
 		fetch('https://api.urbandictionary.com/v0/random')
 			.then((res) => res.json())
