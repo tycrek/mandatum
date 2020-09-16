@@ -1,0 +1,16 @@
+{
+	"name": "Bot Testing",
+	"id": "751793035565727816",
+	"admins": [],
+	"settings": {
+		"steal": {
+			"roles": [],
+			"excludedChannels": []
+		},
+		"roles": {
+			"excludedChannels": [
+				"752898408834138145"
+			]
+		}
+	}
+}
