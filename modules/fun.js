@@ -15,11 +15,12 @@ module.exports = {
 		if (args.length === 0)
 			return msg.channel.send(new UsageEmbed(command, '', false, ['username'], ['Minecraft username to get a link from NameMC']));
 
-		msg.channel.send(new MessageEmbed()
-			.setTitle(`${args[0]} on NameMC`)
-			.setColor(0x234875)
-			.setURL(`https://namemc.com/s?${args[0]}`)
-			.setFooter('https://namemc.com'))
+		msg.channel.send(
+			new MessageEmbed()
+				.setTitle(`${args[0]} on NameMC`)
+				.setColor(0x234875)
+				.setURL(`https://namemc.com/s?${args[0]}`)
+				.setFooter('https://namemc.com'))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
 	},
@@ -44,29 +45,32 @@ module.exports = {
 		if (args.length === 0)
 			return msg.channel.send(new UsageEmbed(command, '', false, ['username'], ['Minecraft username to display a skin for']));
 
-		msg.channel.send(new MessageEmbed()
-			.setTitle(`${args[0]}'s Minecraft skin`)
-			.setColor(0xFF4136)
-			.setImage(`https://minotar.net/armor/body/${args[0]}/150.png`)
-			.setFooter('https://minotar.net'))
+		msg.channel.send(
+			new MessageEmbed()
+				.setTitle(`${args[0]}'s Minecraft skin`)
+				.setColor(0xFF4136)
+				.setImage(`https://minotar.net/armor/body/${args[0]}/150.png`)
+				.setFooter('https://minotar.net'))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
 	},
 
 	shut: (msg) =>
-		msg.channel.send(new MessageEmbed()
-			.setColor(0x0B1308)
-			.setImage('https://shutplea.se/'))
+		msg.channel.send(
+			new MessageEmbed()
+				.setColor(0x0B1308)
+				.setImage('https://shutplea.se/'))
 			.then(() => msg.delete())
 			.catch((err) => log.warn(err)),
 
 	/*
 	face: (msg) =>
-		msg.channel.send(new MessageEmbed()
-			.setColor(0x000000)
-			.setTitle('This person does not exist...')
-			.setImage('https://thispersondoesnotexist.com/image')
-			.setFooter('https://thispersondoesnotexist.com/')),
+		msg.channel.send(
+			new MessageEmbed()
+				.setColor(0x000000)
+				.setTitle('This person does not exist...')
+				.setImage('https://thispersondoesnotexist.com/image')
+				.setFooter('https://thispersondoesnotexist.com/')),
 	*/
 
 	inspire: (msg) =>
@@ -114,12 +118,15 @@ module.exports = {
 		fetch('https://api.urbandictionary.com/v0/random')
 			.then((res) => res.json())
 			.then((json) => json.list[0])
-			.then((word) => msg.channel.send(new MessageEmbed()
-				.setTitle(word.word)
-				.setURL(word.permalink)
-				.setDescription(`${word.definition.replace(/[\[\]]/g, '').substring(0, 200)}\n>>> ${word.example.replace(/[\[\]]/g, '').substring(0, 200)}`)
-				.setTimestamp(word.written_on)
-				.setFooter(`Definition by: ${word.author}`))),
+			.then((word) =>
+				msg.channel.send(
+					new MessageEmbed()
+						.setTitle(word.word)
+						.setURL(word.permalink)
+						.setDescription(`${word.definition.replace(/[\[\]]/g, '').substring(0, 200)}\n>>> ${word.example.replace(/[\[\]]/g, '').substring(0, 200)}`)
+						.setTimestamp(word.written_on)
+						.setFooter(`Definition by: ${word.author}`)))
+			.then((botMsg) => trash(msg, botMsg)),
 
 	morse: (msg) => {
 		let args = msg.content.slice(prefix.length).trim().split(/ +/);
@@ -155,6 +162,7 @@ module.exports = {
 			paddedOriginal.push(args[i].padStart(parseInt(morseLength - cutLength), ' ').padEnd(morseLength, ' '));
 		}
 
-		msg.channel.send(`\`${paddedOriginal.join('  ')}\`\n\`${converted.join('  ')}\``);
+		msg.channel.send(`\`${paddedOriginal.join('  ')}\`\n\`${converted.join('  ')}\``)
+			.then((botMsg) => trash(msg, botMsg));
 	}
 }

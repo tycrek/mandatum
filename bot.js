@@ -99,10 +99,12 @@ client.once('ready', () => {
 	schedule.scheduleJob('0 */1 * * *', () =>
 		client.guilds.fetch(guilds.bt)
 			.then((guild) => guild.channels.cache.find(channel => channel.id === '752898408834138145'))
-			.then((guildChannel) => guildChannel.send(new MessageEmbed()
-				.setTitle(`Clock strikes ${moment().format('h')}!`)
-				.setColor(0xFFFFFF)
-				.setDescription(printTime())))
+			.then((guildChannel) =>
+				guildChannel.send(
+					new MessageEmbed()
+						.setTitle(`Clock strikes ${moment().format('h')}!`)
+						.setColor(0xFFFFFF)
+						.setDescription(printTime())))
 			.catch((err) => log.warn(err)));
 });
 

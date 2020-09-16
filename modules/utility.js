@@ -15,10 +15,11 @@ module.exports = {
 		if (args.length < 2)
 			return msg.channel.send(new UsageEmbed('link', '', false, ['url'], ['A URL without `https://` (example: `>link example.com`)']));
 
-		msg.channel.send(new MessageEmbed()
-			.setTitle(args[1])
-			.setColor(0x455A64)
-			.setURL(`https://${args[1].toLowerCase()}`))
+		msg.channel.send(
+			new MessageEmbed()
+				.setTitle(args[1])
+				.setColor(0x455A64)
+				.setURL(`https://${args[1].toLowerCase()}`))
 			.then(() => msg.delete())
 			.catch((err) => log.warn(err));
 	},
@@ -30,19 +31,21 @@ module.exports = {
 			return msg.channel.send(new UsageEmbed('search', '', false, ['query'], ['Searches `query` using DuckDuckGo'], ['You can use [DuckDuckGo Bangs](https://duckduckgo.com/bang) to redirect your search']));
 
 		args.shift();
-		msg.channel.send(new MessageEmbed()
-			.setColor(0xE0632F)
-			.setAuthor(`Searching "${args.join(' ')}" for ${msg.author.username}`)
-			.setDescription(`https://duckduckgo.com/?q=${args.join('+')}`))
+		msg.channel.send(
+			new MessageEmbed()
+				.setColor(0xE0632F)
+				.setAuthor(`Searching "${args.join(' ')}" for ${msg.author.username}`)
+				.setDescription(`https://duckduckgo.com/?q=${args.join('+')}`))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
 	},
 
 	uuid: (msg) =>
-		msg.channel.send(new MessageEmbed()
-			.setTitle('Here\'s your UUID:')
-			.setColor(0x000000)
-			.setDescription(`\`${UUID()}\``))
+		msg.channel.send(
+			new MessageEmbed()
+				.setTitle('Here\'s your UUID:')
+				.setColor(0x000000)
+				.setDescription(`\`${UUID()}\``))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err)),
 
@@ -52,6 +55,9 @@ module.exports = {
 		let minutes = (totalSeconds / 60 % 60).toString().split('.')[0];
 		let seconds = (totalSeconds % 60).toString().split('.')[0];
 
+		msg.channel.send(
+			new MessageEmbed()
+				.setTitle(`Bot has been active for ${hours} hours, ${minutes} minutes, ${seconds} seconds`))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
 	}
