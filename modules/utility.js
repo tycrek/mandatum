@@ -1,10 +1,10 @@
 /* Imports */
-const { Client, MessageEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const UUID = require('uuid').v4;
 const client = require('../bot').client;
 const prefix = require('../bot').prefix;
 const UsageEmbed = require('../UsageEmbed');
-const { trash } = require('../utils');
+const { log, trash } = require('../utils');
 
 // export command functions
 module.exports = {

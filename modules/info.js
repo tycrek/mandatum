@@ -1,6 +1,6 @@
 /* Imports */
-const { Client, MessageEmbed } = require('discord.js');
-const { trash } = require('../utils');
+const { MessageEmbed } = require('discord.js');
+const { log, trash } = require('../utils');
 
 // export command functions
 module.exports = {

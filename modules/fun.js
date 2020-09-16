@@ -1,9 +1,9 @@
 /* Imports */
-const { Client, MessageEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const prefix = require('../bot').prefix;
 const UsageEmbed = require('../UsageEmbed');
-const { trash } = require('../utils');
+const { log, trash } = require('../utils');
 
 // export command functions
 module.exports = {

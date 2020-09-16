@@ -2,7 +2,6 @@
 const { MessageEmbed } = require('discord.js');
 const { log, trash } = require('../utils');
 const prefix = require('../bot').prefix;
-const owner = require('../bot').owner;
 const UsageEmbed = require('../UsageEmbed');
 const moment = require('moment-timezone');
 moment.tz.setDefault('UTC');
