@@ -54,10 +54,10 @@ module.exports = {
 	// New filter system
 	neoFilter: neoFilter,
 
-	trash: (userMsg, botMsg) =>
+	trash: (userMsg, botMsg, deleteUser = true) =>
 		botMsg.react('🗑️')
 			.then(() => botMsg.awaitReactions((reaction, user) => reaction.emoji.name === '🗑️' && user.id === userMsg.author.id, { max: 1 }))
-			.then((_collected) => Promise.all([userMsg.delete(), botMsg.delete()]))
+			.then((_collected) => Promise.all([deleteUser && userMsg.delete(), botMsg.delete()]))
 			.catch(log.warn)
 };
 
