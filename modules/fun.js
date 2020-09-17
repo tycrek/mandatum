@@ -60,7 +60,7 @@ module.exports = {
 			new MessageEmbed()
 				.setColor(0x0B1308)
 				.setImage('https://shutplea.se/'))
-			.then(() => msg.delete())
+			.then((botMsg) => Promise.all([trash(msg, botMsg, false), msg.delete()]))
 			.catch((err) => log.warn(err)),
 
 	/*
