@@ -49,7 +49,8 @@ module.exports = {
 	writeJson: (filepath, json) => fs.writeJsonSync(filepath, json, { spaces: '\t' }),
 
 	// author does not have permission to use command
-	noPermission: (msg) => msg.reply('sorry, but you don\'t have permission to do that.'),
+	noPermission: (msg) => msg.reply('sorry, but you don\'t have permission to do that.')
+		.then((botMsg) => trash(msg, botMsg)),
 
 	// New filter system
 	neoFilter: neoFilter,
