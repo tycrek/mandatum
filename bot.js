@@ -189,23 +189,34 @@ client.on('message', (msg) => {
 	if (msg.author.bot || msg.channel.type === 'dm' || !filter.guild(msg, [guilds.t, guilds.bt]) || filter.category(msg, '750773557239349259')) return;
 
 	msg.isSwear = true;
-	let swears = fs.readJsonSync(path.join(__dirname, 'swears.json')).swears;
-	for (let i = 0; i < swears.length; i++) {
-		if (new RegExp(`\\b${swears[i]}\\b`, 'gi').test(msg.content.toLowerCase())) {
+	neoFilter(msg)
+		.then((allowed) => {
+			if (!allowed) return;
 
-			// Return if we are within the cooldown period
-			if (lastSwear[msg.channel.id] != null && (moment().format('X') - lastSwear[msg.channel.id]) < 30) return;
+			let swears = fs.readJsonSync(path.join(__dirname, 'swears.json')).swears;
+			for (let i = 0; i < swears.length; i++) {
+				if (new RegExp(`\\b${swears[i]}\\b`, 'gi').test(msg.content.toLowerCase())) {
 
-			// Curse thee heathen!
-			msg.channel.send(`Watch your fucking language ${msg.author.toString()}.`)
-				.catch((err) => log.warn(err));
+					let configPath = path.join(__dirname, `./config/servers/guild.${msg.guild.id}.json`);
+					fs.readJson(configPath)
+						.then((config) => {
+							let cooldown = config.settings.swear && config.settings.swear.cooldown && config.settings.swear.cooldown[msg.channel.id] ? config.settings.swear.cooldown[msg.channel.id] : 30;
 
-			// Update the cooldown and log the time updated
-			lastSwear[msg.channel.id] = moment().format('X');
-			log.info(`Setting ${msg.guild.name}: ${msg.channel.name} swear cooldown at ${lastSwear[msg.channel.id]}`);
-			break;
-		}
-	}
+							// Return if we are within the cooldown period
+							if (lastSwear[msg.channel.id] != null && (moment().format('X') - lastSwear[msg.channel.id]) < cooldown) return;
+
+							// Curse thee heathen!
+							msg.channel.send(`Watch your fucking language ${msg.author.toString()}.`)
+								.catch((err) => log.warn(err));
+
+							// Update the cooldown and log the time updated
+							lastSwear[msg.channel.id] = moment().format('X');
+							log.info(`Setting ${msg.guild.name}: ${msg.channel.name} swear cooldown at ${lastSwear[msg.channel.id]}`);
+						});
+					break;
+				}
+			}
+		});
 });
 
 // Log in to Discord using token
