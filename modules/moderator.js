@@ -188,14 +188,14 @@ module.exports = {
 
 		//! MASSIVE rate limit if you do this too fast
 		if (args.length > 5)
-			return msg.reply('slow down, buckaroo! Only do 5 emoji at a time.');
+			return msg.reply('slow down, buckaroo! Only do 5 emoji at a time.')
+				.then((botMsg) => trash(msg, botMsg));
 
 		// iterate through the added emoji (must be seperated with a space in message)
 		for (let arg of args)
 			new Promise((r) => r(arg.replace(/<|>/g, '')))
 				.then((cleaned) => (console.log(cleaned), msg.guild.emojis.create(`https://cdn.discordapp.com/emojis/${cleaned.split(':')[2]}.${cleaned.startsWith('a:') ? 'gif' : 'png'}?v=1`, cleaned.split(':')[1])))
 				.then((emoji) => msg.reply(`added ${emoji}`))
-				.then((botMsg) => trash(msg, botMsg))
 				.catch((err) => log.warn(err));
 	},
 
