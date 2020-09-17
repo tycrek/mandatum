@@ -9,10 +9,11 @@
 			],
 			"excludedChannels": []
 		},
-		"roles": {
-			"excludedChannels": [
-				"752898408834138145"
-			]
+		"swear": {
+			"excludedChannels": [],
+			"cooldown": {
+				"752898408834138145": "30"
+			}
 		}
 	},
 	"stats": {
