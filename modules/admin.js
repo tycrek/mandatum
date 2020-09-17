@@ -66,6 +66,14 @@ module.exports = {
 					// Tell the user what happened
 					msg.channel.send(`${operation === '+' ? 'Added' : 'Removed'} exclusion for channel \`${roleId}\` ${operation === '+' ? 'to' : 'from'} command \`${command}\` in ${msg.guild.name}`)
 						.then((botMsg) => trash(msg, botMsg));
+				} else if (setting === 'cooldown') {
+					let channel = msg.channel.id;
+					if (!config.settings[command].cooldown) config.settings[command].cooldown = {};
+					config.settings[command].cooldown[channel] = value;
+
+					// Tell the user what happened
+					msg.channel.send(`${command} cooldown set to \`${value}\` in ${msg.guild.name}`)
+						.then((botMsg) => trash(msg, botMsg));
 				}
 
 				// Return config to next Promise to write it
