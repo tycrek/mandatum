@@ -21,7 +21,7 @@ module.exports = {
 				.setTitle(args[1])
 				.setColor(0x455A64)
 				.setURL(`https://${args[1].toLowerCase()}`))
-			.then(() => msg.delete())
+			.then((botMsg) => Promise.all([trash(msg, botMsg, false), msg.delete()]))
 			.catch((err) => log.warn(err));
 	},
 

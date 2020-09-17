@@ -113,7 +113,8 @@ module.exports = {
 					? (`${v1.replace('c', '')} Celsius is ${((parseInt(v1.replace('c', '')) * 1.8) + 32).toFixed(2)} Fahrenheit`)
 					: (v1.includes('f'))
 						? (`${v1.replace('f', '')} Fahrenheit is ${((parseInt(v1.replace('f', '')) - 32) / 1.8).toFixed(2)} Celsius`)
-						: 'No units specified');
+						: 'No units specified')
+				.then((botMsg) => trash(msg, botMsg));
 	},
 
 	urban: (msg) =>
