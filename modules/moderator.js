@@ -187,7 +187,8 @@ module.exports = {
 
 		// iterate through the added emoji (must be seperated with a space in message)
 		for (let arg of args)
-			msg.guild.emojis.create(`https://cdn.discordapp.com/emojis/${arg.split(':')[2].replace('>', '')}${arg.startsWith('<a:') ? '.gif?v=1' : '.png?v=1'}`, arg.split(':')[1])
+			new Promise((r) => r(arg.replace(/<|>/g, '')))
+				.then((cleaned) => (console.log(cleaned), msg.guild.emojis.create(`https://cdn.discordapp.com/emojis/${cleaned.split(':')[2]}.${cleaned.startsWith('a:') ? 'gif' : 'png'}?v=1`, cleaned.split(':')[1])))
 				.then((emoji) => msg.reply(`added ${emoji}`))
 				.then((botMsg) => trash(msg, botMsg))
 				.catch((err) => log.warn(err));
