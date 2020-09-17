@@ -26,7 +26,7 @@ const schedule = require('node-schedule');
 // anything time related such as the cooldown
 const moment = require('moment-timezone');
 
-const { log, printTime, filter, readJson, writeJson, neoFilter, noPermission } = require('./utils');
+const { log, printTime, filter, readJson, writeJson, neoFilter, noPermission, trash } = require('./utils');
 
 /* Variables */
 
@@ -207,6 +207,7 @@ client.on('message', (msg) => {
 
 							// Curse thee heathen!
 							msg.channel.send(`Watch your fucking language ${msg.author.toString()}.`)
+								.then((botMsg) => trash(msg, botMsg, false))
 								.catch((err) => log.warn(err));
 
 							// Update the cooldown and log the time updated
