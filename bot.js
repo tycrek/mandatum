@@ -188,6 +188,7 @@ client.on('message', (msg) => {
 client.on('message', (msg) => {
 	if (msg.author.bot || msg.channel.type === 'dm' || !filter.guild(msg, [guilds.t, guilds.bt]) || filter.category(msg, '750773557239349259')) return;
 
+	msg.isSwear = true;
 	let swears = fs.readJsonSync(path.join(__dirname, 'swears.json')).swears;
 	for (let i = 0; i < swears.length; i++) {
 		if (new RegExp(`\\b${swears[i]}\\b`, 'gi').test(msg.content.toLowerCase())) {
