@@ -66,7 +66,7 @@ function neoFilter(msg) {
 
 		// Extract the command string without the prefix
 		const args = msg.content.slice(require('./bot').prefix.length).trim().split(/ +/);
-		let cmd = args.shift();
+		let cmd = msg.isSwear ? 'swear' : args.shift();
 
 		// Prep ID's for later use
 		let guild = msg.guild.id;
