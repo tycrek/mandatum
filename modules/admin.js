@@ -113,7 +113,8 @@ module.exports = {
 		let count = parseInt(args[1]);
 
 		if (!count || count < 1)
-			return msg.channel.send(new UsageEmbed('send', '', false, ['count'], ['How many messages to send']));
+			return msg.channel.send(new UsageEmbed('send', '', false, ['count'], ['How many messages to send']))
+				.then((botMsg) => trash(msg, botMsg));
 
 		log.info(`Sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`);
 		msg.delete().catch((err) => log.warn(err));

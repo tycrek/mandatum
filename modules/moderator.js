@@ -14,7 +14,8 @@ module.exports = {
 		let channel = msg.channel;
 
 		if (args.length !== 2)
-			return msg.channel.send(new UsageEmbed('clear', '', false, ['amount'], ['How many messages to delete from the channel'], ['No maximum (that I know of :wink:)']));
+			return msg.channel.send(new UsageEmbed('clear', '', false, ['amount'], ['How many messages to delete from the channel'], ['No maximum (that I know of :wink:)']))
+				.then((botMsg) => trash(msg, botMsg));
 
 		// amount is total user wants deleted plus the message calling the command
 		let amount = parseInt(args[1]) + 1;
@@ -95,7 +96,8 @@ module.exports = {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 
 		if (args.length < 3)
-			return msg.channel.send(new UsageEmbed('kick', ' ', false, ['@user', 'reason'], ['User to kick (must be a mention)', 'Reason to kick user'], ['Reason does not have to be wrapped in quotes (" ")']));
+			return msg.channel.send(new UsageEmbed('kick', ' ', false, ['@user', 'reason'], ['User to kick (must be a mention)', 'Reason to kick user'], ['Reason does not have to be wrapped in quotes (" ")']))
+				.then((botMsg) => trash(msg, botMsg));
 
 		args.shift(); // Remove the command
 		args.shift(); // Remove the user
@@ -121,7 +123,8 @@ module.exports = {
 			roleName = msg.mentions.roles.first().name;
 		} catch (err) {
 			log.warn(err);
-			return msg.channel.send(new UsageEmbed('drole', '', false, ['@role'], ['Role to delete from the server']));
+			return msg.channel.send(new UsageEmbed('drole', '', false, ['@role'], ['Role to delete from the server']))
+				.then((botMsg) => trash(msg, botMsg));
 		}
 
 		msg.guild.roles.fetch(roleId)
@@ -157,7 +160,8 @@ module.exports = {
 						'Boolean.'
 					],
 					['All parameters must be contained within "quotes"']
-				));
+				))
+				.then((botMsg) => trash(msg, botMsg));
 
 		// Create the role!
 		msg.guild.roles.create(
@@ -179,7 +183,8 @@ module.exports = {
 		args.shift(); // Remove command from args
 
 		if (args.length < 1)
-			return msg.channel.send(new UsageEmbed('steal', '', false, [':emoji:'], ['Emoji to steal and add to current server'], ['To steal multiple emoji, separate each with a space', 'Both static and animated emoji can be stolen']));
+			return msg.channel.send(new UsageEmbed('steal', '', false, [':emoji:'], ['Emoji to steal and add to current server'], ['To steal multiple emoji, separate each with a space', 'Both static and animated emoji can be stolen']))
+				.then((botMsg) => trash(msg, botMsg));
 
 		//! MASSIVE rate limit if you do this too fast
 		if (args.length > 5)
@@ -205,7 +210,8 @@ module.exports = {
 
 		// According to JavaScript, "Not a Number" is typeof number........
 		if (args.length < 2 || parseInt(args[0]).toString() === 'NaN')
-			return msg.channel.send(new UsageEmbed('vote', ' ', false, ['time', 'topic'], ['time in seconds', 'what users will vote on'], ['topic can be multiple words']));
+			return msg.channel.send(new UsageEmbed('vote', ' ', false, ['time', 'topic'], ['time in seconds', 'what users will vote on'], ['topic can be multiple words']))
+				.then((botMsg) => trash(msg, botMsg));
 
 		// General information about the vote
 		let time = parseInt(args.shift());

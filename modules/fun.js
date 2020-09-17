@@ -13,7 +13,8 @@ module.exports = {
 		let command = args.shift();
 
 		if (args.length === 0)
-			return msg.channel.send(new UsageEmbed(command, '', false, ['username'], ['Minecraft username to get a link from NameMC']));
+			return msg.channel.send(new UsageEmbed(command, '', false, ['username'], ['Minecraft username to get a link from NameMC']))
+				.then((botMsg) => trash(msg, botMsg));
 
 		msg.channel.send(
 			new MessageEmbed()
@@ -43,7 +44,8 @@ module.exports = {
 		let command = args.shift();
 
 		if (args.length === 0)
-			return msg.channel.send(new UsageEmbed(command, '', false, ['username'], ['Minecraft username to display a skin for']));
+			return msg.channel.send(new UsageEmbed(command, '', false, ['username'], ['Minecraft username to display a skin for']))
+				.then((botMsg) => trash(msg, botMsg));
 
 		msg.channel.send(
 			new MessageEmbed()
@@ -138,6 +140,7 @@ module.exports = {
 
 		if (args === '' || args.length > max)
 			return msg.channel.send(new UsageEmbed(command, '', false, ['text'], ['String of words to convert to morse'], [`Max of \`${max}\` characters`]))
+				.then((botMsg) => trash(msg, botMsg));
 
 		// Thanks @Cerbrus https://stackoverflow.com/a/26059399/9665770
 		let morseCode = {

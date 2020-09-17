@@ -13,7 +13,8 @@ module.exports = {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 
 		if (args.length < 2)
-			return msg.channel.send(new UsageEmbed('link', '', false, ['url'], ['A URL without `https://` (example: `>link example.com`)']));
+			return msg.channel.send(new UsageEmbed('link', '', false, ['url'], ['A URL without `https://` (example: `>link example.com`)']))
+				.then((botMsg) => trash(msg, botMsg));
 
 		msg.channel.send(
 			new MessageEmbed()
@@ -28,7 +29,8 @@ module.exports = {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 
 		if (args.length < 2)
-			return msg.channel.send(new UsageEmbed('search', '', false, ['query'], ['Searches `query` using DuckDuckGo'], ['You can use [DuckDuckGo Bangs](https://duckduckgo.com/bang) to redirect your search']));
+			return msg.channel.send(new UsageEmbed('search', '', false, ['query'], ['Searches `query` using DuckDuckGo'], ['You can use [DuckDuckGo Bangs](https://duckduckgo.com/bang) to redirect your search']))
+				.then((botMsg) => trash(msg, botMsg));
 
 		args.shift();
 		msg.channel.send(
