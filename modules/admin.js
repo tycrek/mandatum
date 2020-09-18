@@ -69,7 +69,13 @@ module.exports = {
 				} else if (setting === 'cooldown') {
 					let channel = msg.channel.id;
 					if (!config.settings[command].cooldown) config.settings[command].cooldown = {};
-					config.settings[command].cooldown[channel] = value;
+
+					if (value === '-') {
+						config.settings[command].cooldown[channel] = undefined;
+						config = JSON.parse(JSON.stringify(config));
+					} else {
+						config.settings[command].cooldown[channel] = value;
+					}
 
 					// Tell the user what happened
 					msg.channel.send(`${command} cooldown set to \`${value}\` in ${msg.guild.name}`)
