@@ -11,10 +11,7 @@
 		},
 		"swear": {
 			"excludedChannels": [],
-			"cooldown": {
-				"752898408834138145": "30",
-				"752679477787623544": "1"
-			}
+			"cooldown": {}
 		},
 		"vote": {
 			"roles": [
