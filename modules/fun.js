@@ -168,5 +168,7 @@ module.exports = {
 
 		msg.channel.send(`\`${paddedOriginal.join('  ')}\`\n\`${converted.join('  ')}\``)
 			.then((botMsg) => trash(msg, botMsg));
-	}
+	},
+
+	schlong: (msg) => msg.channel.send('8' + '='.padEnd(Math.min(30, parseInt(msg.content.slice(prefix.length).trim().split(/ +/)[1])), '=') + 'D').then((botMsg) => trash(msg, botMsg))
 }
