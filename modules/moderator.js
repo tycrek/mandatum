@@ -183,7 +183,12 @@ module.exports = {
 		args.shift(); // Remove command from args
 
 		if (args.length < 1)
-			return msg.channel.send(new UsageEmbed('steal', '', false, [':emoji:'], ['Emoji to steal and add to current server'], ['To steal multiple emoji, separate each with a space', 'Both static and animated emoji can be stolen']))
+			return msg.channel.send(new UsageEmbed('steal', '', false, [':emoji:'], ['Emoji to steal and add to current server'],
+				[
+					'To steal multiple emoji, separate each with a space',
+					'Both static and animated emoji can be stolen',
+					'You can also use a Discord CDN emoji URL in the form `name:url`'
+				]))
 				.then((botMsg) => trash(msg, botMsg));
 
 		//! MASSIVE rate limit if you do this too fast
@@ -191,12 +196,23 @@ module.exports = {
 			return msg.reply('slow down, buckaroo! Only do 5 emoji at a time.')
 				.then((botMsg) => trash(msg, botMsg));
 
-		// iterate through the added emoji (must be seperated with a space in message)
-		for (let arg of args)
-			new Promise((r) => r(arg.replace(/<|>/g, '')))
-				.then((cleaned) => (console.log(cleaned), msg.guild.emojis.create(`https://cdn.discordapp.com/emojis/${cleaned.split(':')[2]}.${cleaned.startsWith('a:') ? 'gif' : 'png'}?v=1`, cleaned.split(':')[1])))
-				.then((emoji) => msg.reply(`added ${emoji}`))
-				.catch((err) => log.warn(err));
+		// If adding multiple emoji, wait until all have been added before replying
+		Promise.all(
+			args.map((arg) =>
+				new Promise((resolve, reject) =>
+					new Promise((r) => r(arg.replace(/<|>/g, '')))
+						.then((emoji) => ({ emoji, isUrl: emoji.split(/:(.+)/)[1].startsWith('https') }))
+						.then(({ emoji, isUrl }) => ({
+							url: isUrl ? emoji.split(':').slice(1).join(':') : (`https://cdn.discordapp.com/emojis/${emoji.split(':')[2]}.${emoji.startsWith('a:') ? 'gif' : 'png'}?v=1`),
+							name: emoji.split(':')[isUrl ? 0 : 1]
+						}))
+						.then(({ url, name }) => msg.guild.emojis.create(url, name))
+						.then((emoji) => resolve(emoji))
+						.catch((err) => reject(err))
+				)))
+			.then((results) => msg.reply(`added ${results.join(' ')}`))
+			.then((botMsg) => trash(msg, botMsg))
+			.catch((err) => log.warn(err));
 	},
 
 	vote: (msg) => {
