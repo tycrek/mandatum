@@ -37,7 +37,7 @@ class UsageEmbed extends MessageEmbed {
 				+ newLine +
 
 				//! STEP 3: Notes
-				(notes && notes.length !== 0 ? `Note: ${notes.join('; ')}` : '')
+				(notes && notes.length !== 0 ? `Note: ${notes.join('\nNote: ')}` : '')
 			)
 		});
 	}
