@@ -262,16 +262,16 @@ module.exports = {
 				return votes;
 			})
 			.then((votes) =>
-				reactMsg.edit(
-					new MessageEmbed()
-						.setAuthor('Votes are in!')
-						.setTitle(`${topic}${!topic.endsWith('?') ? '?' : ''}`)
-						.setDescription(`${emoji.up} : ${votes[emoji.up]}\u2003\u2003${emoji.down} : ${votes[emoji.down]}`)
-						.setFooter(`Vote requested by ${author}\nVote Concluded at ${moment().format('h:mm:ss a, MMMM Do, YYYY')} UTC`)))
-
-			// Remove the emoji after vote completes
-			.then((editedMsg) => editedMsg.reactions.removeAll())
-			.then((botMsg) => trash(msg, botMsg))
+				Promise.all([
+					reactMsg.edit(
+						new MessageEmbed()
+							.setAuthor('Votes are in!')
+							.setTitle(`${topic}${!topic.endsWith('?') ? '?' : ''}`)
+							.setDescription(`${emoji.up} : ${votes[emoji.up]}\u2003\u2003${emoji.down} : ${votes[emoji.down]}`)
+							.setFooter(`Vote requested by ${author}\nVote Concluded at ${moment().format('h:mm:ss a, MMMM Do, YYYY')} UTC`)),
+					reactMsg.reactions.removeAll()
+				]))
+			.then((_results) => trash(msg, reactMsg))
 			.catch((err) => log.error(err));
 	},
 
