@@ -6,7 +6,6 @@
 	<h1>mandatum</h1>
 </div>
 
-
 An open-source Discord bot.
 
 **Please note**: The only **legitimate** mandatum bot is `mandatum#2749`. Any others are clones and may not be safe to use.
@@ -17,7 +16,7 @@ An open-source Discord bot.
 
 | Command | Description |
 | ------- | ----------- |
-| `>help` | Displays a list of available commands |
+| `>help`/`>commands` | Displays a list of available commands |
 | `>website` | Shows a link to [my website](https://jmoore.dev) |
 | `>github` | Shows a link to [my GitHub](https://github.com/tycrek) |
 | `>source` | Shows a link to [this repo](/) |
@@ -34,8 +33,9 @@ An open-source Discord bot.
 | `>inspire` | Generates an "inspirational" quote and image from [InspiroBot](https://inspirobot.me/) |
 | `>meme` | Shows a random meme from [Imgflip](https://imgflip.com) |
 | `>convert` | Converts units (WIP) |
-| `>badword` | Displays a random bad word from [Google's list of bad words](https://www.freewebheaders.com/full-list-of-bad-words-banned-by-google/) |
 | `>urban` | Displays a random definition from [Urban Dictionary](https://urbandictionary.com) |
+| `>morse <text>` | Converts given `text` to morse code |
+| `>schlong <length>` | ... |
 
 #### Utility
 
@@ -54,6 +54,8 @@ An open-source Discord bot.
 | `>kick <@user> <reason>` | Kicks `@user` from the server for `reason` |
 | `>drole <@role>` | Deletes `@role` from the server |
 | `>crole "<name>" "<color>" "<permissions>" "<mentionable>"` | Run this command without any parameters to see usage |
+| `>steal <:emoji:>` | Steals the emoji and adds it to the server |
+| `>vote <time> <topic>` | Allows members to vote on a topic |
 
 #### Admin
 
@@ -62,4 +64,5 @@ An open-source Discord bot.
 | `>config [command] [setting] [value]` | Get or set `value` for `setting` for `command`.<br>Eventually a wiki will show full usage for this command |
 | `>release` | for tycrek's use only |
 | `>send <n>` | Sends `n` messages in chat (meant for testing other commands) |
-| `>steal <:emoji:>` | Steals the emoji and adds it to the server |
+| `>stats <name>` | Creates channel statistics channels under a new category `name` |
+| `>delstats` | Deletes the statistics channels created with `>stats` |
