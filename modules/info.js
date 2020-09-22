@@ -13,7 +13,7 @@ module.exports = {
 				.setColor(0xFFFF00)
 				.setThumbnail('https://cdn.discordapp.com/avatars/750806884914692207/d38112a55f14509e68e9823871ecf2eb.png?size=4096')
 				.setFooter('Created by tycrek')
-				.addFields(['info', 'fun', 'utility', 'moderator', 'admin'].map(category => ({
+				.addFields(['info', 'fun', 'utility', 'voice', 'moderator', 'admin'].map(category => ({
 					name: category[0].toUpperCase() + category.slice(1), // crappy way to capitalize 1st letter
 					value: Object.keys(require('./' + category)).map(c => `\`>${c}\``).join('\n'),
 					inline: true

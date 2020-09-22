@@ -58,6 +58,7 @@ var commands = {
 	...require('./modules/info'),
 	...require('./modules/fun'),
 	...require('./modules/utility'),
+	...require('./modules/voice'),
 	...require('./modules/moderator'),
 	...require('./modules/admin')
 };
