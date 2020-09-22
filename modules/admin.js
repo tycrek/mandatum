@@ -3,9 +3,9 @@ const { MessageEmbed } = require('discord.js');
 const fs = require('fs-extra');
 const path = require('path');
 const { log, trash, filter, noPermission } = require('../utils');
-const prefix = require('../bot').prefix;
-const owner = require('../bot').owner;
+const { prefix, owner, client } = require('../bot');
 const UsageEmbed = require('../UsageEmbed');
+const ytdl = require('ytdl-core');
 
 // export command functions
 module.exports = {
@@ -199,6 +199,19 @@ module.exports = {
 			.then((stats) => Promise.all(stats.map((statChannel) => statChannel.delete())))
 			.then((_results) => msg.channel.send('Deleted stats channels'))
 			.then((botMsg) => trash(msg, botMsg))
+			.catch((err) => log.warn(err));
+	},
+
+	voice: (msg) => {
+		const args = msg.content.slice(prefix.length).trim().split(/ +/);
+
+		let user = msg.member;
+
+		if (!user.voice.channel)
+			return msg.reply('please join a voice channel first!').then((botMsg) => trash(msg, botMsg));
+
+		msg.member.voice.channel.join()
+			.then((connection) => connection.play(args[1].includes('youtube') ? ytdl(args[1]) : args[1]))
 			.catch((err) => log.warn(err));
 	}
 }
