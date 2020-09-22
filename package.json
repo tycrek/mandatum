@@ -23,6 +23,7 @@
     "discord.js": "^12.3.1",
     "ffmpeg-static": "^4.2.7",
     "fs-extra": "^9.0.1",
+    "googleapis": "^59.0.0",
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
     "node-fetch": "^2.6.0",
