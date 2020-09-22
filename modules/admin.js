@@ -5,7 +5,7 @@ const path = require('path');
 const { log, trash, filter, noPermission } = require('../utils');
 const { prefix, owner, client } = require('../bot');
 const UsageEmbed = require('../UsageEmbed');
-const ytdl = require('ytdl-core-discord');
+const ytdl = require('ytdl-core');
 
 // export command functions
 module.exports = {
@@ -211,13 +211,7 @@ module.exports = {
 			return msg.reply('please join a voice channel first!').then((botMsg) => trash(msg, botMsg));
 
 		msg.member.voice.channel.join()
-			.then(connection => {
-				play(connection, args[1])
-			})
+			.then((connection) => connection.play(args[1].includes('youtube') ? ytdl(args[1]) : args[1]))
 			.catch((err) => log.warn(err));
 	}
-}
-
-async function play(connection, url) {
-	connection.play(await ytdl(url, { quality: 'highestaudio' }), { type: 'opus' });
 }
