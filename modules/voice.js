@@ -107,8 +107,7 @@ module.exports = {
 		if (!vc)
 			return msg.reply('Bot not in voice chat').then((botMsg) => trash(msg, botMsg));
 
-		// pause stuff
-		vc.dispatcher.pause();
+		vc.dispatcher && !vc.dispatcher.paused && vc.dispatcher.pause();
 	}),
 
 	vresume: new Command(CATEGORY, null, (cmd, msg) => {
@@ -120,7 +119,7 @@ module.exports = {
 			return msg.reply('Bot not in voice chat').then((botMsg) => trash(msg, botMsg));
 
 		// pause stuff
-		vc.dispatcher.resume();
+		vc.dispatcher && vc.dispatcher.paused && vc.dispatcher.resume();
 	}),
 
 	vskip: new Command(CATEGORY, null, (cmd, msg) => {
