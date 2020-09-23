@@ -1,6 +1,8 @@
+const CATEGORY = 'moderator';
+
 /* Imports */
 const { MessageEmbed } = require('discord.js');
-const { log, trash } = require('../utils');
+const { log, trash, Command } = require('../utils');
 const prefix = require('../bot').prefix;
 const UsageEmbed = require('../UsageEmbed');
 const moment = require('moment-timezone');
@@ -9,13 +11,12 @@ moment.tz.setDefault('UTC');
 // export command functions
 module.exports = {
 
-	clear: (msg) => {
+	clear: new Command(CATEGORY, new UsageEmbed('clear', '', false, ['amount'], ['How many messages to delete from the channel'], ['No maximum (that I know of :wink:)']), (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let channel = msg.channel;
 
 		if (args.length !== 2)
-			return msg.channel.send(new UsageEmbed('clear', '', false, ['amount'], ['How many messages to delete from the channel'], ['No maximum (that I know of :wink:)']))
-				.then((botMsg) => trash(msg, botMsg));
+			return cmd.help(msg);
 
 		// amount is total user wants deleted plus the message calling the command
 		let amount = parseInt(args[1]) + 1;
@@ -90,14 +91,13 @@ module.exports = {
 					.catch((err) => log.warn(err));
 			});
 		}
-	},
+	}),
 
-	kick: (msg) => {
+	kick: new Command(CATEGORY, new UsageEmbed('kick', ' ', false, ['@user', 'reason'], ['User to kick (must be a mention)', 'Reason to kick user'], ['Reason does not have to be wrapped in quotes (" ")']), (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 
 		if (args.length < 3)
-			return msg.channel.send(new UsageEmbed('kick', ' ', false, ['@user', 'reason'], ['User to kick (must be a mention)', 'Reason to kick user'], ['Reason does not have to be wrapped in quotes (" ")']))
-				.then((botMsg) => trash(msg, botMsg));
+			return cmd.help(msg);
 
 		args.shift(); // Remove the command
 		args.shift(); // Remove the user
@@ -114,17 +114,16 @@ module.exports = {
 			})
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	},
+	}),
 
-	drole: (msg) => {
+	drole: new Command(CATEGORY, new UsageEmbed('drole', '', false, ['@role'], ['Role to delete from the server']), (cmd, msg) => {
 		let roleId, roleName;
 		try {
 			roleId = msg.mentions.roles.first().id;
 			roleName = msg.mentions.roles.first().name;
 		} catch (err) {
 			log.warn(err);
-			return msg.channel.send(new UsageEmbed('drole', '', false, ['@role'], ['Role to delete from the server']))
-				.then((botMsg) => trash(msg, botMsg));
+			return cmd.help(msg);
 		}
 
 		msg.guild.roles.fetch(roleId)
@@ -132,9 +131,18 @@ module.exports = {
 			.then(() => msg.channel.send(`Deleted role ${roleName}`))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	},
+	}),
 
-	crole: (msg) => {
+	crole: new Command(CATEGORY, new UsageEmbed('crole', '" "', true,
+		['name', 'color', 'permissions', 'mentionable'],
+		[
+			'String. Can have spaces.',
+			'Must be a [ColorResolvable](https://discord.js.org/#/docs/main/stable/typedef/ColorResolvable)',
+			'Must be `NONE` or a [PermissionResolvable](https://discord.js.org/#/docs/main/stable/typedef/PermissionResolvable)',
+			'Boolean.'
+		],
+		['All parameters must be contained within "quotes"']
+	), (cmd, msg) => {
 		let args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let command = args.shift(); // Remove the command
 
@@ -150,18 +158,7 @@ module.exports = {
 
 		// Check if the command has the required number of arguments
 		if (args.length != 4)
-			return msg.channel.send(
-				new UsageEmbed(command, '" "', true,
-					['name', 'color', 'permissions', 'mentionable'],
-					[
-						'String. Can have spaces.',
-						'Must be a [ColorResolvable](https://discord.js.org/#/docs/main/stable/typedef/ColorResolvable)',
-						'Must be `NONE` or a [PermissionResolvable](https://discord.js.org/#/docs/main/stable/typedef/PermissionResolvable)',
-						'Boolean.'
-					],
-					['All parameters must be contained within "quotes"']
-				))
-				.then((botMsg) => trash(msg, botMsg));
+			return cmd.help(msg);
 
 		// Create the role!
 		msg.guild.roles.create(
@@ -176,46 +173,45 @@ module.exports = {
 			.then((role) => msg.channel.send(`Role [${role.toString()}] created`))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	},
+	}),
 
-	steal: (msg) => {
-		const args = msg.content.slice(prefix.length).trim().split(/ +/);
-		args.shift(); // Remove command from args
+	steal: new Command(CATEGORY, new UsageEmbed('steal', '', false, [':emoji:'], ['Emoji to steal and add to current server'],
+		[
+			'To steal multiple emoji, separate each with a space',
+			'Both static and animated emoji can be stolen',
+			'You can also use a Discord CDN emoji URL in the form `name:url`'
+		]), (cmd, msg) => {
+			const args = msg.content.slice(prefix.length).trim().split(/ +/);
+			args.shift(); // Remove command from args
 
-		if (args.length < 1)
-			return msg.channel.send(new UsageEmbed('steal', '', false, [':emoji:'], ['Emoji to steal and add to current server'],
-				[
-					'To steal multiple emoji, separate each with a space',
-					'Both static and animated emoji can be stolen',
-					'You can also use a Discord CDN emoji URL in the form `name:url`'
-				]))
-				.then((botMsg) => trash(msg, botMsg));
+			if (args.length < 1)
+				return cmd.help(msg);
 
-		//! MASSIVE rate limit if you do this too fast
-		if (args.length > 5)
-			return msg.reply('slow down, buckaroo! Only do 5 emoji at a time.')
-				.then((botMsg) => trash(msg, botMsg));
+			//! MASSIVE rate limit if you do this too fast
+			if (args.length > 5)
+				return msg.reply('slow down, buckaroo! Only do 5 emoji at a time.')
+					.then((botMsg) => trash(msg, botMsg));
 
-		// If adding multiple emoji, wait until all have been added before replying
-		Promise.all(
-			args.map((arg) =>
-				new Promise((resolve, reject) =>
-					new Promise((r) => r(arg.replace(/<|>/g, '')))
-						.then((emoji) => ({ emoji, isUrl: emoji.split(/:(.+)/)[1].startsWith('https') }))
-						.then(({ emoji, isUrl }) => ({
-							url: isUrl ? emoji.split(':').slice(1).join(':') : (`https://cdn.discordapp.com/emojis/${emoji.split(':')[2]}.${emoji.startsWith('a:') ? 'gif' : 'png'}?v=1`),
-							name: emoji.split(':')[isUrl ? 0 : 1]
-						}))
-						.then(({ url, name }) => msg.guild.emojis.create(url, name))
-						.then((emoji) => resolve(emoji))
-						.catch((err) => reject(err))
-				)))
-			.then((results) => msg.reply(`added ${results.join(' ')}`))
-			.then((botMsg) => trash(msg, botMsg))
-			.catch((err) => log.warn(err));
-	},
+			// If adding multiple emoji, wait until all have been added before replying
+			Promise.all(
+				args.map((arg) =>
+					new Promise((resolve, reject) =>
+						new Promise((r) => r(arg.replace(/<|>/g, '')))
+							.then((emoji) => ({ emoji, isUrl: emoji.split(/:(.+)/)[1].startsWith('https') }))
+							.then(({ emoji, isUrl }) => ({
+								url: isUrl ? emoji.split(':').slice(1).join(':') : (`https://cdn.discordapp.com/emojis/${emoji.split(':')[2]}.${emoji.startsWith('a:') ? 'gif' : 'png'}?v=1`),
+								name: emoji.split(':')[isUrl ? 0 : 1]
+							}))
+							.then(({ url, name }) => msg.guild.emojis.create(url, name))
+							.then((emoji) => resolve(emoji))
+							.catch((err) => reject(err))
+					)))
+				.then((results) => msg.reply(`added ${results.join(' ')}`))
+				.then((botMsg) => trash(msg, botMsg))
+				.catch((err) => log.warn(err));
+		}),
 
-	vote: (msg) => {
+	vote: new Command(CATEGORY, new UsageEmbed('vote', ' ', false, ['time', 'topic'], ['time in seconds', 'what users will vote on'], ['topic can be multiple words']), (cmd, msg) => {
 		const emoji = {
 			up: '👍',
 			down: '👎'
@@ -226,8 +222,7 @@ module.exports = {
 
 		// According to JavaScript, "Not a Number" is typeof number........
 		if (args.length < 2 || parseInt(args[0]).toString() === 'NaN')
-			return msg.channel.send(new UsageEmbed('vote', ' ', false, ['time', 'topic'], ['time in seconds', 'what users will vote on'], ['topic can be multiple words']))
-				.then((botMsg) => trash(msg, botMsg));
+			return cmd.help(msg);
 
 		// General information about the vote
 		let time = parseInt(args.shift());
@@ -273,9 +268,9 @@ module.exports = {
 				]))
 			.then((_results) => trash(msg, reactMsg))
 			.catch((err) => log.error(err));
-	},
+	}),
 
-	// poll: (msg) => {
+	// poll: new Command(CATEGORY, null, (cmd, msg) => {
 	// 	let args = msg.content.slice(prefix.length).trim().split(/ +/);
 	// 	let command = args.shift(); // Remove the command
 
@@ -292,5 +287,5 @@ module.exports = {
 	// 	// Check if the command has the required number of arguments
 	// 	if (args.length != 4)
 	// 		return msg.channel.send(new UsageEmbed(command, '" "', true))
-	// }
+	// })
 }

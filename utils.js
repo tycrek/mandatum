@@ -3,6 +3,7 @@
 // path & fs-extra for filesystem operations
 const path = require('path');
 const fs = require('fs-extra');
+const UsageEmbed = require('./UsageEmbed');
 
 // anything time related such as the cooldown
 const moment = require('moment-timezone');
@@ -13,9 +14,33 @@ const log = require('pino')({
 	timestamp: () => `,"time": ${moment().format('YYYY-MM-DD hh:mm:ss A')} `
 });
 
+class Command {
+	/**
+	 * 
+	 * @param {string} keyword 
+	 * @param {string} category 
+	 * @param {UsageEmbed} usage 
+	 * @param {function} execute 
+	 */
+	constructor(category, usage, execute) {
+		this.category = category;
+		this.usage = usage;
+
+		this.execute = (msg) => new Promise((resolve, reject) => {
+			try { resolve(execute(this, msg)) }
+			catch (err) { reject(err) }
+		}).catch((err) => log.warn(err));
+	}
+
+	help(msg) {
+		msg.channel.send(this.usage).then((botMsg) => trash(msg, botMsg));
+	}
+}
+
 // export the utils
 module.exports = {
-	log: log,
+	log,
+	Command,
 
 	// Print the time in a nice format: 6:57:30 pm, September 7th, 2020
 	printTime: () => moment().format('h:mm:ss a, MMMM Do, YYYY'),

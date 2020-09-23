@@ -179,7 +179,7 @@ client.on('message', (msg) => {
 	neoFilter(msg)
 		.then((allowed) => {
 			if (!allowed) return noPermission(msg);
-			try { commands[msg.content.trim().substr(1).split(/ +/)[0]](msg) }
+			try { commands[msg.content.trim().substr(1).split(/ +/)[0]].execute(msg) }
 			catch (err) { !(err instanceof TypeError) && log.warn(err) }
 		})
 		.catch((err) => log.warn(err));
