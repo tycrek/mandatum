@@ -132,13 +132,12 @@ function play(vc, item, channel) {
 		let newMsg;
 		channel.send(new MessageEmbed().setAuthor(`Now playing audio in ${vc.channel.name}`))
 			.then((mNewMsg) => newMsg = mNewMsg)
-			.then(() => newMsg.react('⏯'))
-			.then(() => {
-				let collector = newMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '⏯' /*&& user.id === msg.author.id*/);
-				collector.on('collect', (r, u) => {
-					(vc.dispatcher.paused ? vc.dispatcher.resume() : vc.dispatcher.pause(), newMsg.reactions.resolve(r).users.remove(u.id));
-				});
-			})
+			.then(() => Promise.all([newMsg.react('⏯'), newMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '⏯' && user.id !== client.id)]))
+			.then((results) =>
+				results[1].on('collect', (reaction, user) => {
+					vc.dispatcher.paused ? vc.dispatcher.resume() : vc.dispatcher.pause();
+					newMsg.reactions.resolve(reaction).users.remove(user.id);
+				}))
 			.catch((err) => log.warn(err));
 	} else {
 		queue[vc.channel.id].push(item);
