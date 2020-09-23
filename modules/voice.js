@@ -131,14 +131,7 @@ module.exports = {
 			return msg.reply('Bot not in voice chat').then((botMsg) => trash(msg, botMsg));
 
 		// Short-circuit null check, only kill if the dispatcher exists
-
-		console.log(vc.dispatcher.end);
-
-		vc.dispatcher.destroy((e) => {
-			console.log(e ? e : 'eh')
-		});
-		console.log('fyck')
-
+		vc.dispatcher && vc.dispatcher.end();
 	})
 
 	// vvup: (msg) => {
