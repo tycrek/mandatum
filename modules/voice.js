@@ -80,6 +80,8 @@ module.exports = {
 			.then(() => Promise.all(emoji.map((e) => botMsg.react(e))))
 			.then(() => botMsg.awaitReactions((reaction, user) => emoji.includes(reaction.emoji.name) || reaction.emoji.name === '🗑️' && user.id === msg.author.id, { max: 1 }))
 			.then((collected) => results[emoji.indexOf(collected.first()['_emoji'].name)])
+			.then((video) => play(vc, ytdl(`https://www.youtube.com/watch?v=${video.id.videoId}`), msg.channel))
+			.then(() => Promise.all([msg.delete(), botMsg.delete()]))
 			.catch((err) => log.warn(err));
 	},
 
@@ -120,32 +122,32 @@ module.exports = {
 	// }
 }
 
-function play(vc, item, msg) {
+function play(vc, item, channel) {
+	if (!queue[vc.channel.id]) queue[vc.channel.id] = [];
+
 	if (!vc.dispatcher) {
 		let dispatcher = vc.play(item, { quality: 'highestaudio' });
-		dispatcher.on('finish', () => queue[vc.channel.id].length > 0 && play(vc, queue[vc.channel.id].shift(), msg));
+		dispatcher.on('finish', () => queue[vc.channel.id].length > 0 && play(vc, queue[vc.channel.id].shift(), channel));
 
-		botMsg.channel.send(new MessageEmbed().setAuthor(`Now playing audio in ${vc.channel.name}`))
+		let newMsg;
+		channel.send(new MessageEmbed().setAuthor(`Now playing audio in ${vc.channel.name}`))
 			.then((mNewMsg) => newMsg = mNewMsg)
-			.then(() => botMsg.delete())
-			.then(() => newMsg.reactions.removeAll())
 			.then(() => newMsg.react('⏯'))
 			.then(() => {
 				let collector = newMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '⏯' /*&& user.id === msg.author.id*/);
-				collector.on('collect', (r) => {
-					if (r.emoji.name === '⏯') {
-						vc.dispatcher.paused ? vc.dispatcher.resume() : vc.dispatcher.pause();
-						newMsg.reactions.resolve(r).users.remove(msg.member.id);
-					}
+				collector.on('collect', (r, u) => {
+					(vc.dispatcher.paused ? vc.dispatcher.resume() : vc.dispatcher.pause(), newMsg.reactions.resolve(r).users.remove(u.id));
 				});
 			})
 			.catch((err) => log.warn(err));
 	} else {
-		if (!queue[vc.channel.id]) queue[vc.channel.id] = [];
 		queue[vc.channel.id].push(item);
 
-		botMsg.edit(new MessageEmbed().setAuthor(`Added to queue (queue length: ${queue[vc.channel.id].length})`))
+		let botMsg;
+		channel.send(new MessageEmbed().setAuthor(`Added to queue (queue length: ${queue[vc.channel.id].length})`))
+			.then((mBotMsg) => botMsg = mBotMsg)
 			.then(() => botMsg.reactions.removeAll())
+			.then(() => trash(null, botMsg, false))
 			.catch((err) => log.warn(err));
 	}
 }
