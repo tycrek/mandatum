@@ -1,15 +1,10 @@
 const { MessageEmbed } = require('discord.js');
-const ytdl = require('ytdl-core');
-const { log, trash, filter, noPermission } = require('../utils');
-const { prefix, owner, client } = require('../bot');
+const ytdl = require('ytdl-core-discord');
+const { log, trash } = require('../utils');
+const { prefix, client } = require('../bot');
 const UsageEmbed = require('../UsageEmbed');
-const fetch = require('node-fetch');
-const { google } = require('googleapis');
+const youtube = require('scrape-youtube').default
 
-const YT = google.youtube({
-	version: 'v3',
-	auth: require('../auth.json').youtube
-});
 var queue = {};
 
 module.exports = {
@@ -47,42 +42,54 @@ module.exports = {
 	vsearch: (msg) => {
 		const emoji = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
 
-		let vc = getVoice(msg);
+		let vc = getVoice(msg), results, botMsg;
 
 		if (!isMemberVoice(msg))
 			return msg.reply('Please join a voice channel first!').then((botMsg) => trash(msg, botMsg));
 		if (!vc)
 			return msg.reply('Bot not in voice chat').then((botMsg) => trash(msg, botMsg));
 
-		// youtube stuff
+		// Search query
 		let search = msg.content.slice(prefix.length).trim().split(/ +/).slice(1).join(' ').trim();
 
 		if (search.length === 0 || search === '')
 			return msg.reply('No search specified').then((botMsg) => trash(msg, botMsg));
 
-		let results, botMsg;
-
-		msg.channel.send(
-			new MessageEmbed()
-				.setTitle('Searching...'))
+		msg.channel.send(new MessageEmbed().setTitle('Searching...'))
 			.then((mBotMsg) => botMsg = mBotMsg)
-			.then(() => YT.search.list({ q: search, part: 'snippet' }))
-			.then((result) => {
-				results = result.data.items;
-				let count = 0;
-				let embedText = results.map((result) => (count++, `**${count}**: \`[${result.snippet.channelTitle}] ${result.snippet.title}\`\n`));
 
-				// returns promise but doesn't resolve until user clicks delete so don't listen for promise
+			// Search youtube
+			.then(() => youtube.search(search, { limit: 5 }))
+			.then((res) => res.slice(0, 5))
+			.then((sliced) => results = sliced)
+			.then(() => {
+				// Returns promise but doesn't resolve until user clicks delete so don't listen for promise // ! don't put in a .then()
 				trash(msg, botMsg);
 
-				return botMsg.edit(new MessageEmbed().setTitle('Results').setDescription(embedText));
+				// Build results message
+				let count = 0;
+				return botMsg.edit(
+					new MessageEmbed().setTitle('Results').setDescription(
+						results.map((result) =>
+							(count++, `**${count}**: \`[${result.channel.name}] ${result.title}\`\n`))));
 			})
+
+			// Add reactions to message and wait for results
 			.then(() => Promise.all(emoji.map((e) => botMsg.react(e))))
 			.then(() => botMsg.awaitReactions((reaction, user) => emoji.includes(reaction.emoji.name) || reaction.emoji.name === '🗑️' && user.id === msg.author.id, { max: 1 }))
 			.then((collected) => results[emoji.indexOf(collected.first()['_emoji'].name)])
-			.then((video) => play(vc, ytdl(`https://www.youtube.com/watch?v=${video.id.videoId}`), msg.channel))
+
+			// I don't like using async but ytdl-core-discord needs async so whatever
+			.then((video) => _play(vc, video.link, msg.channel))
+
+			// Don't need the calling messages anymore
 			.then(() => Promise.all([msg.delete(), botMsg.delete()]))
 			.catch((err) => log.warn(err));
+
+		// ytdl-core-discord specifically requires an async funtion so I need a wrapper
+		async function _play(vc, link, channel) {
+			play(vc, await ytdl(link), channel);
+		}
 	},
 
 	// vplay: (msg) => {
@@ -113,6 +120,18 @@ module.exports = {
 		vc.dispatcher.resume();
 	},
 
+	vskip: (msg) => {
+		let vc = getVoice(msg);
+
+		if (!isMemberVoice(msg))
+			return msg.reply('Please join a voice channel first!').then((botMsg) => trash(msg, botMsg));
+		if (!vc)
+			return msg.reply('Bot not in voice chat').then((botMsg) => trash(msg, botMsg));
+
+		// Short-circuit null check, only kill if the dispatcher exists
+		vc.dispatcher && vc.dispatcher.end();
+	}
+
 	// vvup: (msg) => {
 
 	// },
@@ -122,24 +141,41 @@ module.exports = {
 	// }
 }
 
+// Plays audio and handles queue
 function play(vc, item, channel) {
+	// Create a queue for voice channel if it doesn't exist already
 	if (!queue[vc.channel.id]) queue[vc.channel.id] = [];
 
+	// Nothing playing so start playing item
 	if (!vc.dispatcher) {
-		let dispatcher = vc.play(item, { quality: 'highestaudio' });
-		dispatcher.on('finish', () => queue[vc.channel.id].length > 0 && play(vc, queue[vc.channel.id].shift(), channel));
-
 		let newMsg;
 		channel.send(new MessageEmbed().setAuthor(`Now playing audio in ${vc.channel.name}`))
 			.then((mNewMsg) => newMsg = mNewMsg)
+
+			// Play the audio
+			.then(() => vc.play(item, { type: 'opus', quality: 'highestaudio', highWaterMark: 1 << 25 }))
+			.then((dispatcher) => {
+
+				// ytdl-core had weird issues and ytdl-core-discord had weird issues without highWaterMark parameter so monitor any other potential issues
+				dispatcher.on('error', (err) => log.warn(err));
+
+				// When the current audio is finished playing, play the next in queue (if applicable) and delete the previous "playing" message
+				dispatcher.on('finish', () => {
+					queue[vc.channel.id].length > 0 && play(vc, queue[vc.channel.id].shift(), channel);
+					newMsg.delete();
+				});
+			})
+
+			// Create the play/pause button
 			.then(() => Promise.all([newMsg.react('⏯'), newMsg.createReactionCollector((reaction, user) => reaction.emoji.name === '⏯' && user.id !== client.id)]))
 			.then((results) =>
 				results[1].on('collect', (reaction, user) => {
-					vc.dispatcher.paused ? vc.dispatcher.resume() : vc.dispatcher.pause();
+					vc.dispatcher && vc.dispatcher.paused ? vc.dispatcher.resume() : vc.dispatcher.pause();
 					newMsg.reactions.resolve(reaction).users.remove(user.id);
 				}))
 			.catch((err) => log.warn(err));
-	} else {
+
+	} else { // Add item to queue
 		queue[vc.channel.id].push(item);
 
 		let botMsg;
