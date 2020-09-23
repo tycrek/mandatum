@@ -1,6 +1,8 @@
+const CATEGORY = 'voice';
+
 const { MessageEmbed } = require('discord.js');
 const ytdl = require('ytdl-core-discord');
-const { log, trash } = require('../utils');
+const { log, trash, Command } = require('../utils');
 const { prefix, client } = require('../bot');
 const UsageEmbed = require('../UsageEmbed');
 const youtube = require('scrape-youtube').default
@@ -8,7 +10,7 @@ const youtube = require('scrape-youtube').default
 var queue = {};
 
 module.exports = {
-	vjoin: (msg) => {
+	vjoin: new Command(CATEGORY, null, (cmd, msg) => {
 		let vc = getVoice(msg);
 
 		if (!isMemberVoice(msg))
@@ -21,9 +23,9 @@ module.exports = {
 			.then(() => msg.channel.send('Connected!'))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	},
+	}),
 
-	vleave: (msg) => {
+	vleave: new Command(CATEGORY, null, (cmd, msg) => {
 		let vc = getVoice(msg);
 
 		if (!isMemberVoice(msg))
@@ -37,9 +39,9 @@ module.exports = {
 		msg.channel.send('Disconnected')
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	},
+	}),
 
-	vsearch: (msg) => {
+	vsearch: new Command(CATEGORY, null, (cmd, msg) => {
 		const emoji = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
 
 		let vc = getVoice(msg), results, botMsg;
@@ -83,20 +85,21 @@ module.exports = {
 			.then((video) => _play(vc, video.link, msg.channel))
 
 			// Don't need the calling messages anymore
-			.then(() => Promise.all([msg.delete(), botMsg.delete()]))
+			.then(() => Promise.all([msg.delete()]))
+			.then(() => botMsg.delete())
 			.catch((err) => log.warn(err));
 
 		// ytdl-core-discord specifically requires an async funtion so I need a wrapper
 		async function _play(vc, link, channel) {
 			play(vc, await ytdl(link), channel);
 		}
-	},
+	}),
 
 	// vplay: (msg) => {
 
 	// },
 
-	vpause: (msg) => {
+	vpause: new Command(CATEGORY, null, (cmd, msg) => {
 		let vc = getVoice(msg);
 
 		if (!isMemberVoice(msg))
@@ -106,9 +109,9 @@ module.exports = {
 
 		// pause stuff
 		vc.dispatcher.pause();
-	},
+	}),
 
-	vresume: (msg) => {
+	vresume: new Command(CATEGORY, null, (cmd, msg) => {
 		let vc = getVoice(msg);
 
 		if (!isMemberVoice(msg))
@@ -118,9 +121,9 @@ module.exports = {
 
 		// pause stuff
 		vc.dispatcher.resume();
-	},
+	}),
 
-	vskip: (msg) => {
+	vskip: new Command(CATEGORY, null, (cmd, msg) => {
 		let vc = getVoice(msg);
 
 		if (!isMemberVoice(msg))
@@ -129,8 +132,15 @@ module.exports = {
 			return msg.reply('Bot not in voice chat').then((botMsg) => trash(msg, botMsg));
 
 		// Short-circuit null check, only kill if the dispatcher exists
-		vc.dispatcher && vc.dispatcher.end();
-	}
+
+		console.log(vc.dispatcher.end);
+
+		vc.dispatcher.destroy((e) => {
+			console.log(e ? e : 'eh')
+		});
+		console.log('fyck')
+
+	})
 
 	// vvup: (msg) => {
 
@@ -160,7 +170,7 @@ function play(vc, item, channel) {
 				dispatcher.on('error', (err) => log.warn(err));
 
 				// When the current audio is finished playing, play the next in queue (if applicable) and delete the previous "playing" message
-				dispatcher.on('finish', () => {
+				dispatcher.on('close', () => {
 					queue[vc.channel.id].length > 0 && play(vc, queue[vc.channel.id].shift(), channel);
 					newMsg.delete();
 				});

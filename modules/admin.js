@@ -1,15 +1,17 @@
+const CATEGORY = 'admin';
+
 /* Imports */
 const { MessageEmbed } = require('discord.js');
 const fs = require('fs-extra');
 const path = require('path');
-const { log, trash, filter, noPermission } = require('../utils');
+const { log, trash, filter, noPermission, Command } = require('../utils');
 const { prefix, owner } = require('../bot');
 const UsageEmbed = require('../UsageEmbed');
 
 // export command functions
 module.exports = {
 
-	config: (msg) => {
+	config: new Command(CATEGORY, null, (cmd, msg) => {
 		if (!filter.author(msg, owner)) return noPermission(msg);
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		args.shift();
@@ -86,9 +88,9 @@ module.exports = {
 			})
 			.then((config) => fs.writeJson(configPath, config, { spaces: '\t' }))
 			.catch((err) => log.warn(err));
-	},
+	}),
 
-	release: (msg) => {
+	release: new Command(CATEGORY, null, (cmd, msg) => {
 		if (!filter.author(msg, owner)) return noPermission(msg);
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let project = args[1];
@@ -111,15 +113,14 @@ module.exports = {
 
 		msg.channel.send(embed)
 			.catch((err) => log.warn(err));
-	},
+	}),
 
-	send: (msg) => {
+	send: new Command(CATEGORY, new UsageEmbed('send', '', false, ['count'], ['How many messages to send']), (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let count = parseInt(args[1]);
 
 		if (!count || count < 1)
-			return msg.channel.send(new UsageEmbed('send', '', false, ['count'], ['How many messages to send']))
-				.then((botMsg) => trash(msg, botMsg));
+			return cmd.help(msg);
 
 		log.info(`Sending ${count} messages to channel ${msg.channel.name} in ${msg.guild.name}`);
 		msg.delete().catch((err) => log.warn(err));
@@ -148,9 +149,9 @@ module.exports = {
 			.then(() => msg.member.createDM())
 			.then((channel) => channel.send(`**${count}** messages created!`))
 			.catch((err) => log.warn(err));
-	},
+	}),
 
-	stats: (msg) => {
+	stats: new Command(CATEGORY, null, (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let command = args.shift();
 		let category = args.join('-');
@@ -184,9 +185,9 @@ module.exports = {
 			.then(() => msg.channel.send('Stats channels created successfully.'))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	},
+	}),
 
-	delstats: (msg) => {
+	delstats: new Command(CATEGORY, null, (cmd, msg) => {
 		let configPath = path.join(__dirname, `../config/servers/guild.${msg.guild.id}.json`);
 
 		let config;
@@ -199,5 +200,5 @@ module.exports = {
 			.then((_results) => msg.channel.send('Deleted stats channels'))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	}
+	})
 }

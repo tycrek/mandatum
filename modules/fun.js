@@ -1,20 +1,21 @@
+const CATEGORY = 'fun';
+
 /* Imports */
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const prefix = require('../bot').prefix;
 const UsageEmbed = require('../UsageEmbed');
-const { log, trash } = require('../utils');
+const { log, trash, Command } = require('../utils');
 
 // export command functions
 module.exports = {
 
-	namemc: (msg) => {
+	namemc: new Command(CATEGORY, new UsageEmbed('namemc', '', false, ['username'], ['Minecraft username to get a link from NameMC']), (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let command = args.shift();
 
 		if (args.length === 0)
-			return msg.channel.send(new UsageEmbed(command, '', false, ['username'], ['Minecraft username to get a link from NameMC']))
-				.then((botMsg) => trash(msg, botMsg));
+			return cmd.help(msg);
 
 		msg.channel.send(
 			new MessageEmbed()
@@ -24,9 +25,9 @@ module.exports = {
 				.setFooter('https://namemc.com'))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	},
+	}),
 
-	btc: (msg) =>
+	btc: new Command(CATEGORY, null, (cmd, msg) =>
 		fetch('https://api.coindesk.com/v1/bpi/currentprice.json')
 			.then((res) => res.json())
 			.then((json) => json.bpi.USD.rate)
@@ -37,15 +38,14 @@ module.exports = {
 				.setFooter('https://www.coindesk.com/coindesk-api'))
 			.then((embed) => msg.channel.send(embed))
 			.then((botMsg) => trash(msg, botMsg))
-			.catch((err) => log.warn(err)),
+			.catch((err) => log.warn(err))),
 
-	mcskin: (msg) => {
+	mcskin: new Command(CATEGORY, new UsageEmbed('mcskin', '', false, ['username'], ['Minecraft username to display a skin for']), (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let command = args.shift();
 
 		if (args.length === 0)
-			return msg.channel.send(new UsageEmbed(command, '', false, ['username'], ['Minecraft username to display a skin for']))
-				.then((botMsg) => trash(msg, botMsg));
+			return cmd.help(msg);
 
 		msg.channel.send(
 			new MessageEmbed()
@@ -55,18 +55,18 @@ module.exports = {
 				.setFooter('https://minotar.net'))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	},
+	}),
 
-	shut: (msg) =>
+	shut: new Command(CATEGORY, null, (cmd, msg) =>
 		msg.channel.send(
 			new MessageEmbed()
 				.setColor(0x0B1308)
 				.setImage('https://shutplea.se/'))
 			.then((botMsg) => Promise.all([trash(msg, botMsg, false), msg.delete()]))
-			.catch((err) => log.warn(err)),
+			.catch((err) => log.warn(err))),
 
 	/*
-	face: (msg) =>
+	face: (cmd, msg) =>
 		msg.channel.send(
 			new MessageEmbed()
 				.setColor(0x000000)
@@ -75,7 +75,7 @@ module.exports = {
 				.setFooter('https://thispersondoesnotexist.com/')),
 	*/
 
-	inspire: (msg) =>
+	inspire: new Command(CATEGORY, null, (cmd, msg) =>
 		fetch('https://inspirobot.me/api?generate=true')
 			.then((res) => res.text())
 			.then((text) => new MessageEmbed()
@@ -85,9 +85,9 @@ module.exports = {
 				.setFooter('https://inspirobot.me/'))
 			.then((embed) => msg.channel.send(embed))
 			.then((botMsg) => trash(msg, botMsg))
-			.catch((err) => log.warn(err)),
+			.catch((err) => log.warn(err))),
 
-	meme: (msg) =>
+	meme: new Command(CATEGORY, null, (cmd, msg) =>
 		fetch('https://imgflip.com/ajax_img_flip')
 			.then((res) => res.text())
 			.then((text) => text.split('/')[2])
@@ -97,9 +97,9 @@ module.exports = {
 				.setFooter('https://imgflip.com'))
 			.then((embed) => msg.channel.send(embed))
 			.then((botMsg) => trash(msg, botMsg))
-			.catch((err) => log.warn(err)),
+			.catch((err) => log.warn(err))),
 
-	convert: (msg) => {
+	convert: new Command(CATEGORY, null, (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		args.shift();
 
@@ -115,9 +115,9 @@ module.exports = {
 						? (`${v1.replace('f', '')} Fahrenheit is ${((parseInt(v1.replace('f', '')) - 32) / 1.8).toFixed(2)} Celsius`)
 						: 'No units specified')
 				.then((botMsg) => trash(msg, botMsg));
-	},
+	}),
 
-	urban: (msg) =>
+	urban: new Command(CATEGORY, null, (cmd, msg) =>
 		fetch('https://api.urbandictionary.com/v0/random')
 			.then((res) => res.json())
 			.then((json) => json.list[0])
@@ -129,9 +129,9 @@ module.exports = {
 						.setDescription(`${word.definition.replace(/[\[\]]/g, '').substring(0, 200)}\n>>> ${word.example.replace(/[\[\]]/g, '').substring(0, 200)}`)
 						.setTimestamp(word.written_on)
 						.setFooter(`Definition by: ${word.author}`)))
-			.then((botMsg) => trash(msg, botMsg)),
+			.then((botMsg) => trash(msg, botMsg))),
 
-	morse: (msg) => {
+	morse: new Command(CATEGORY, new UsageEmbed('morse', '', false, ['text'], ['String of words to convert to morse'], [`Max of \`${'max'}\` characters`]), (cmd, msg) => { //todo: fix max parameter
 		let args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let command = args.shift();
 		let max = 30;
@@ -140,8 +140,8 @@ module.exports = {
 		args = args.join(' ').toLowerCase().replace(/[^a-z0-9 ]/g, '').trim();
 
 		if (args === '' || args.length > max)
-			return msg.channel.send(new UsageEmbed(command, '', false, ['text'], ['String of words to convert to morse'], [`Max of \`${max}\` characters`]))
-				.then((botMsg) => trash(msg, botMsg));
+			return cmd.help(msg);
+
 
 		// Thanks @Cerbrus https://stackoverflow.com/a/26059399/9665770
 		let morseCode = {
@@ -168,7 +168,7 @@ module.exports = {
 
 		msg.channel.send(`\`${paddedOriginal.join('  ')}\`\n\`${converted.join('  ')}\``)
 			.then((botMsg) => trash(msg, botMsg));
-	},
+	}),
 
-	schlong: (msg) => msg.channel.send('8' + '='.padEnd(Math.min(32, parseInt(msg.content.slice(prefix.length).trim().split(/ +/)[1])), '=') + 'D').then((botMsg) => trash(msg, botMsg))
+	schlong: new Command(CATEGORY, null, (cmd, msg) => msg.channel.send('8' + '='.padEnd(Math.min(32, parseInt(msg.content.slice(prefix.length).trim().split(/ +/)[1])), '=') + 'D').then((botMsg) => trash(msg, botMsg)))
 }
