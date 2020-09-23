@@ -162,7 +162,7 @@ function play(vc, item, channel) {
 				dispatcher.on('error', (err) => log.warn(err));
 
 				// When the current audio is finished playing, play the next in queue (if applicable) and delete the previous "playing" message
-				dispatcher.on('close', () => {
+				dispatcher.on('finish', () => {
 					queue[vc.channel.id].length > 0 && play(vc, queue[vc.channel.id].shift(), channel);
 					newMsg.delete();
 				});
