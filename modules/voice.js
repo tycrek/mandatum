@@ -11,7 +11,6 @@ const YT = google.youtube({
 	auth: require('../auth.json').youtube
 });
 var queue = {};
-var controls = {};
 
 module.exports = {
 	vjoin: (msg) => {
