@@ -55,12 +55,15 @@ module.exports = {
 	// New filter system
 	neoFilter: neoFilter,
 
-	trash: (userMsg, botMsg, deleteUser = true) =>
-		botMsg.react('🗑️')
-			.then(() => botMsg.awaitReactions((reaction, user) => reaction.emoji.name === '🗑️' && user.id === userMsg.author.id, { max: 1 }))
-			.then((_collected) => Promise.all([deleteUser && userMsg.delete(), botMsg.delete()]))
-			.catch(log.warn)
+	trash: trash
 };
+
+function trash(userMsg, botMsg, deleteUser = true) {
+	botMsg.react('🗑️')
+		.then(() => botMsg.awaitReactions((reaction, user) => reaction.emoji.name === '🗑️' && (userMsg ? user.id === userMsg.author.id : true), { max: 1 }))
+		.then((_collected) => Promise.all([deleteUser && userMsg.delete(), botMsg.delete()]))
+		.catch((err) => err.message !== 'Unknown Message' && log.warn(err));
+}
 
 function neoFilter(msg) {
 	return new Promise((resolve, reject) => {
@@ -93,7 +96,7 @@ function neoFilter(msg) {
 
 				//! STEP 1
 				// Get a list of modules
-				let modules = ['info', 'fun', 'utility', 'moderator', 'admin'].map(category => ({
+				let modules = ['info', 'fun', 'utility', 'voice', 'moderator', 'admin'].map(category => ({
 					module: category,
 					commands: Object.keys(require('./modules/' + category))
 				}));
