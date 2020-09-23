@@ -10,7 +10,9 @@
 			"excludedChannels": []
 		},
 		"swear": {
-			"excludedChannels": [],
+			"excludedChannels": [
+				"751793035565727819"
+			],
 			"cooldown": {}
 		},
 		"vote": {
