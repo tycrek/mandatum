@@ -80,8 +80,7 @@ module.exports = {
 			.then(() => Promise.all(emoji.map((e) => botMsg.react(e))))
 			.then(() => botMsg.awaitReactions((reaction, user) => emoji.includes(reaction.emoji.name) || reaction.emoji.name === '🗑️' && user.id === msg.author.id, { max: 1 }))
 			.then((collected) => results[emoji.indexOf(collected.first()['_emoji'].name)])
-			.then((video) => play(vc, ytdl(`https://www.youtube.com/watch?v=${video.id.videoId}`), msg))
-			.then(() => trash(msg, botMsg))
+			.catch((err) => log.warn(err));
 	},
 
 	// vplay: (msg) => {
@@ -140,14 +139,14 @@ function play(vc, item, msg) {
 					}
 				});
 			})
-			.then(() => trash(msg, botMsg))
+			.catch((err) => log.warn(err));
 	} else {
 		if (!queue[vc.channel.id]) queue[vc.channel.id] = [];
 		queue[vc.channel.id].push(item);
 
 		botMsg.edit(new MessageEmbed().setAuthor(`Added to queue (queue length: ${queue[vc.channel.id].length})`))
 			.then(() => botMsg.reactions.removeAll())
-			.then(() => trash(msg, botMsg))
+			.catch((err) => log.warn(err));
 	}
 }
 
