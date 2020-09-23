@@ -91,7 +91,7 @@ module.exports = {
 
 		// ytdl-core-discord specifically requires an async funtion so I need a wrapper
 		async function _play(vc, link, channel) {
-			play(vc, await ytdl(link), channel);
+			play(vc, await ytdl(link, { format: 'audioonly', highWaterMark: 1 << 25 }), channel);
 		}
 	}),
 
@@ -163,7 +163,7 @@ function play(vc, item, channel) {
 			.then((mNewMsg) => newMsg = mNewMsg)
 
 			// Play the audio
-			.then(() => vc.play(item, { type: 'opus', quality: 'highestaudio', highWaterMark: 1 << 25 }))
+			.then(() => vc.play(item, { type: 'opus' }))
 			.then((dispatcher) => {
 
 				// ytdl-core had weird issues and ytdl-core-discord had weird issues without highWaterMark parameter so monitor any other potential issues
