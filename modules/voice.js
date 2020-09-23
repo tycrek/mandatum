@@ -85,7 +85,7 @@ module.exports = {
 			.then((video) => _play(vc, video.link, msg.channel))
 
 			// Don't need the calling messages anymore
-			.then(() => Promise.all([msg.delete()]))
+			.then(() => msg.delete())
 			.then(() => botMsg.delete())
 			.catch((err) => log.warn(err));
 
