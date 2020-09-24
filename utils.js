@@ -11,8 +11,17 @@ const moment = require('moment-timezone');
 // Good logging tool
 const log = require('pino')({
 	prettyPrint: true,
-	timestamp: () => `,"time": ${moment().format('YYYY-MM-DD hh:mm:ss A')} `
+	level: 'debug',
+	base: null,
+	timestamp: () => `,"time": ${moment().format('YYYY-MM-DD hh:mm:ss A')} `,
+	// hooks: {
+	// 	logMethod(inputArgs, method) {
+	// 		return method.apply(this, inputArgs);
+	// 	}
+	// }
 });
+
+let prefix;
 
 class Command {
 	/**
@@ -23,10 +32,15 @@ class Command {
 	 * @param {function} execute 
 	 */
 	constructor(category, usage, execute) {
+		if (!prefix) prefix = require('./bot').prefix;
 		this.category = category;
 		this.usage = usage;
 
 		this.execute = (msg) => new Promise((resolve, reject) => {
+			const command = msg.content.slice(prefix.length).trim().split(/ +/).shift();
+			const server = msg.guild, channel = msg.channel, author = msg.author;
+			log.debug(`Command "${command}" ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
+
 			try { resolve(execute(this, msg)) }
 			catch (err) { reject(err) }
 		}).catch((err) => log.warn(err));
