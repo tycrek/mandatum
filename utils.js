@@ -96,6 +96,12 @@ class Command {
 							message = `Removed.`
 						} else if (key[2] === 'roles' || key[2] === 'exclude') {
 
+							// The command is exclude but the field is excludedChannels so we end up with a blank exlude category. This removes it
+							if (key[2] === 'exclude') {
+								key[2] = 'excludedChannels';
+								config[key[0]][key[1]].exclude = undefined;
+								config = JSON.parse(JSON.stringify(config));
+							}
 
 							// Value should be one of "+12345678" (add) or "-12345678" (remove)
 							let operation = key[3].split('').shift(); // Get the operation (either + or -)
