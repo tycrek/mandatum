@@ -11,83 +11,22 @@ const UsageEmbed = require('../UsageEmbed');
 // export command functions
 module.exports = {
 
-	config: new Command(CATEGORY, null, (cmd, msg) => {
-		if (!filter.author(msg, owner)) return noPermission(msg);
+	getconfig: new Command(CATEGORY, null, (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		args.shift();
 
-		let configPath = path.join(__dirname, `../config/servers/guild.${msg.guild.id}.json`);
+		cmd.getConfig(msg, args)
+			.then((result) => msg.channel.send(`\`\`\`json\n${JSON.stringify(result, null, 2)}\`\`\``))
+			.then((botMsg) => trash(msg, botMsg));
+	}),
 
-		let command = args[0]; // Any command the bot runs (crole, btc, release, etc.)
-		let setting = args[1]; // The setting/option that will be changed
-		let value = args[2]; // Value to apply to the setting
+	setconfig: new Command(CATEGORY, null, (cmd, msg) => {
+		const args = msg.content.slice(prefix.length).trim().split(/ +/);
+		args.shift();
 
-		let config;
-		fs.readJson(configPath)
-			.then((mConfig) => config = mConfig)
-
-			// Check if settings already exist
-			.then(() => config.settings[command] ? config.settings[command] : null)
-			.then((settings) => {
-				if (!settings && command) config.settings[command] = {};
-
-				// Send current config if no changes specified
-				if (!command || !setting)
-					msg.channel.send(`Config for \`${!command ? msg.guild.name : command}\`:\n\`\`\`json\n${JSON.stringify(!command ? config : config.settings[command], null, 2)}\`\`\``)
-						.then((botMsg) => trash(msg, botMsg));
-
-				// Change command roles property
-				if (setting === 'roles') {
-
-					// value should be one of "+12345678" (add) or "-12345678" (remove)
-					let operation = value.split('').shift(); // Get the operation (either + or -)
-					let roleId = value.substring(1); // Get the role ID
-
-					// Create empty roles array if it doesn't exist
-					if (!config.settings[command].roles) config.settings[command].roles = [];
-
-					// Add or remove the role ID based on what operation is used
-					operation === '+' ? config.settings[command].roles.push(roleId) : config.settings[command].roles.splice(config.settings[command].roles.indexOf(roleId), 1);
-
-					// Tell the user what happened
-					msg.channel.send(`${operation === '+' ? 'Added' : 'Removed'} role \`${roleId}\` ${operation === '+' ? 'to' : 'from'} command \`${command}\` in ${msg.guild.name}`)
-						.then((botMsg) => trash(msg, botMsg));
-				} else if (setting === 'exclude') {
-
-					// value should be one of "+12345678" (add) or "-12345678" (remove)
-					let operation = value.split('').shift(); // Get the operation (either + or -)
-					let roleId = value.substring(1); // Get the channel ID
-
-					// Create empty channels array if it doesn't exist
-					if (!config.settings[command].excludedChannels) config.settings[command].excludedChannels = [];
-
-					// Add or remove the channel ID based on what operation is used
-					operation === '+' ? config.settings[command].excludedChannels.push(roleId) : config.settings[command].excludedChannels.splice(config.settings[command].excludedChannels.indexOf(roleId), 1);
-
-					// Tell the user what happened
-					msg.channel.send(`${operation === '+' ? 'Added' : 'Removed'} exclusion for channel \`${roleId}\` ${operation === '+' ? 'to' : 'from'} command \`${command}\` in ${msg.guild.name}`)
-						.then((botMsg) => trash(msg, botMsg));
-				} else if (setting === 'cooldown') {
-					let channel = msg.channel.id;
-					if (!config.settings[command].cooldown) config.settings[command].cooldown = {};
-
-					if (value === '-') {
-						config.settings[command].cooldown[channel] = undefined;
-						config = JSON.parse(JSON.stringify(config));
-					} else {
-						config.settings[command].cooldown[channel] = value;
-					}
-
-					// Tell the user what happened
-					msg.channel.send(`${command} cooldown set to \`${value}\` in ${msg.guild.name}`)
-						.then((botMsg) => trash(msg, botMsg));
-				}
-
-				// Return config to next Promise to write it
-				return config;
-			})
-			.then((config) => fs.writeJson(configPath, config, { spaces: '\t' }))
-			.catch((err) => log.warn(err));
+		cmd.setConfig(msg, args)
+			.then((result) => msg.channel.send(result))
+			.then((botMsg) => trash(msg, botMsg));
 	}),
 
 	release: new Command(CATEGORY, null, (cmd, msg) => {
