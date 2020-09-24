@@ -4,9 +4,9 @@
 	"admins": [],
 	"settings": {
 		"swear": {
-			"cooldown": {
-				"752898408834138145": "2"
-			}
+			"excludedChannels": [
+				"751793035565727819"
+			]
 		}
 	},
 	"commands": {}
