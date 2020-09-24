@@ -46,6 +46,82 @@ class Command {
 		}).catch((err) => log.warn(err));
 	}
 
+	getConfig(msg, key) {
+		let configPath = path.join(__dirname, `./config/servers/guild.${msg.guild.id}.json`);
+		return new Promise((resolve, reject) => {
+			fs.readJson(configPath)
+				.then((config) => {
+
+					if (key[0] === 'command' || key[0] === 'settings') {
+						switch (key.length) {
+							case 3:
+								resolve(config[key[0]][key[1]][key[2]]);
+							case 2:
+								resolve(config[key[0]][key[1]]);
+							default:
+								resolve(config[key[0]]);
+						}
+					} else if (key[0]) {
+						resolve(config[key[0]]);
+					} else {
+						resolve(config);
+					}
+
+				})
+				.catch((err) => reject(err));
+		});
+	}
+
+	setConfig(msg, key) {
+		let configPath = path.join(__dirname, `./config/servers/guild.${msg.guild.id}.json`);
+		let message;
+		return new Promise((resolve, reject) => {
+			fs.readJson(configPath)
+				.then((config) => {
+
+					if (key[0].startsWith('command') || key[0] === 'settings') {
+
+						// Create empty setting if necessary
+						if (!config[key[0]][key[1]]) config[key[0]][key[1]] = {};
+						if (!config[key[0]][key[1]][key[2]]) config[key[0]][key[1]][key[2]] = null;
+
+						// Remove the setting
+						if ((key[3] && key[3] === '-') || key[2] === '-') {
+							if (key[3]) config[key[0]][key[1]][key[2]] = undefined;
+							else config[key[0]][key[1]] = undefined;
+							config = JSON.parse(JSON.stringify(config));
+							message = `Removed.`
+						} else if (key[2] === 'roles' || key[2] === 'exclude') {
+							if (key[2] === 'exclude') key[2] = 'excludedChannels';
+
+							// value should be one of "+12345678" (add) or "-12345678" (remove)
+							let operation = key[3].split('').shift(); // Get the operation (either + or -)
+							let roleId = key[3].substring(1); // Get the role ID
+
+							if (!config[key[0]][key[1]][key[2]]) config[key[0]][key[1]][key[2]] = [];
+
+							operation === '+' ? config[key[0]][key[1]][key[2]].push(roleId) : config[key[0]][key[1]][key[2]].splice(config[key[0]][key[1]][key[2]].indexOf(roleId), 1);
+							message = `${operation === '+' ? 'Added' : 'Removed'} ${key[2] === 'roles' ? 'role' : 'channel exclusion'} \`${roleId}\` ${operation === '+' ? 'to' : 'from'} command \`${key[1]}\``;
+						} else if (key[2] === 'cooldown') {
+							config[key[0]][key[1]][key[2]] = {};
+							config[key[0]][key[1]][key[2]][msg.channel.id] = key[3];
+							message = `Set \`${key[1]}: ${key[2]}\` to \`${key[3]}\` for channel ${msg.channel.name}`;
+						} else {
+							config[key[0]][key[1]][key[2]] = key[3];
+							message = `Set \`${key[1]}: ${key[2]}\` to \`${key[3]}\``;
+						}
+					} else {
+						message = 'Not implemented';
+					}
+
+					return config;
+				})
+				.then((config) => fs.writeJson(configPath, config, { spaces: '\t' }))
+				.then(() => resolve(message))
+				.catch((err) => reject(err));
+		});
+	}
+
 	help(msg) {
 		msg.channel.send(this.usage).then((botMsg) => trash(msg, botMsg));
 	}
@@ -128,7 +204,7 @@ function neoFilter(msg) {
 			.then((mConfig) => config = mConfig)
 
 			// Check if a config for this command actually exists
-			.then(() => config.settings[cmd] ? config.settings[cmd] : null)
+			.then(() => config.commands[cmd] ? config.commands[cmd] : config.settings[cmd] ? config.settings[cmd] : null)
 
 			// Process the filters
 			.then((settings) => {
