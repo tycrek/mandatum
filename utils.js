@@ -107,7 +107,7 @@ class Command {
 							operation === '+' ? config[key[0]][key[1]][key[2]].push(roleId) : config[key[0]][key[1]][key[2]].splice(config[key[0]][key[1]][key[2]].indexOf(roleId), 1);
 							message = `${operation === '+' ? 'Added' : 'Removed'} ${key[2] === 'roles' ? 'role' : 'channel exclusion'} \`${roleId}\` ${operation === '+' ? 'to' : 'from'} command \`${key[1]}\``;
 						} else if (key[2] === 'cooldown') {
-							config[key[0]][key[1]][key[2]] = {};
+							if (!config[key[0]][key[1]][key[2]]) config[key[0]][key[1]][key[2]] = {};
 							config[key[0]][key[1]][key[2]][msg.channel.id] = key[3];
 							message = `Set \`${key[1]}: ${key[2]}\` to \`${key[3]}\` for channel ${msg.channel.name}`;
 						} else {
