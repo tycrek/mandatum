@@ -65,12 +65,9 @@ class Command {
 							default:
 								resolve(config[key[0]]);
 						}
-					} else if (key[0]) {
-						resolve(config[key[0]]);
-					} else {
-						resolve(config);
 					}
-
+					else if (key[0]) resolve(config[key[0]]);
+					else resolve(config);
 				})
 				.catch((err) => reject(err));
 		});
