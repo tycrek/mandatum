@@ -79,7 +79,7 @@ class Command {
 		return new Promise((resolve, reject) => {
 			fs.readJson(configPath)
 				.then((config) => {
-					if (key[0].startsWith('command') || key[0] === 'settings') {
+					if (key[0] === 'commands' || key[0] === 'settings') {
 
 						// Create empty setting if necessary
 						if (!config[key[0]][key[1]]) config[key[0]][key[1]] = {};
