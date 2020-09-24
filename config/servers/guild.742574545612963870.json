@@ -3,5 +3,9 @@
 	"id": "742574545612963870",
 	"admins": [],
 	"settings": {},
-	"commands": {}
+	"commands": {
+		"schlong": {
+			"max": "70"
+		}
+	}
 }
