@@ -59,9 +59,9 @@ class Command {
 					if (key[0] === 'command' || key[0] === 'settings') {
 						switch (key.length) {
 							case 3:
-								resolve(config[key[0]][key[1]][key[2]]);
+								return resolve(config[key[0]][key[1]][key[2]]);
 							case 2:
-								resolve(config[key[0]][key[1]]);
+								return resolve(config[key[0]][key[1]]);
 							default:
 								resolve(config[key[0]]);
 						}
