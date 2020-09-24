@@ -36,11 +36,15 @@ class Command {
 		this.category = category;
 		this.usage = usage;
 
+		// Somewhat janky promisification
 		this.execute = (msg) => new Promise((resolve, reject) => {
+
+			// Log the command use
 			const command = msg.content.slice(prefix.length).trim().split(/ +/).shift();
 			const server = msg.guild, channel = msg.channel, author = msg.author;
 			log.debug(`Command "${command}" ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
 
+			// If command execution fails, handle it here
 			try { resolve(execute(this, msg)) }
 			catch (err) { reject(err) }
 		}).catch((err) => log.warn(err));
@@ -48,10 +52,10 @@ class Command {
 
 	getConfig(msg, key) {
 		let configPath = path.join(__dirname, `./config/servers/guild.${msg.guild.id}.json`);
+
 		return new Promise((resolve, reject) => {
 			fs.readJson(configPath)
 				.then((config) => {
-
 					if (key[0] === 'command' || key[0] === 'settings') {
 						switch (key.length) {
 							case 3:
@@ -73,31 +77,31 @@ class Command {
 	}
 
 	setConfig(msg, key) {
-		let configPath = path.join(__dirname, `./config/servers/guild.${msg.guild.id}.json`);
-		let message;
+		let message, configPath = path.join(__dirname, `./config/servers/guild.${msg.guild.id}.json`);
+
 		return new Promise((resolve, reject) => {
 			fs.readJson(configPath)
 				.then((config) => {
-
 					if (key[0].startsWith('command') || key[0] === 'settings') {
 
 						// Create empty setting if necessary
 						if (!config[key[0]][key[1]]) config[key[0]][key[1]] = {};
 						if (!config[key[0]][key[1]][key[2]]) config[key[0]][key[1]][key[2]] = null;
 
-						// Remove the setting
+						// Remove the setting or command
 						if ((key[3] && key[3] === '-') || key[2] === '-') {
 							if (key[3]) config[key[0]][key[1]][key[2]] = undefined;
 							else config[key[0]][key[1]] = undefined;
 							config = JSON.parse(JSON.stringify(config));
 							message = `Removed.`
 						} else if (key[2] === 'roles' || key[2] === 'exclude') {
-							if (key[2] === 'exclude') key[2] = 'excludedChannels';
 
-							// value should be one of "+12345678" (add) or "-12345678" (remove)
+
+							// Value should be one of "+12345678" (add) or "-12345678" (remove)
 							let operation = key[3].split('').shift(); // Get the operation (either + or -)
-							let roleId = key[3].substring(1); // Get the role ID
+							let roleId = key[3].substring(1); // Get the role/channel ID
 
+							// Create empty key if necessary
 							if (!config[key[0]][key[1]][key[2]]) config[key[0]][key[1]][key[2]] = [];
 
 							operation === '+' ? config[key[0]][key[1]][key[2]].push(roleId) : config[key[0]][key[1]][key[2]].splice(config[key[0]][key[1]][key[2]].indexOf(roleId), 1);
