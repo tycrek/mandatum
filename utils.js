@@ -56,19 +56,16 @@ class Command {
 		return new Promise((resolve, reject) => {
 			fs.readJson(configPath)
 				.then((config) => {
-					if (key[0] === 'command' || key[0] === 'settings') {
-						switch (key.length) {
-							case 3:
-								return resolve(config[key[0]][key[1]][key[2]]);
-							case 2:
-								return resolve(config[key[0]][key[1]]);
-							default:
-								resolve(config[key[0]]);
-						}
+					try {
+						if (key[0] === 'commands' || key[0] === 'settings')
+							return key.length === 3 ? config[key[0]][key[1]][key[2]] : key.length === 2 ? config[key[0]][key[1]] : config[key[0]];
+						else if (key[0]) return config[key[0]];
+						else return config;
+					} catch (err) {
+						return null;
 					}
-					else if (key[0]) resolve(config[key[0]]);
-					else resolve(config);
 				})
+				.then((value) => resolve(value))
 				.catch((err) => reject(err));
 		});
 	}
