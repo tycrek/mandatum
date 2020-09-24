@@ -41,7 +41,7 @@ module.exports = {
 			.catch((err) => log.warn(err));
 	}),
 
-	vsearch: new Command(CATEGORY, null, (cmd, msg) => {
+	vsearch: new Command(CATEGORY, new UsageEmbed('vsearch', '', false, ['query'], ['what to search on YouTube'], ['Playlists & livestreams are not supported at the moment']), (cmd, msg) => {
 		const emoji = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
 
 		let vc = getVoice(msg), results, botMsg;
@@ -55,7 +55,7 @@ module.exports = {
 		let search = msg.content.slice(prefix.length).trim().split(/ +/).slice(1).join(' ').trim();
 
 		if (search.length === 0 || search === '')
-			return msg.reply('No search specified').then((botMsg) => trash(msg, botMsg));
+			return cmd.help(msg);
 
 		msg.channel.send(new MessageEmbed().setTitle('Searching...'))
 			.then((mBotMsg) => botMsg = mBotMsg)
