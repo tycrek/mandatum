@@ -118,6 +118,7 @@ class Command {
 						message = 'Not implemented';
 					}
 
+					if (!message || message.trim() === '') message = '\`No message set\`';
 					return config;
 				})
 				.then((config) => fs.writeJson(configPath, config, { spaces: '\t' }))
