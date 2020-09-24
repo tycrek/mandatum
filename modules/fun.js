@@ -134,41 +134,50 @@ module.exports = {
 	morse: new Command(CATEGORY, new UsageEmbed('morse', '', false, ['text'], ['String of words to convert to morse'], [`Max of \`${'max'}\` characters`]), (cmd, msg) => { //todo: fix max parameter
 		let args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let command = args.shift();
-		let max = 30;
 
-		// Strip anything but letters, numbers, and space
-		args = args.join(' ').toLowerCase().replace(/[^a-z0-9 ]/g, '').trim();
+		cmd.getConfig(msg, 'commands morse max'.split(/ +/))
+			.then((max) => {
+				if (!max) max = 30;
+				// Strip anything but letters, numbers, and space
+				args = args.join(' ').toLowerCase().replace(/[^a-z0-9 ]/g, '').trim();
 
-		if (args === '' || args.length > max)
-			return cmd.help(msg);
+				if (args === '' || args.length > max)
+					return cmd.help(msg);
 
+				// Thanks @Cerbrus https://stackoverflow.com/a/26059399/9665770
+				let morseCode = {
+					'a': '.-', 'b': '-...', 'c': '-.-.', 'd': '-..', 'e': '.', 'f': '..-.', 'g': '--.',
+					'h': '....', 'i': '..', 'j': '.---', 'k': '-.-', 'l': '.-..', 'm': '--', 'n': '-.',
+					'o': '---', 'p': '.--.', 'q': '--.-', 'r': '.-.', 's': '...', 't': '-', 'u': '..-',
+					'v': '...-', 'w': '.--', 'x': '-..-', 'y': '-.--', 'z': '--..', ' ': '/', '1': '.----',
+					'2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...',
+					'8': '---..', '9': '----.', '0': '-----',
+				};
 
-		// Thanks @Cerbrus https://stackoverflow.com/a/26059399/9665770
-		let morseCode = {
-			'a': '.-', 'b': '-...', 'c': '-.-.', 'd': '-..', 'e': '.', 'f': '..-.', 'g': '--.',
-			'h': '....', 'i': '..', 'j': '.---', 'k': '-.-', 'l': '.-..', 'm': '--', 'n': '-.',
-			'o': '---', 'p': '.--.', 'q': '--.-', 'r': '.-.', 's': '...', 't': '-', 'u': '..-',
-			'v': '...-', 'w': '.--', 'x': '-..-', 'y': '-.--', 'z': '--..', ' ': '/', '1': '.----',
-			'2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...',
-			'8': '---..', '9': '----.', '0': '-----',
-		};
+				let paddedOriginal = [];
+				let converted = [];
 
-		let paddedOriginal = [];
-		let converted = [];
+				for (i = 0; i < args.length; i++) {
+					// Convert character at i
+					converted.push(morseCode[args[i]]);
 
-		for (i = 0; i < args.length; i++) {
-			// Convert character at i
-			converted.push(morseCode[args[i]]);
+					// Pad the original character
+					let morseLength = converted[i].length;
+					let cutLength = morseLength === 1 ? 0 : morseLength < 4 ? 1 : 2;
+					paddedOriginal.push(args[i].padStart(parseInt(morseLength - cutLength), ' ').padEnd(morseLength, ' '));
+				}
 
-			// Pad the original character
-			let morseLength = converted[i].length;
-			let cutLength = morseLength === 1 ? 0 : morseLength < 4 ? 1 : 2;
-			paddedOriginal.push(args[i].padStart(parseInt(morseLength - cutLength), ' ').padEnd(morseLength, ' '));
-		}
-
-		msg.channel.send(`\`${paddedOriginal.join('  ')}\`\n\`${converted.join('  ')}\``)
+				return { paddedOriginal, converted };
+			})
+			.then(({ paddedOriginal, converted }) => msg.channel.send(`\`${paddedOriginal.join('  ')}\`\n\`${converted.join('  ')}\``))
 			.then((botMsg) => trash(msg, botMsg));
 	}),
 
-	schlong: new Command(CATEGORY, null, (cmd, msg) => msg.channel.send('8' + '='.padEnd(Math.min(32, parseInt(msg.content.slice(prefix.length).trim().split(/ +/)[1])), '=') + 'D').then((botMsg) => trash(msg, botMsg)))
+	schlong: new Command(CATEGORY, null, (cmd, msg) => {
+		cmd.getConfig(msg, ['commands', 'schlong', 'max'])
+			.then((max) => '8' + '='.padEnd(Math.min(max ? max : 32, parseInt(msg.content.slice(prefix.length).trim().split(/ +/)[1])), '=') + 'D')
+			.then((schlong) => msg.channel.send(schlong))
+			.then((botMsg) => trash(msg, botMsg))
+			.catch((err) => log.warn(err));
+	})
 }
