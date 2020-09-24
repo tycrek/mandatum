@@ -11,6 +11,9 @@
  * 
  */
 
+const USING_VPN = true;
+if (USING_VPN) process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 /* Imports */
 
 // discord.js for Discord API
