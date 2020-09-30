@@ -9,5 +9,9 @@
 			]
 		}
 	},
-	"commands": {}
+	"commands": {
+		"xd": {
+			"max": "80"
+		}
+	}
 }
