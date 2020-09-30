@@ -30,6 +30,7 @@
     "pino": "^6.6.1",
     "pino-pretty": "^4.2.1",
     "scrape-youtube": "^0.2.3",
+    "tycrek-certs-custom": "^0.1.0",
     "uuid": "^8.3.0",
     "ytdl-core-discord": "^1.2.3"
   }

@@ -7,6 +7,7 @@ const path = require('path');
 const { log, trash, filter, noPermission, Command } = require('../utils');
 const { prefix, owner } = require('../bot');
 const UsageEmbed = require('../UsageEmbed');
+const TycrekCert = require('tycrek-certs-custom');
 
 // export command functions
 module.exports = {
@@ -139,5 +140,28 @@ module.exports = {
 			.then((_results) => msg.channel.send('Deleted stats channels'))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
+	}),
+
+	'jmdev:certs': new Command(CATEGORY, null, (cmd, msg) => {
+		if (!filter.author(msg, owner)) return noPermission(msg);
+
+		let testing = require('os').hostname() !== 'ubuntu-s-1vcpu-1gb-tor1-01';
+		if (testing) log.warn('Certificates command called in testing environment, I hope you know what you are doing!');
+
+		msg.channel.send('Generating certificates, please wait')
+			.then((botMsg) => {
+				let cert = new TycrekCert(require('../auth.json').digitalocean, ['*.jmoore.dev', 'jmoore.dev'], 'josh.moore@jmoore.dev', 'josh.moore@jmoore.dev', testing);
+				cert.setSavePath('/certs');
+				return Promise.all([getCert(cert), botMsg]);
+			})
+			.then((results) => results[1].edit('Completed!'))
+			.then((botMsg) => trash(msg, botMsg))
+			.catch((err) => log.warn(err));
+
+		async function getCert(c) {
+			await c.init();
+			await c.account();
+			await c.createCertificate();
+		}
 	})
 }
