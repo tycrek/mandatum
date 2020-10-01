@@ -42,7 +42,7 @@ class Command {
 			// Log the command use
 			const command = msg.content.slice(prefix.length).trim().split(/ +/).shift();
 			const server = msg.guild, channel = msg.channel, author = msg.author;
-			log.debug(`Command "${command}" ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
+			log.debug(`[COMMAND] >${command} ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
 
 			// If command execution fails, handle it here
 			try { resolve(execute(this, msg)) }

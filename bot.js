@@ -148,7 +148,7 @@ client.once('ready', () => {
 client.on('warn', (warn) => log.warn(warn));
 client.on('error', (error) => log.error(error));
 client.on('invalidated', () => log.fatal('Session invalidated, please restart!'));
-client.on('rateLimit', (info) => log.warn(`API rate limit with ${info.timeout}ms delay!`));
+client.on('rateLimit', (info) => log.warn(`[API] Rate limit hit, ${info.timeout}ms delay!`));
 
 var statsUpdate = (member, op) => {
 
