@@ -287,5 +287,52 @@ module.exports = {
 	// 	// Check if the command has the required number of arguments
 	// 	if (args.length != 4)
 	// 		return msg.channel.send(new UsageEmbed(command, '" "', true))
-	// })
+	// }),
+
+	colours: new Command(CATEGORY, null, (cmd, msg) => {
+		const args = msg.content.slice(prefix.length).trim().split(/ +/);
+		const command = args.shift();
+
+		msg.channel.send(
+			new MessageEmbed()
+				.setAuthor('Available Discord colours')
+				.setDescription(`\`\`\`yaml\n['${discordColours.join('\', \'')}']\n\`\`\``)
+		)
+			.then((botMsg) => trash(msg, botMsg))
+			.catch((err) => log.warn(err));
+	})
 }
+
+
+const discordColours = [
+	"DEFAULT",
+	"WHITE",
+	"AQUA",
+	"GREEN",
+	"BLUE",
+	"YELLOW",
+	"PURPLE",
+	"LUMINOUS_VIVID_PINK",
+	"GOLD",
+	"ORANGE",
+	"RED",
+	"GREY",
+	"DARKER_GREY",
+	"NAVY",
+	"DARK_AQUA",
+	"DARK_GREEN",
+	"DARK_BLUE",
+	"DARK_PURPLE",
+	"DARK_VIVID_PINK",
+	"DARK_GOLD",
+	"DARK_ORANGE",
+	"DARK_RED",
+	"DARK_GREY",
+	"LIGHT_GREY",
+	"DARK_NAVY",
+	"BLURPLE",
+	"GREYPLE",
+	"DARK_BUT_NOT_BLACK",
+	"NOT_QUITE_BLACK",
+	"RANDOM"
+];
