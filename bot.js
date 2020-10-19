@@ -190,7 +190,7 @@ client.on('message', (msg) => {
 
 // Swear word processor
 client.on('message', (msg) => {
-	if (msg.author.bot || msg.channel.type === 'dm' || !filter.guild(msg, [guilds.t, guilds.bt, guilds.mb512]) || filter.category(msg, '750773557239349259')) return;
+	if (msg.author.bot || msg.channel.type === 'dm' || !filter.guild(msg, [guilds.t, guilds.bt]) || filter.category(msg, '750773557239349259')) return;
 
 	msg.isSwear = true;
 	neoFilter(msg)

@@ -163,5 +163,37 @@ module.exports = {
 			await c.account();
 			await c.createCertificate();
 		}
+	}),
+
+	record: new Command(CATEGORY, new UsageEmbed('record', ' ', false, ['user', 'record', 'value', 'screenshotUrl', 'mcusername', 'colour'], ['Discord username', 'What record got broken (deaths, block mined, etc). Use hyphens to indicate a space.', 'Numerical value of the record', 'URL to the screenshot for proof', 'Minecraft username for skin', 'Colour for Embed accent (use >colours to see available colours)']), (cmd, msg) => {
+		if (!filter.author(msg, owner)) return noPermission(msg);
+		const args = msg.content.slice(prefix.length).trim().split(/ +/);
+		let command = args.shift();
+
+		if (args.length < 5)
+			return cmd.help(msg);
+
+		let discordUser = args[0];
+		let record = args[1];
+		let value = args[2].replace(/[a-zA-Z]/g, '');
+		let units = args[2].replace(/[0-9]/g, '');
+		let screenshot = args[3];
+		let mcusername = args[4];
+		let colour = args[5];
+
+		msg.channel.send(
+			new MessageEmbed()
+				.setTitle(`${record.replace(/\-/g, ' ')}`)
+				.setImage(screenshot)
+				.setColor(colour)
+				.addField('Record', numberWithCommas(value) + units, true)
+				.addField('Set by', `${discordUser} (${mcusername})`, true)
+		)
+			//.then((botMsg) => msg.delete())
+			.catch((err) => log.warn(err));
+
+		function numberWithCommas(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
 	})
 }
