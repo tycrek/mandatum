@@ -173,13 +173,12 @@ module.exports = {
 			.then((botMsg) => trash(msg, botMsg));
 	}),
 
-	schlong: new Command(CATEGORY, null, (cmd, msg) => {
+	schlong: new Command(CATEGORY, null, (cmd, msg) =>
 		cmd.getConfig(msg, ['commands', 'schlong', 'max'])
-			.then((max) => '8' + '='.padEnd(Math.min(max ? max : 32, parseInt(msg.content.slice(prefix.length).trim().split(/ +/)[1])), '=') + 'D')
+			.then((max) => '8'.padEnd(Math.min(max ? max : 32, parseInt(msg.content.slice(prefix.length).trim().split(/ +/)[1])), '=') + 'D')
 			.then((schlong) => msg.channel.send(schlong))
 			.then((botMsg) => trash(msg, botMsg))
-			.catch((err) => log.warn(err));
-	}),
+			.catch((err) => log.warn(err))),
 
 	xd: new Command(CATEGORY, null, (cmd, msg) => {
 		let doUpper = msg.content[1] === msg.content[1].toUpperCase();
