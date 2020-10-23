@@ -3,26 +3,33 @@ const CATEGORY = 'info';
 /* Imports */
 const { MessageEmbed } = require('discord.js');
 const UsageEmbed = require('../UsageEmbed');
-const { log, trash, Command } = require('../utils');
+const { log, trash, Command, categories } = require('../utils');
+const prefix = require('../bot').prefix;
 
 // export command functions
 module.exports = {
 
 	// Thanks coolguy284#5720 for making this hella smaller
-	help: new Command(CATEGORY, null, (cmd, msg) =>
-		msg.channel.send(
-			new MessageEmbed()
-				.setTitle('Bot commands')
-				.setColor(0xFFFF00)
-				.setThumbnail('https://cdn.discordapp.com/avatars/750806884914692207/d38112a55f14509e68e9823871ecf2eb.png?size=4096')
-				.setFooter('Created by tycrek')
-				.addFields(['info', 'fun', 'utility', 'voice', 'moderator', 'admin'].map(category => ({
-					name: category[0].toUpperCase() + category.slice(1), // crappy way to capitalize 1st letter
-					value: Object.keys(require('./' + category)).map(c => `\`>${c}\``).join('\n'),
-					inline: true
-				}))))
-			.then((botMsg) => trash(msg, botMsg))
-			.catch((err) => log.warn(err))),
+	help: new Command(CATEGORY, null, (cmd, msg) => {
+		const args = msg.content.slice(prefix.length).trim().split(/ +/);
+		let commands = Object.assign({}, ...categories.map((category) => require(`./${category}`)));
+
+		args.length > 1
+			? (commands[args[1]] && commands[args[1]].usage ? commands[args[1]].help(msg) : msg.reply(`command \`${args[1]}\` ether does not exist or does not have a help page.`))
+			: msg.channel.send(
+				new MessageEmbed()
+					.setTitle('Bot commands')
+					.setColor(0xFFFF00)
+					.setThumbnail('https://cdn.discordapp.com/avatars/750806884914692207/d38112a55f14509e68e9823871ecf2eb.png?size=4096')
+					.setFooter('Created by tycrek')
+					.addFields(categories.map((category) => ({
+						name: category[0].toUpperCase() + category.slice(1), // crappy way to capitalize 1st letter
+						value: Object.keys(require(`./${category}`)).map(command => `\`>${command}\``).join('\n'),
+						inline: true
+					}))))
+				.then((botMsg) => trash(msg, botMsg))
+				.catch((err) => log.warn(err));
+	}),
 
 	website: new Command(CATEGORY, null, (cmd, msg) =>
 		msg.channel.send('Visit: https://jmoore.dev/')

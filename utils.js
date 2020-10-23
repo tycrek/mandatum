@@ -175,7 +175,9 @@ module.exports = {
 	// New filter system
 	neoFilter: neoFilter,
 
-	trash: trash
+	trash: trash,
+
+	categories: ['info', 'fun', 'utility', 'voice', 'moderator', 'admin']
 };
 
 function trash(userMsg, botMsg, deleteUser = true) {
