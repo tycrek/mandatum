@@ -39,7 +39,7 @@ const guilds = require('./config/guilds');
 // bot owner, has access to everything
 const owner = require('./config/config').owner;
 
-// Cooldown timer for last swear in channel //! currently behaves globally (swear in 1 server affects cooldown in another server)
+// Cooldown timer for last swear in channel
 let lastSwear = {};
 
 // Prefix for bot commands
