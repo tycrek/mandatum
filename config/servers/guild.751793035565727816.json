@@ -9,12 +9,16 @@
 			],
 			"cooldown": {
 				"751793035565727819": "9999999999"
-			}
+			},
+			"enabled": "false"
 		}
 	},
 	"commands": {
 		"xd": {
 			"max": "80"
+		},
+		"schlong": {
+			"enabled": "false"
 		}
 	},
 	"stats": {

@@ -2,6 +2,10 @@
 	"name": "512mb",
 	"id": "766606858667950091",
 	"admins": [],
-	"settings": {},
+	"settings": {
+		"swear": {
+			"enabled": "false"
+		}
+	},
 	"commands": {}
 }
