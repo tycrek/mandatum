@@ -203,7 +203,7 @@ function neoFilter(msg) {
 
 		// Owner can always run everything
 		let forceTest = false; //* true = dev mode, false = production
-		if (require('./bot').owner === author && !forceTest) return resolve(true);
+		if (require('./bot').owner === author && !forceTest && cmd !== 'swear') return resolve(true);
 
 		// Read server config
 		let config;
@@ -238,6 +238,10 @@ function neoFilter(msg) {
 					)
 						return resolve(false);
 				}
+
+				//! STEP idk: command might be disabled on server
+				if (settings && settings.enabled != null && settings.enabled == 'false')
+					return resolve([false, false]);
 
 				//! STEP 2: Is user admin
 				// Admins as they can run everything

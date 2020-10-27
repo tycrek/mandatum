@@ -187,7 +187,8 @@ client.on('message', (msg) => {
 	// Filter the command using the new filter system
 	neoFilter(msg)
 		.then((allowed) => {
-			if (!allowed) return noPermission(msg);
+			if (typeof allowed === typeof [] && !allowed[0] && !allowed[1]) return;
+			else if (!allowed) return noPermission(msg);
 			try { commands[msg.content.trim().substr(1).split(/ +/)[0]].execute(msg) }
 			catch (err) { !(err instanceof TypeError) && log.warn(err) }
 		})
@@ -201,7 +202,7 @@ client.on('message', (msg) => {
 	msg.isSwear = true;
 	neoFilter(msg)
 		.then((allowed) => {
-			if (!allowed) return;
+			if (!allowed || (typeof allowed === typeof [] && !allowed[0] && !allowed[1])) return;
 
 			let swears = fs.readJsonSync(path.join(__dirname, 'swears.json')).swears;
 			for (let i = 0; i < swears.length; i++) {
