@@ -11,7 +11,7 @@
  * 
  */
 
-const USING_VPN = true;
+const USING_VPN = false;
 if (USING_VPN) process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 /* Imports */
