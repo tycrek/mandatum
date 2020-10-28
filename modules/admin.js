@@ -100,17 +100,15 @@ module.exports = {
 		let everyone = msg.guild.roles.everyone.id;
 		let configPath = path.join(__dirname, `../config/servers/guild.${msg.guild.id}.json`);
 
-		let members = bots = 0;
-
-		msg.guild.members.cache.each((member) => member.user.bot ? bots++ : members++);
-
-		msg.guild.channels.create(category, { type: 'category' })
+		let memberCount = bots = 0;
+		msg.guild.members.fetch()
+			.then((members) => members.each((member) => member.user.bot ? bots++ : memberCount++))
+			.then(() => msg.guild.channels.create(category, { type: 'category' }))
 			.then((c) => c.setPosition(0))
 			.then((c) => Promise.all([
 				fs.readJson(configPath),
 				c.id,
-				c.guild.channels.create(`Members: ${members}`, { type: 'voice', parent: c.id, permissionOverwrites: [{ id: everyone, deny: 1048576 }, { id: require('../bot').client.user.id, allow: 1048592 }] }),
-				c.guild.channels.create(`Bots: ${bots}`, { type: 'voice', parent: c.id, permissionOverwrites: [{ id: everyone, deny: 1048576 }, { id: require('../bot').client.user.id, allow: 1048592 }] })
+				c.guild.channels.create(`Members: ${memberCount}`, { type: 'voice', parent: c.id, permissionOverwrites: [{ id: everyone, deny: 1048576 }, { id: require('../bot').client.user.id, allow: 1048592 }] }),
 			]))
 			.then((results) => {
 				let config = results[0];
