@@ -62,5 +62,33 @@ module.exports = {
 				.setTitle(`Bot has been active for ${hours} hours, ${minutes} minutes, ${seconds} seconds`))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
+	}),
+
+	roles: new Command(CATEGORY, null, (cmd, msg) => {
+		cmd.getConfig(msg, ['settings', 'langroles', 'langroles'])
+			.then((config) =>
+				msg.channel.send(
+					new MessageEmbed()
+						.setTitle('Roles')
+						.setDescription(Object.keys(config).map(key => `\`${key}\``).slice(1).join(', '))
+				))
+			.then((botMsg) => trash(msg, botMsg))
+			.catch((err) => log.warn(err));
+	}),
+
+	role: new Command(CATEGORY, new UsageEmbed('role', '', false, ['rolename'], ['The role to apply. Prefix with `-` to remove a role. Role names **must** perfectly match, including capitalization!'], ['Run `>roles` to see a list of available roles', 'Multiple roles can be added at once if separated by a space']), (cmd, msg) => {
+		const args = msg.content.slice(prefix.length).trim().split(/ +/);
+		const command = args.shift();
+
+		if (args.length < 1)
+			return cmd.help(msg);
+
+		cmd.getConfig(msg, ['settings', 'langroles', 'langroles'])
+			.then((roles) =>
+				Promise.all([msg.member.roles.add(roles['⸻ LANGUAGES ⸻'])].concat(args.map((arg) =>
+					Object.keys(roles).includes(arg.replace('-', '')) && !arg.includes('LANGUAGES') ? (arg.startsWith('-') ? msg.member.roles.remove(roles[arg.replace('-', '')]) : msg.member.roles.add(roles[arg.replace('-', '')])) : ''))))
+			.then(() => msg.channel.send('Done!'))
+			.then((botMsg) => trash(msg, botMsg))
+			.catch((err) => log.warn(err));
 	})
 }
