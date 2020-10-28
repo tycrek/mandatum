@@ -4,6 +4,7 @@ const CATEGORY = 'admin';
 const { MessageEmbed } = require('discord.js');
 const fs = require('fs-extra');
 const path = require('path');
+const moment = require('moment');
 const { log, trash, filter, noPermission, Command } = require('../utils');
 const { prefix, owner } = require('../bot');
 const UsageEmbed = require('../UsageEmbed');
@@ -100,24 +101,25 @@ module.exports = {
 		let everyone = msg.guild.roles.everyone.id;
 		let configPath = path.join(__dirname, `../config/servers/guild.${msg.guild.id}.json`);
 
-		let members = bots = 0;
-
-		msg.guild.members.cache.each((member) => member.user.bot ? bots++ : members++);
-
-		msg.guild.channels.create(category, { type: 'category' })
+		let memberCount = bots = 0;
+		msg.guild.members.fetch()
+			.then((members) => members.each((member) => member.user.bot ? bots++ : memberCount++))
+			.then(() => msg.guild.channels.create(category, { type: 'category' }))
 			.then((c) => c.setPosition(0))
 			.then((c) => Promise.all([
 				fs.readJson(configPath),
 				c.id,
-				c.guild.channels.create(`Members: ${members}`, { type: 'voice', parent: c.id, permissionOverwrites: [{ id: everyone, deny: 1048576 }, { id: require('../bot').client.user.id, allow: 1048592 }] }),
-				c.guild.channels.create(`Bots: ${bots}`, { type: 'voice', parent: c.id, permissionOverwrites: [{ id: everyone, deny: 1048576 }, { id: require('../bot').client.user.id, allow: 1048592 }] })
+				c.guild.channels.create(`Members: ${memberCount}`, { type: 'voice', parent: c.id, permissionOverwrites: [{ id: everyone, deny: 1048576 }, { id: require('../bot').client.user.id, allow: 1048592 }] }),
+				c.guild.channels.create(`Bots: ${bots}`, { type: 'voice', parent: c.id, permissionOverwrites: [{ id: everyone, deny: 1048576 }, { id: require('../bot').client.user.id, allow: 1048592 }] }),
+				c.guild.channels.create(`Created: ${moment(age).format('MMM Do YYYY')}`, { type: 'voice', parent: c.id, permissionOverwrites: [{ id: everyone, deny: 1048576 }, { id: require('../bot').client.user.id, allow: 1048592 }] }),
 			]))
 			.then((results) => {
 				let config = results[0];
 				config.stats = {
 					parent: results[1],
 					members: results[2].id,
-					bots: results[3].id
+					bots: results[3].id,
+					age: results[4].id
 				};
 				return config;
 			})
@@ -135,7 +137,7 @@ module.exports = {
 			.then((mConfig) => config = mConfig)
 			.then(() => { if (!config.stats) throw Error('No stats data in config') })
 			.then(() => msg.guild.channels)
-			.then((channels) => Promise.all([channels.resolve(config.stats.parent), channels.resolve(config.stats.members), channels.resolve(config.stats.bots)]))
+			.then((channels) => Promise.all([channels.resolve(config.stats.parent), channels.resolve(config.stats.members), channels.resolve(config.stats.bots), channels.resolve(config.stats.age)]))
 			.then((stats) => Promise.all(stats.map((statChannel) => statChannel.delete())))
 			.then((_results) => msg.channel.send('Deleted stats channels'))
 			.then((botMsg) => trash(msg, botMsg))
@@ -195,5 +197,68 @@ module.exports = {
 		function numberWithCommas(x) {
 			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		}
+	}),
+
+	langroles: new Command(CATEGORY, null, (cmd, msg) => {
+		const labelRole = {
+			name: '⸻ LANGUAGES ⸻',
+			color: '#2f3136'
+		};
+
+		const languages = [
+			{ name: 'Angular', color: '#D82D30' },
+			{ name: 'Assembly', color: '#1D282E' },
+			{ name: 'C', color: '#5D6CBF' },
+			{ name: 'C#', color: '#9B4A96' },
+			{ name: 'C++', color: '#649AD2' },
+			{ name: 'CSS', color: '#3D9BD8' },
+			{ name: 'Dart', color: '#2CB7F6' },
+			{ name: 'Go', color: '#73CDDB' },
+			{ name: 'Haskell', color: '#453A62' },
+			{ name: 'HTML', color: '#EC631D' },
+			{ name: 'Java', color: '#F89917' },
+			{ name: 'JavaScript', color: '#F0D63B' },
+			{ name: 'Julia', color: '#252525' },
+			{ name: 'Kotlin', color: '#DE6F64' },
+			{ name: 'Less', color: '#244D84' },
+			{ name: 'Lua', color: '#01007E' },
+			{ name: 'Node.js', color: '#7BB740' },
+			{ name: 'Objective-C', color: '#339BFF' },
+			{ name: 'Perl', color: '#004065' },
+			{ name: 'PHP', color: '#787CB4' },
+			{ name: 'Python', color: '#3471A2' },
+			{ name: 'R', color: '#246ABF' },
+			{ name: 'React', color: '#05CFF9' },
+			{ name: 'Ruby', color: '#AD1300' },
+			{ name: 'Rust', color: '#000000' },
+			{ name: 'Sass', color: '#CC6699' },
+			{ name: 'Scala', color: '#DE3423' },
+			{ name: 'Swift', color: '#FB4227' },
+			{ name: 'SQL', color: '#318CC9' },
+			{ name: 'TypeScript', color: '#007ACC' },
+			{ name: 'VBA', color: '#4477B9' },
+			{ name: 'Vue', color: '#41B883' }
+		];
+
+		msg.guild.roles.create({ data: labelRole })
+			.then((role) => Promise.all([role].concat(languages.map((language) => msg.guild.roles.create({ data: language })))))
+			.then((results) => {
+				let saveData = {};
+				results.forEach((result) => saveData[result.name] = result.id);
+				return cmd.setConfig(msg, ['settings', 'langroles', 'langroles', saveData]);
+			})
+			.then(() => msg.channel.send('Finished!'))
+			.then((botMsg) => trash(msg, botMsg))
+			.catch((err) => log.warn(err));
+	}),
+
+	dellangroles: new Command(CATEGORY, null, (cmd, msg) => {
+		cmd.getConfig(msg, ['settings', 'langroles', 'langroles'])
+			.then((config) => Promise.all(Object.keys(config).map((roleData) => msg.guild.roles.fetch(config[roleData]))))
+			.then((roles) => Promise.all(roles.map((role) => role.delete())))
+			.then(() => cmd.setConfig(msg, ['settings', 'langroles', '-']))
+			.then((_results) => msg.channel.send('Deleted language roles'))
+			.then((botMsg) => trash(msg, botMsg))
+			.catch((err) => log.warn(err));
 	})
 }

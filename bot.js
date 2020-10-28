@@ -11,7 +11,7 @@
  * 
  */
 
-const USING_VPN = true;
+const USING_VPN = false;
 if (USING_VPN) process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 /* Imports */
@@ -112,7 +112,7 @@ client.once('ready', () => {
 			.then((config) => {
 				if (!config.stats) throw Error(`No stats for guild [${guild.id}], ignoring`);
 				else return Promise.all([
-					client.guilds.resolve(guild.id).members.cache,
+					client.guilds.resolve(guild.id).members.fetch(),
 					client.guilds.resolve(guild.id).channels.resolve(config.stats.members),
 					client.guilds.resolve(guild.id).channels.resolve(config.stats.bots)
 				]);
