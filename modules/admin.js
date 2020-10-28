@@ -4,6 +4,7 @@ const CATEGORY = 'admin';
 const { MessageEmbed } = require('discord.js');
 const fs = require('fs-extra');
 const path = require('path');
+const moment = require('moment');
 const { log, trash, filter, noPermission, Command } = require('../utils');
 const { prefix, owner } = require('../bot');
 const UsageEmbed = require('../UsageEmbed');
@@ -109,13 +110,16 @@ module.exports = {
 				fs.readJson(configPath),
 				c.id,
 				c.guild.channels.create(`Members: ${memberCount}`, { type: 'voice', parent: c.id, permissionOverwrites: [{ id: everyone, deny: 1048576 }, { id: require('../bot').client.user.id, allow: 1048592 }] }),
+				c.guild.channels.create(`Bots: ${bots}`, { type: 'voice', parent: c.id, permissionOverwrites: [{ id: everyone, deny: 1048576 }, { id: require('../bot').client.user.id, allow: 1048592 }] }),
+				c.guild.channels.create(`Created: ${moment(age).format('MMM Do YYYY')}`, { type: 'voice', parent: c.id, permissionOverwrites: [{ id: everyone, deny: 1048576 }, { id: require('../bot').client.user.id, allow: 1048592 }] }),
 			]))
 			.then((results) => {
 				let config = results[0];
 				config.stats = {
 					parent: results[1],
 					members: results[2].id,
-					bots: results[3].id
+					bots: results[3].id,
+					age: results[4].id
 				};
 				return config;
 			})
@@ -133,7 +137,7 @@ module.exports = {
 			.then((mConfig) => config = mConfig)
 			.then(() => { if (!config.stats) throw Error('No stats data in config') })
 			.then(() => msg.guild.channels)
-			.then((channels) => Promise.all([channels.resolve(config.stats.parent), channels.resolve(config.stats.members), channels.resolve(config.stats.bots)]))
+			.then((channels) => Promise.all([channels.resolve(config.stats.parent), channels.resolve(config.stats.members), channels.resolve(config.stats.bots), channels.resolve(config.stats.age)]))
 			.then((stats) => Promise.all(stats.map((statChannel) => statChannel.delete())))
 			.then((_results) => msg.channel.send('Deleted stats channels'))
 			.then((botMsg) => trash(msg, botMsg))
