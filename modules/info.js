@@ -2,7 +2,6 @@ const CATEGORY = 'info';
 
 /* Imports */
 const { MessageEmbed } = require('discord.js');
-const UsageEmbed = require('../UsageEmbed');
 const { log, trash, Command, categories } = require('../utils');
 const prefix = require('../bot').prefix;
 

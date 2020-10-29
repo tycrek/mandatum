@@ -35,13 +35,7 @@ const { Client } = require('discord.js');
 const path = require('path');
 const fs = require('fs-extra');
 
-// for scheduling automated messages
-const schedule = require('node-schedule');
-
-// anything time related such as the cooldown
-const moment = require('moment-timezone');
-
-const { log, printTime, filter, readJson, writeJson, neoFilter, noPermission, trash } = require('./utils');
+const { log, readJson, writeJson, neoFilter, noPermission, trash } = require('./utils');
 
 //#endregion
 
