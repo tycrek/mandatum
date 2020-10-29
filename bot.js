@@ -98,10 +98,6 @@ module.exports.commands = commands;
 client.once('ready', () => {
 	log.info('Beep, boop! mandatum is ready :)');
 
-	//client.guilds.fetch(guilds.bt)
-	//	.then((guild) => guild.channels.cache.find(channel => channel.id === '752664709408227518'))
-	//.then((guildChannel) => guildChannel.send('`Beep, boop! mandatum is ready :)`'));
-
 	// Check configurations
 	client.guilds.cache.each((guild) => {
 		let configPath = path.join(__dirname, `config/servers/guild.${guild.id}.json`);
