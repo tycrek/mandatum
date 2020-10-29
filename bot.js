@@ -48,16 +48,13 @@ const { log, printTime, filter, readJson, writeJson, neoFilter, noPermission, tr
 // servers where the bot is active
 const guilds = require('./config/guilds');
 
-// bot owner, has access to everything
-const owner = require('./config/config').owner;
+// bot owner, has access to everything; prefix for bot commands
+const { owner, prefix } = require('./config/config');
 
 // Cooldown timer for last swear in channel
 let lastSwear = {};
 
-// Prefix for bot commands
-const prefix = require('./config/config').prefix;
-
-// client
+// Discord client
 const client = new Client();
 
 //* Version check (need node 11 or later)
