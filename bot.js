@@ -22,8 +22,9 @@
  *   - Material Icon Theme (Philipp Kief)
  */
 
+//! Only set to true if running behind a firewall that injects self-signed certificates (dev environments ONLY)
 const USING_VPN = false;
-if (USING_VPN) process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+if (USING_VPN && process.env.NODE_ENV !== 'production') process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 /* Imports */
 
