@@ -29,7 +29,7 @@ if (USING_VPN && process.env.NODE_ENV !== 'production') process.env.NODE_TLS_REJ
 //#region  Imports
 
 // discord.js for Discord API
-const { Client, MessageEmbed } = require('discord.js');
+const { Client } = require('discord.js');
 
 // path & fs-extra for filesystem operations
 const path = require('path');
@@ -147,18 +147,6 @@ client.once('ready', () => {
 	// Custom status
 	client.user.setActivity(`the world burn (${prefix})`, { type: "WATCHING" })
 		.catch((err) => log.warn(err));
-
-	// Scheduled message test
-	schedule.scheduleJob('0 */1 * * *', () =>
-		client.guilds.fetch(guilds.bt)
-			.then((guild) => guild.channels.cache.find(channel => channel.id === '752898408834138145'))
-			.then((guildChannel) =>
-				guildChannel.send(
-					new MessageEmbed()
-						.setTitle(`Clock strikes ${moment().format('h')}!`)
-						.setColor(0xFFFFFF)
-						.setDescription(printTime())))
-			.catch((err) => log.warn(err)));
 });
 
 client.on('warn', (warn) => log.warn(warn));
