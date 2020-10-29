@@ -3,15 +3,6 @@
 	"id": "751793035565727816",
 	"admins": [],
 	"settings": {
-		"swear": {
-			"excludedChannels": [
-				"751793035565727819"
-			],
-			"cooldown": {
-				"751793035565727819": "9999999999"
-			},
-			"enabled": "false"
-		},
 		"langroles": {
 			"langroles": {
 				"⸻ LANGUAGES ⸻": "771092863311151157",

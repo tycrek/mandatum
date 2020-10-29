@@ -192,7 +192,7 @@ function neoFilter(msg) {
 
 		// Extract the command string without the prefix
 		const args = msg.content.slice(require('./bot').prefix.length).trim().split(/ +/);
-		let cmd = msg.isSwear ? 'swear' : args.shift();
+		let cmd = args.shift();
 
 		// Prep ID's for later use
 		let guild = msg.guild.id;
@@ -203,7 +203,7 @@ function neoFilter(msg) {
 
 		// Owner can always run everything
 		let forceTest = false; //* true = dev mode, false = production
-		if (require('./bot').owner === author && !forceTest && cmd !== 'swear') return resolve(true);
+		if (require('./bot').owner === author && !forceTest) return resolve(true);
 
 		// Read server config
 		let config;
