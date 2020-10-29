@@ -139,10 +139,7 @@ client.once('ready', () => {
 				results[0].each((member) => member.user.bot ? bots++ : members++);
 
 				let oldMembersPrefix = results[1].name.split(' ')[0];
-				let oldMembersSuffix = parseInt(results[1].name.split(' ')[1]);
 				let oldBotsPrefix = results[2].name.split(' ')[0];
-				let oldBotsSuffix = parseInt(results[2].name.split(' ')[1]);
-
 				let newMembers = `${oldMembersPrefix} ${members}`;
 				let newBots = `${oldBotsPrefix} ${bots}`;
 
