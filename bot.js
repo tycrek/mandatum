@@ -9,6 +9,17 @@
  * > jmoore.dev
  * > github.com/tycrek
  * 
+ * Recommended software for development: Visual Studio Code
+ * Recommended VSCode extensions:
+ *   - Babel JavaScript (Michael McDermott)
+ *   - Better Comments (Aaron Bond)
+ *   - Bracket Pair Colorizer 2 (CoenraadS)
+ *   - Path Intellisense (Christian Kohler)
+ *   - TabNine (TabNine)
+ *   - Todo Tree (Gruntfuggly)
+ * Suggested theme (optional):
+ *   - Night Owl (sarah.drasner)
+ *   - Material Icon Theme (Philipp Kief)
  */
 
 const USING_VPN = false;
