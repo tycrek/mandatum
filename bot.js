@@ -57,13 +57,13 @@ let lastSwear = {};
 // Discord client
 const client = new Client();
 
-//* Version check (need node 11 or later)
+//* (1/4) Version check (need node 11 or later)
 if (process.version.match(/^v(\d+\.\d+)/)[1].split('.')[0] <= 11) {
 	log.fatal(`Must be using Node.js 11 or later! Current version: ${process.version}`);
 	return process.exit(1);
 }
 
-//* (1/3) Export everything
+//* (2/4) Export everything
 module.exports = {
 	client: client,
 	owner: owner,
@@ -71,7 +71,7 @@ module.exports = {
 	prefix: prefix
 };
 
-//* (2/3) Set up commands
+//* (3/4) Set up commands
 var commands = {
 	...require('./modules/info'),
 	...require('./modules/fun'),
@@ -81,7 +81,7 @@ var commands = {
 	...require('./modules/admin')
 };
 
-//* (3/3) Add commands to exports
+//* (4/4) Add commands to exports
 module.exports.commands = commands;
 
 /* client events */
