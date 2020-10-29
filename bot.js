@@ -92,6 +92,8 @@ module.exports.commands = commands;
 
 //#endregion
 
+//#region client events
+
 // When client is ready (after it logs in)
 client.once('ready', () => {
 	log.info('Beep, boop! mandatum is ready :)');
@@ -190,7 +192,7 @@ var statsUpdate = (member, op) => {
 			}
 		})
 		.catch((err) => log.warn(err));
-}
+};
 
 client.on('guildMemberAdd', (member) => statsUpdate(member, 0));
 client.on('guildMemberRemove', (member) => statsUpdate(member, 1));
@@ -246,6 +248,6 @@ client.on('message', (msg) => {
 		});
 });
 
-// Log in to Discord using token
+//#endregion
 client.login(fs.readJsonSync(path.join(__dirname, 'auth.json')).token)
 	.catch((err) => log.warn(err));
