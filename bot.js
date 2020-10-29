@@ -26,7 +26,7 @@
 const USING_VPN = false;
 if (USING_VPN && process.env.NODE_ENV !== 'production') process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-/* Imports */
+//#region  Imports
 
 // discord.js for Discord API
 const { Client, MessageEmbed } = require('discord.js');
@@ -43,7 +43,9 @@ const moment = require('moment-timezone');
 
 const { log, printTime, filter, readJson, writeJson, neoFilter, noPermission, trash } = require('./utils');
 
-/* Variables */
+//#endregion
+
+//#region Variables
 
 // servers where the bot is active
 const guilds = require('./config/guilds');
@@ -56,6 +58,10 @@ let lastSwear = {};
 
 // Discord client
 const client = new Client();
+
+//#endregion
+
+//#region Startup tasks
 
 //* (1/4) Version check (need node 11 or later)
 if (process.version.match(/^v(\d+\.\d+)/)[1].split('.')[0] <= 11) {
@@ -84,7 +90,7 @@ var commands = {
 //* (4/4) Add commands to exports
 module.exports.commands = commands;
 
-/* client events */
+//#endregion
 
 // When client is ready (after it logs in)
 client.once('ready', () => {
