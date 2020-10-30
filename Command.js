@@ -37,7 +37,9 @@ class Command {
 	setConfig(msg, configType, setting, key, value) {
 		let config = this.getConfig(msg.guild.id);
 
-		if (!(configType === 'command' || configType === 'settings')) return 'Not implemented';
+		if (!(configType.startsWith('c') || configType.startsWith('s'))) return 'Not implemented';
+
+		configType = configType.startsWith('c') ? 'commands' : 'settings';
 
 		if (!config) return 'Error: no config';
 		if (!config[configType]) config[configType] = {};
