@@ -43,20 +43,23 @@ class Command {
 	setConfig(msg, configType, setting, key, value) {
 		let config = this.getConfig(msg.guild.id);
 
-		if (!(configType.startsWith('c') || configType.startsWith('s'))) return 'Not implemented';
+		if (configType === 'prefix') config.prefix = setting;
+		else if (!(configType.startsWith('c') || configType.startsWith('s'))) return 'Not implemented';
+		else {
+			configType = configType.startsWith('c') ? 'commands' : 'settings';
 
-		configType = configType.startsWith('c') ? 'commands' : 'settings';
+			if (!config) return 'Error: no config';
+			if (!config[configType]) config[configType] = {};
+			if (!config[configType][setting]) config[configType][setting] = {};
 
-		if (!config) return 'Error: no config';
-		if (!config[configType]) config[configType] = {};
-		if (!config[configType][setting]) config[configType][setting] = {};
-
-		if (value === '-' || key === '-') {
-			value === '-' ? config[configType][setting][key] = undefined : config[configType][setting] = undefined;
-			config = JSON.parse(JSON.stringify(config));
-		} else {
-			config[configType][setting][key] = value;
+			if (value === '-' || key === '-') {
+				value === '-' ? config[configType][setting][key] = undefined : config[configType][setting] = undefined;
+				config = JSON.parse(JSON.stringify(config));
+			} else {
+				config[configType][setting][key] = value;
+			}
 		}
+
 
 		let guildConfigPath = path.join(__dirname, `./config/servers/guild.${msg.guild.id}.json`);
 		writeJson(guildConfigPath, config);

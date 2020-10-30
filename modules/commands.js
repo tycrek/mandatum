@@ -14,6 +14,12 @@ const commands = {
 		new CommandData('neoSetConfig')
 			.setCategory('admin')
 			.setDescription('foo'))
+		.loadConfig(),
+
+	prefix: new (require('./test/prefix'))(
+		new CommandData('prefix')
+			.setCategory('admin')
+			.setDescription('Set the server prefix'))
 		.loadConfig()
 	//#endregion
 };
