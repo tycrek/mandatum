@@ -32,6 +32,12 @@ class Command {
 		return this;
 	}
 
+	parseArgs(msg) {
+		let prefix = this.getConfig(msg.guild.id).prefix || '>';
+		let split = msg.content.slice(prefix.length).trim().split(/ +/);
+		return { command: split.shift(), args: split };
+	}
+
 	//#region Setters
 
 	setConfig(msg, configType, setting, key, value) {
