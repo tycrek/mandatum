@@ -5,7 +5,7 @@ class NeoSetConfig extends Command {
 		const args = msg.content.slice('>'.length).trim().split(/ +/);
 		let cmd = args.shift();
 
-		let result = this.setConfig(msg, args[0], args[1], args[2]);
+		let result = this.setConfig(msg, ...args);
 		msg.reply(result);
 	}
 }
