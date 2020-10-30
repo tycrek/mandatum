@@ -34,20 +34,20 @@ class Command {
 
 	//#region Setters
 
-	setConfig(msg, configType, command, key, value) {
+	setConfig(msg, configType, setting, key, value) {
 		let config = this.getConfig(msg.guild.id);
 
-		if (configType !== 'command') return 'Not implemented';
+		if (!(configType === 'command' || configType === 'settings')) return 'Not implemented';
 
 		if (!config) return 'Error: no config';
-		if (!config.commands) config.commands = {};
-		if (!config.commands[command]) config.commands[command] = {};
+		if (!config[configType]) config[configType] = {};
+		if (!config[configType][setting]) config[configType][setting] = {};
 
 		if (value === '-' || key === '-') {
-			value === '-' ? config.commands[command][key] = undefined : config.commands[command] = undefined;
+			value === '-' ? config[configType][setting][key] = undefined : config[configType][setting] = undefined;
 			config = JSON.parse(JSON.stringify(config));
 		} else {
-			config.commands[command][key] = value;
+			config[configType][setting][key] = value;
 		}
 
 		let guildConfigPath = path.join(__dirname, `./config/servers/guild.${msg.guild.id}.json`);
