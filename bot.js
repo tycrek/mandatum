@@ -77,6 +77,7 @@ var commands = {
 	...require('./modules/moderator'),
 	...require('./modules/admin')
 };
+var neocom = require('./modules/commands');
 
 //* (4/4) Add commands to exports
 module.exports.commands = commands;
@@ -180,6 +181,10 @@ client.on('message', (msg) => {
 			else if (!allowed) return noPermission(msg);
 			try { commands[msg.content.trim().substr(1).split(/ +/)[0]].execute(msg) }
 			catch (err) { !(err instanceof TypeError) && log.warn(err) }
+
+			//* new command system
+			try { neocom.getCommand(msg.content.trim().substr(1).split(/ +/)[0]).execute(msg); }
+			catch (err) { !(err instanceof TypeError) && log.warn(err); }
 		})
 		.catch((err) => log.warn(err));
 });

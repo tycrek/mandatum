@@ -216,6 +216,14 @@ function neoFilter(msg) {
 			// Process the filters
 			.then((settings) => {
 
+
+				//* testing for new command system
+				let neocmd = require('./modules/commands').getCommand(cmd);
+				if (neocmd.getCategory() === 'admin' || neocmd.getCategory() === 'moderator')
+					return resolve(false);
+				//* end new system test
+
+
 				//! STEP 1
 				// Get a list of modules
 				let modules = ['info', 'fun', 'utility', 'voice', 'moderator', 'admin'].map(category => ({
