@@ -2,8 +2,7 @@ const Command = require('../../Command');
 
 class NeoSetConfig extends Command {
 	execute(msg) {
-		const args = msg.content.slice('>'.length).trim().split(/ +/);
-		let cmd = args.shift();
+		const { args } = this.parseArgs(msg);
 
 		let result = this.setConfig(msg, ...args);
 		msg.reply(result);
