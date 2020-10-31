@@ -190,8 +190,11 @@ function trash(userMsg, botMsg, deleteUser = true) {
 function neoFilter(msg) {
 	return new Promise((resolve, reject) => {
 
+		let guildConfig = fs.readJsonSync(path.join(__dirname, `./config/servers/guild.${msg.guild.id}.json`));
+		let pre = guildConfig.prefix || require('./bot').prefix;
+
 		// Extract the command string without the prefix
-		const args = msg.content.slice(require('./bot').prefix.length).trim().split(/ +/);
+		const args = msg.content.slice(pre.length).trim().split(/ +/);
 		let cmd = args.shift();
 
 		// Prep ID's for later use
