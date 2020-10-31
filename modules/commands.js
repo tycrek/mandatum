@@ -3,7 +3,7 @@ const commands = {
 	//#region category test
 	test: new (require('./test/test'))(
 		new CommandData('test')
-			.setCategory('test')
+			.setCategory('admin')
 			.setDescription('A test command')
 			.setVariables(new CommandVariables()
 				.addVariable(new CommandVariable('message', 'Hello bitch'))
