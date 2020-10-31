@@ -41,12 +41,7 @@
 			}
 		}
 	},
-	"commands": {
-		"test": {
-			"number": "2",
-			"message": "foo"
-		}
-	},
+	"commands": {},
 	"stats": {
 		"parent": "771139332487643177",
 		"members": "771139334152650782",
