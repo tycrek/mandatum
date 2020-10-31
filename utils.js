@@ -219,7 +219,7 @@ function neoFilter(msg) {
 
 				//* testing for new command system
 				let neocmd = require('./modules/commands').getCommand(cmd);
-				if (neocmd.getCategory() === 'admin' || neocmd.getCategory() === 'moderator')
+				if (neocmd && (neocmd.getCategory() === 'admin' || neocmd.getCategory() === 'moderator'))
 					return resolve(false);
 				//* end new system test
 
