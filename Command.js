@@ -55,11 +55,13 @@ class Command {
 			if (value === '-' || key === '-') {
 				value === '-' ? config[configType][setting][key] = undefined : config[configType][setting] = undefined;
 				config = JSON.parse(JSON.stringify(config));
+			} else if (key === 'cooldown') {
+				if (!config[configType][setting][key]) config[configType][setting][key] = {};
+				config[configType][setting][key][msg.guild.id] = value;
 			} else {
 				config[configType][setting][key] = value;
 			}
 		}
-
 
 		let guildConfigPath = path.join(__dirname, `./config/servers/guild.${msg.guild.id}.json`);
 		writeJson(guildConfigPath, config);
