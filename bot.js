@@ -182,11 +182,11 @@ client.on('message', (msg) => {
 		.then((allowed) => {
 			if (typeof allowed === typeof [] && !allowed[0] && !allowed[1]) return;
 			else if (!allowed) return noPermission(msg);
-			try { commands[msg.content.trim().substr(1).split(/ +/)[0]].execute(msg) }
+			try { commands[msg.content.slice(pre.length).trim().split(/ +/)[0]].execute(msg) }
 			catch (err) { !(err instanceof TypeError) && log.warn(err) }
 
 			//* new command system
-			try { neocom.getCommand(msg.content.trim().substr(1).split(/ +/)[0]).execute(msg); }
+			try { neocom.getCommand(msg.content.slice(pre.length).trim().split(/ +/)[0]).execute(msg); }
 			catch (err) { !(err instanceof TypeError) && log.warn(err); }
 		})
 		.catch((err) => log.warn(err));
