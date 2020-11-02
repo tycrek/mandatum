@@ -1,4 +1,4 @@
-const { CommandData, CommandVariable, CommandVariables } = require('../CommandData');
+const { CommandData, CommandVariable, CommandVariables, CommandArgument, CommandArguments } = require('../CommandData');
 const commands = {
 	//#region category test
 	test: new (require('./test/test'))(

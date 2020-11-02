@@ -36,6 +36,15 @@ class CommandData {
 		return this;
 	}
 
+	/**
+	 * Set the arguments this command accepts
+	 * @param {CommandArguments} args Arguments for the command
+	 */
+	setArguments(args) {
+		this.args = args;
+		return this;
+	}
+
 	//#endregion
 
 	//#region Getters
@@ -46,6 +55,10 @@ class CommandData {
 
 	getVariable(key) {
 		return this.variables.getVariable(key);
+	}
+
+	getArgument(key) {
+		return this.args.getArgument(key);
 	}
 
 	//#endregion
@@ -90,8 +103,59 @@ class CommandVariable {
 	}
 }
 
+class CommandArguments {
+	/**
+	 * 
+	 * @param {CommandArgument[]} args 
+	 */
+	constructor(args = null) {
+		this.args = {};
+		args && args.length > 0 && args.forEach((arg) => this.args[arg.getName()] = arg)
+	}
+
+	/**
+	 * 
+	 * @param {CommandArgument} arg 
+	 */
+	addArgument(arg) {
+		this.args[arg.getName()] = arg;
+		return this;
+	}
+
+	getArgument(key) {
+		return this.args[key] || null;
+	}
+}
+
+class CommandArgument {
+	constructor(name, description, required, variableKey = null) {
+		this.name = name;
+		this.description = description;
+		this.required = required;
+		this.variableKey = variableKey;
+	}
+
+	getName() {
+		return this.name;
+	}
+
+	getDescription() {
+		return this.description;
+	}
+
+	getRequired() {
+		return this.required;
+	}
+
+	getVariableKey() {
+		return this.variableKey;
+	}
+}
+
 module.exports = {
 	CommandData,
 	CommandVariables,
-	CommandVariable
+	CommandVariable,
+	CommandArguments,
+	CommandArgument
 };
