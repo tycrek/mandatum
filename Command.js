@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const UsageEmbed = require('./UsageEmbed');
 const { CommandData, CommandVariables, CommandVariable } = require('./CommandData');
-const { readJson, writeJson, log } = require('./utils');
+const { readJson, writeJson, log, splitArgs } = require('./utils');
 
 class Command {
 
@@ -33,8 +33,11 @@ class Command {
 	}
 
 	parseArgs(msg, onlyCommand = false) {
+		let split = splitArgs(msg, this.getPrefix(msg.guild.id));
+
 		let command = split.shift();
 		if (onlyCommand) return { command };
+		else return { command, args: split };
 	}
 
 	execute(msg) {
@@ -81,6 +84,10 @@ class Command {
 	//#endregion
 
 	//#region Getters
+
+	getPrefix(guildId) {
+		return this.getConfig(guildId).prefix || '>'
+	}
 
 	getCategory() {
 		return this.commandData.category;
