@@ -4,21 +4,26 @@ const UsageEmbed = require('./UsageEmbed');
 const { CommandData, CommandVariables, CommandVariable } = require('./CommandData');
 const { readJson, writeJson, log, splitArgs } = require('./utils');
 const RequiredError = require('./RequiredError');
+const Message = require('discord.js').Message;
 
 class Command {
 
 	/**
-	 * 
-	 * @param {CommandData} commandData 
+	 * Build a new command
+	 * @param {CommandData} commandData Command data used to build the command object
 	 */
 	constructor(commandData) {
 		this.command = commandData.getCommandName();
 		this.commandData = commandData;
+		this.config = {};
 	}
 
+	/**
+	 * Load the config for the server (called after constructor)
+	 * @returns {Command} This command
+	 */
 	loadConfig() {
 		let guilds = require('./config/guilds.json').guilds;
-		this.config = {};
 		guilds.forEach((guildId) => {
 			let guildConfigPath = path.join(__dirname, `./config/servers/guild.${guildId}.json`);
 			if (fs.existsSync(guildConfigPath)) this.config[guildId] = require(guildConfigPath);
@@ -33,6 +38,12 @@ class Command {
 		return this;
 	}
 
+	/**
+	 * Parse the command and arguments for the command from message content
+	 * @param {Message} msg Message to parse arguments from
+	 * @param {boolean} onlyCommand Set to true to skip parsing arguments and only return the command
+	 * @returns {Object} Object containing keys 'command' and potentially 'args'
+	 */
 	parseArgs(msg, onlyCommand = false) {
 		let split = splitArgs(msg, this.getPrefix(msg.guild.id));
 
@@ -43,10 +54,18 @@ class Command {
 		else return { command, args: split };
 	}
 
+	/**
+	 * Placeholder object
+	 * @param {Message} msg Message to use in execution
+	 */
 	execute(msg) {
 		log.warn(`No execution function defined for command ${this.parseArgs(msg).command}`);
 	}
 
+	/**
+	 * Interceptor for command execution. Used for logging and other operations before command execution.
+	 * @param {Message} msg Message to use in execution
+	 */
 	superExec(msg) {
 		const command = this.parseArgs(msg, true).command;
 		const server = msg.guild, channel = msg.channel, author = msg.author;
@@ -56,6 +75,15 @@ class Command {
 
 	//#region Setters
 
+	/**
+	 * Sets config data
+	 * @param {Message} msg Used to get guild ID values
+	 * @param {string} configType Type of config to set. Most commonly is "commands" or "settings"
+	 * @param {string} setting Setting or Command to modifying
+	 * @param {string} key Field being modified for setting or command
+	 * @param {string} value Value to set key as
+	 * @returns {string} Message to send to channel
+	 */
 	setConfig(msg, configType, setting, key, value) {
 		let config = this.getConfig(msg.guild.id);
 
@@ -88,18 +116,28 @@ class Command {
 
 	//#region Getters
 
+	/**
+	 * Return the server prefix, or default if not set
+	 * @param {string} guildId Guild ID to get prefix for
+	 * @returns {string} The guild or default prefix
+	 */
 	getPrefix(guildId) {
 		return this.getConfig(guildId).prefix || '>';
 	}
 
+	/**
+	 * Return this commands CommandData
+	 * @returns {CommandData} CommandData for this command
+	 */
 	getCommandData() {
 		return this.commandData;
 	}
 
 	/**
 	 * Get the server or command config
-	 * @param {String} guildId Discord server to get config for
-	 * @param {Boolean} [commandOnly=false] Only return config for the command
+	 * @param {string} guildId Discord server to get config for
+	 * @param {boolean} [commandOnly=false] Only return config for the command
+	 * @returns {Object} The server or command config
 	 */
 	getConfig(guildId, commandOnly = false) {
 		return !commandOnly ? (this.config[guildId] || null) : this.config[guildId].commands[this.command] || null;
@@ -107,9 +145,9 @@ class Command {
 
 	/**
 	 * Get a variable value from either the config or the default
-	 * @param {String} key Variable to get a value for
-	 * @param {String=} guildId Use if you want the value from the config for specified guild
-	 * @return {*} Variable value. Will be default if guild not set or if not specified in config
+	 * @param {string} key Variable to get a value for
+	 * @param {string=} guildId Use if you want the value from the config for specified guild
+	 * @returns {*} Value of variable 'key'. Will be default if guild not set or if not specified in config
 	 */
 	getVariable(key, guildId = null) {
 		if (guildId) {
@@ -125,6 +163,11 @@ class Command {
 
 module.exports = Command;
 
+/**
+ * 
+ * @param {CommandArguments} args Arguments to check if any are required
+ * @param {string[]} split The arguments passed to the command (@see parseArgs)
+ */
 function checkRequired(args, split) {
 	return args ? args.getRequired() > split.length : false;
 }
