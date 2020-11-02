@@ -87,14 +87,20 @@ class Command {
 		return this.commandData.category;
 	}
 
+	/**
+	 * Get the server or command config
+	 * @param {String} guildId Discord server to get config for
+	 * @param {Boolean} [commandOnly=false] Only return config for the command
+	 */
 	getConfig(guildId, commandOnly = false) {
 		return !commandOnly ? (this.config[guildId] || null) : this.config[guildId].commands[this.command] || null;
 	}
 
 	/**
-	 * 
-	 * @param {String} key 
-	 * @param {String} guildId Use if you want the value from the config
+	 * Get a variable value from either the config or the default
+	 * @param {String} key Variable to get a value for
+	 * @param {String=} guildId Use if you want the value from the config for specified guild
+	 * @return {*} Variable value. Will be default if guild not set or if not specified in config
 	 */
 	getVariable(key, guildId = null) {
 		if (guildId) {
