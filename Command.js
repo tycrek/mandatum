@@ -70,7 +70,8 @@ class Command {
 		const command = this.parseArgs(msg, true).command;
 		const server = msg.guild, channel = msg.channel, author = msg.author;
 		log.debug(`[NEW COMMAND] >${command} ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
-		this.execute(msg);
+
+		this.execute(msg).catch((err) => handleError(msg, err));
 	}
 
 	/**
@@ -180,4 +181,19 @@ module.exports = Command;
  */
 function checkRequired(args, split) {
 	return args ? args.getRequired() > split.length : false;
+}
+
+/**
+ * Handle an error by printing in console and sending in Discord
+ * @param {Message} msg Source message that caused an error
+ * @param {Error} err The Error itself
+ */
+function handleError(msg, err) {
+	log.warn(err);
+	msg.channel.send(
+		`\`\`\`js\n${err.stack || err.toString()}\`\`\`` +
+		`Please alert an admin or \`@tycrek#0001\``
+	)
+		.then((botMsg) => trash(msg, botMsg))
+		.catch((err) => log.warn(err));
 }
