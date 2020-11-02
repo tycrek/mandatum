@@ -1,15 +1,27 @@
 class CommandData {
+	/**
+	 * Constructor for command data
+	 * @param {String} command The command
+	 */
 	constructor(command) {
 		this.command = command;
 	}
 
 	//#region Setters
 
+	/**
+	 * Set command category
+	 * @param {String} category Command category
+	 */
 	setCategory(category) {
 		this.category = category;
 		return this;
 	}
 
+	/**
+	 * Set command description
+	 * @param {String} description Command description
+	 */
 	setDescription(description) {
 		this.description = description;
 		return this;
