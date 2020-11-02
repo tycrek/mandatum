@@ -11,7 +11,7 @@ const { log, trash, Command } = require('../utils');
 // export command functions
 module.exports = {
 
-	link: new Command(CATEGORY, new UsageEmbed('link', '', false, ['url'], ['A URL without `https://` (example: `>link example.com`)']), (cmd, msg) => {
+	/* link: new Command(CATEGORY, new UsageEmbed('link', '', false, ['url'], ['A URL without `https://` (example: `>link example.com`)']), (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 
 		if (args.length < 2)
@@ -24,7 +24,7 @@ module.exports = {
 				.setURL(`https://${args[1].toLowerCase()}`))
 			.then((botMsg) => Promise.all([trash(msg, botMsg, false), msg.delete()]))
 			.catch((err) => log.warn(err));
-	}),
+	}), */
 
 	search: new Command(CATEGORY, new UsageEmbed('search', '', false, ['query'], ['Searches `query` using DuckDuckGo'], ['You can use [DuckDuckGo Bangs](https://duckduckgo.com/bang) to redirect your search']), (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);

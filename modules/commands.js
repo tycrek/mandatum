@@ -79,6 +79,17 @@ const commands = {
 		new CommandData('about')
 			.setCategory('info')
 			.setDescription('Display info about Mandatum'))
+		.loadConfig(),
+
+	//#endregion
+
+	//#region //*utility
+	link: new (require('./utility/link'))(
+		new CommandData('link')
+			.setCategory('utility')
+			.setDescription('Creates a clickable link')
+			.setArguments(new CommandArguments()
+				.addArgument(new CommandArgument('url', 'URL to linkify (all this does is add https://)', true))))
 		.loadConfig()
 
 	//#endregion
