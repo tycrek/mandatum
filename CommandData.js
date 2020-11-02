@@ -7,6 +7,10 @@ class CommandData {
 		this.command = command;
 	}
 
+	addNote(note) {
+		this.notes.push(note);
+	}
+
 	//#region Setters
 
 	/**
@@ -75,6 +79,10 @@ class CommandData {
 
 	getArgument(key) {
 		return this.args.getArgument(key);
+	}
+
+	getNotes() {
+		return this.notes;
 	}
 
 	//#endregion
