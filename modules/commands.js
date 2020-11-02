@@ -20,6 +20,12 @@ const commands = {
 		new CommandData('prefix')
 			.setCategory('admin')
 			.setDescription('Set the server prefix'))
+		.loadConfig(),
+
+	noexectest: new (require('./test/noexectest'))(
+		new CommandData('noexectest')
+			.setCategory('admin')
+			.setDescription('test'))
 		.loadConfig()
 	//#endregion
 };

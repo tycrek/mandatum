@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const UsageEmbed = require('./UsageEmbed');
 const { CommandData, CommandVariables, CommandVariable } = require('./CommandData');
-const { readJson, writeJson } = require('./utils');
+const { readJson, writeJson, log } = require('./utils');
 
 class Command {
 
@@ -36,6 +36,17 @@ class Command {
 		let prefix = this.getConfig(msg.guild.id).prefix || '>';
 		let split = msg.content.slice(prefix.length).trim().split(/ +/);
 		return { command: split.shift(), args: split };
+	}
+
+	execute(msg) {
+		log.warn(`No execution function defined for command ${this.parseArgs(msg).command}`);
+	}
+
+	superExec(msg) {
+		const command = this.parseArgs(msg).command;
+		const server = msg.guild, channel = msg.channel, author = msg.author;
+		log.debug(`[NEW COMMAND] >${command} ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
+		this.execute(msg);
 	}
 
 	//#region Setters
