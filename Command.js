@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const UsageEmbed = require('./UsageEmbed');
 const { CommandData, CommandVariables, CommandVariable } = require('./CommandData');
-const { readJson, writeJson, log, splitArgs } = require('./utils');
+const { readJson, writeJson, log, splitArgs, trash } = require('./utils');
 const RequiredError = require('./RequiredError');
 const Message = require('discord.js').Message;
 
@@ -71,6 +71,16 @@ class Command {
 		const server = msg.guild, channel = msg.channel, author = msg.author;
 		log.debug(`[NEW COMMAND] >${command} ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
 		this.execute(msg);
+	}
+
+	/**
+	 * Adds a trash can reaction to a message to let the user delete the bot/user messages
+	 * @param {Message} userMsg The Message sent by the user
+	 * @param {Message} botMsg The Message sent by the bot
+	 * @param {boolean} deleteUser Wether or not to delete the user message
+	 */
+	trash(userMsg, botMsg, deleteUser = true) {
+		trash(userMsg, botMsg, deleteUser);
 	}
 
 	//#region Setters
