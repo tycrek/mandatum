@@ -32,10 +32,9 @@ class Command {
 		return this;
 	}
 
-	parseArgs(msg) {
-		let prefix = this.getConfig(msg.guild.id).prefix || '>';
-		let split = msg.content.slice(prefix.length).trim().split(/ +/);
-		return { command: split.shift(), args: split };
+	parseArgs(msg, onlyCommand = false) {
+		let command = split.shift();
+		if (onlyCommand) return { command };
 	}
 
 	execute(msg) {
@@ -43,7 +42,7 @@ class Command {
 	}
 
 	superExec(msg) {
-		const command = this.parseArgs(msg).command;
+		const command = this.parseArgs(msg, true).command;
 		const server = msg.guild, channel = msg.channel, author = msg.author;
 		log.debug(`[NEW COMMAND] >${command} ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
 		this.execute(msg);
