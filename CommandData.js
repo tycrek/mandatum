@@ -146,7 +146,7 @@ class CommandArguments {
 }
 
 class CommandArgument {
-	constructor(name, description, required, variableKey = null) {
+	constructor(name, description, required = false, variableKey = null) {
 		this.name = name;
 		this.description = description;
 		this.required = required;
