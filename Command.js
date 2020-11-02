@@ -3,6 +3,7 @@ const fs = require('fs-extra');
 const UsageEmbed = require('./UsageEmbed');
 const { CommandData, CommandVariables, CommandVariable } = require('./CommandData');
 const { readJson, writeJson, log, splitArgs } = require('./utils');
+const RequiredError = require('./RequiredError');
 
 class Command {
 
@@ -37,6 +38,8 @@ class Command {
 
 		let command = split.shift();
 		if (onlyCommand) return { command };
+
+		if (checkRequired(this.commandData.getArguments(), split)) throw new RequiredError('Missing parameters');
 		else return { command, args: split };
 	}
 
@@ -121,3 +124,7 @@ class Command {
 }
 
 module.exports = Command;
+
+function checkRequired(args, split) {
+	return args ? args.getRequired() > split.length : false;
+}
