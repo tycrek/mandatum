@@ -57,6 +57,10 @@ class CommandData {
 		return this.variables.getVariable(key);
 	}
 
+	getArguments() {
+		return this.args;
+	}
+
 	getArgument(key) {
 		return this.args.getArgument(key);
 	}
@@ -124,6 +128,12 @@ class CommandArguments {
 
 	getArgument(key) {
 		return this.args[key] || null;
+	}
+
+	getRequired() {
+		let required = 0;
+		Object.keys(this.args).forEach((arg) => this.getArgument(arg).getRequired() && required++)
+		return required;
 	}
 }
 
