@@ -177,7 +177,9 @@ module.exports = {
 
 	trash: trash,
 
-	categories: ['info', 'fun', 'utility', 'voice', 'moderator', 'admin']
+	categories: ['info', 'fun', 'utility', 'voice', 'moderator', 'admin'],
+
+	splitArgs: (msg, prefix) => msg.content.slice(prefix.length).trim().split(/ +/)
 };
 
 function trash(userMsg, botMsg, deleteUser = true) {
