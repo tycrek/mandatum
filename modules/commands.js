@@ -32,7 +32,19 @@ const commands = {
 		new CommandData('bad')
 			.setCategory('admin')
 			.setDescription('another test'))
+		.loadConfig(),
+
+	argtest: new (require('./test/argtest'))(
+		new CommandData('argtest')
+			.setCategory('admin')
+			.setDescription('another test')
+			.setVariables(new CommandVariables()
+				.addVariable(new CommandVariable('length', 30)))
+			.setArguments(new CommandArguments()
+				.addArgument(new CommandArgument('length', 'Length to expand character to', false, 'length'))
+				.addArgument(new CommandArgument('character', 'Character to expand', true))))
 		.loadConfig()
+
 	//#endregion
 };
 
