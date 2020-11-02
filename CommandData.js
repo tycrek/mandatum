@@ -53,12 +53,20 @@ class CommandData {
 		return this.command;
 	}
 
-	getVariable(key) {
-		return this.variables.getVariable(key);
+	getCategory() {
+		return this.category;
+	}
+
+	getDescription() {
+		return this.description;
 	}
 
 	getArguments() {
 		return this.args;
+	}
+
+	getVariable(key) {
+		return this.variables.getVariable(key);
 	}
 
 	getArgument(key) {

@@ -39,7 +39,7 @@ class Command {
 		let command = split.shift();
 		if (onlyCommand) return { command };
 
-		if (checkRequired(this.commandData.getArguments(), split)) throw new RequiredError('Missing parameters');
+		if (checkRequired(this.getCommandData().getArguments(), split)) throw new RequiredError('Missing parameters');
 		else return { command, args: split };
 	}
 
@@ -89,11 +89,11 @@ class Command {
 	//#region Getters
 
 	getPrefix(guildId) {
-		return this.getConfig(guildId).prefix || '>'
+		return this.getConfig(guildId).prefix || '>';
 	}
 
-	getCategory() {
-		return this.commandData.category;
+	getCommandData() {
+		return this.commandData;
 	}
 
 	/**
@@ -114,9 +114,9 @@ class Command {
 	getVariable(key, guildId = null) {
 		if (guildId) {
 			let command = this.getConfig(guildId).commands[this.command];
-			return command && command[key] ? command[key] : this.commandData.getVariable(key);
+			return command && command[key] ? command[key] : this.getCommandData().getVariable(key);
 		} else {
-			return this.commandData.getVariable(key);
+			return this.getCommandData().getVariable(key);
 		}
 	}
 
