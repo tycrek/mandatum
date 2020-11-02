@@ -9,7 +9,7 @@ const prefix = require('../bot').prefix;
 module.exports = {
 
 	// Thanks coolguy284#5720 for making this hella smaller
-	help: new Command(CATEGORY, null, (cmd, msg) => {
+	/* help: new Command(CATEGORY, null, (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let commands = Object.assign({}, ...categories.map((category) => require(`./${category}`)));
 
@@ -28,19 +28,19 @@ module.exports = {
 					}))))
 				.then((botMsg) => trash(msg, botMsg))
 				.catch((err) => log.warn(err));
-	}),
+	}), */
 
-	website: new Command(CATEGORY, null, (cmd, msg) =>
+	/* website: new Command(CATEGORY, null, (cmd, msg) =>
 		msg.channel.send('Visit: https://jmoore.dev/')
 			.then((botMsg) => trash(msg, botMsg))
-			.catch((err) => log.warn(err))),
+			.catch((err) => log.warn(err))), */
 
-	github: new Command(CATEGORY, null, (cmd, msg) =>
+	/* github: new Command(CATEGORY, null, (cmd, msg) =>
 		msg.channel.send('Visit: https://github.com/tycrek')
 			.then((botMsg) => trash(msg, botMsg))
-			.catch((err) => log.warn(err))),
+			.catch((err) => log.warn(err))), */
 
-	source: new Command(CATEGORY, null, (cmd, msg) =>
+	/* source: new Command(CATEGORY, null, (cmd, msg) =>
 		msg.channel.send(
 			new MessageEmbed()
 				.setTitle('Bot source code')
@@ -48,9 +48,9 @@ module.exports = {
 				.setURL('https://github.com/tycrek/mandatum')
 				.setFooter('Check out my source code on GitHub!'))
 			.then((botMsg) => trash(msg, botMsg))
-			.catch((err) => log.warn(err))),
+			.catch((err) => log.warn(err))), */
 
-	about: new Command(CATEGORY, null, (cmd, msg) =>
+	/* about: new Command(CATEGORY, null, (cmd, msg) =>
 		msg.channel.send(
 			new MessageEmbed({
 				"title": "Hello! :wave:",
@@ -60,7 +60,7 @@ module.exports = {
 				"thumbnail": "https://cdn.discordapp.com/avatars/750806884914692207/d38112a55f14509e68e9823871ecf2eb.png?size=4096"
 			})
 				.setThumbnail('https://cdn.discordapp.com/avatars/750806884914692207/d38112a55f14509e68e9823871ecf2eb.png?size=4096'))
-			.then((botMsg) => trash(msg, botMsg)))
+			.then((botMsg) => trash(msg, botMsg))) */
 }
 
 module.exports.commands = module.exports.help;
