@@ -7,8 +7,15 @@ class CommandData {
 		this.command = command;
 	}
 
+	/**
+	 * Note that will be shown in the UsageEmbed
+	 * @param {string} note Note to add to the command
+	 * @returns {Object} Self for chaining
+	 */
 	addNote(note) {
+		if (!this.notes) this.notes = [];
 		this.notes.push(note);
+		return this;
 	}
 
 	//#region Setters
