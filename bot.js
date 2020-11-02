@@ -70,7 +70,7 @@ module.exports = {
 
 //* (3/4) Set up commands
 var commands = {
-	...require('./modules/info'),
+	//...require('./modules/info'),
 	...require('./modules/fun'),
 	...require('./modules/utility'),
 	...require('./modules/voice'),
