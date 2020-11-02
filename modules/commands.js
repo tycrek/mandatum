@@ -26,6 +26,12 @@ const commands = {
 		new CommandData('noexectest')
 			.setCategory('admin')
 			.setDescription('test'))
+		.loadConfig(),
+
+	bad: new (require('./test/bad'))(
+		new CommandData('bad')
+			.setCategory('admin')
+			.setDescription('another test'))
 		.loadConfig()
 	//#endregion
 };
