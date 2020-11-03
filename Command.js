@@ -64,28 +64,42 @@ class Command {
 
 	/**
 	 * Interceptor for command execution. Used for logging and other operations before command execution.
+	 * It is async to be able to catch promise rejections from execute()
 	 * @param {Message} msg Message to use in execution
 	 */
-	superExec(msg) {
+	async superExec(msg) {
 		const command = this.parseArgs(msg, true).command;
 		const server = msg.guild, channel = msg.channel, author = msg.author;
 		log.debug(`[NEW COMMAND] >${command} ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
 
 		try {
-			this.execute(msg).catch((err) => { throw err });
+			await this.execute(msg).catch((err) => { throw err; });
 		} catch (err) {
 			if (err.name === 'RequiredError') this.help(msg).catch((err) => handleError(msg, err));
 			else handleError(msg, err);
 		}
 	}
 
+	/**
+	 * Reply to a poorly formatted command with a UsageEmbed
+	 * @param {Message} msg Message to reply to
+	 */
 	help(msg) {
-		let args = Object.keys(this.getCommandData().getArguments().args).map((key) => this.getCommandData().getArgument(key))
+		return new Promise((resolve, reject) => {
+			let args = Object.keys(this.getCommandData().getArguments().args).map((key) => this.getCommandData().getArgument(key));
 
-		return msg.channel.send(
-			new UsageEmbed(this.command, ' ', false, args.map((arg) => arg.getName()), args.map((arg) => `${arg.getDescription()} ${arg.getRequired() ? '(required)' : ''}`), this.commandData.getNotes()))
-			.then((botMsg) => this.trash(msg, botMsg))
-			.catch((err) => log.warn(err));
+			return msg.channel.send(
+				new UsageEmbed(
+					this.command,
+					' ',
+					false,
+					args.map((arg) => arg.getName()),
+					args.map((arg) => `${arg.getDescription()} ${arg.getRequired() ? '(required)' : ''}`),
+					this.commandData.getNotes()))
+				.then((botMsg) => this.trash(msg, botMsg))
+				.then(resolve)
+				.catch(reject);
+		});
 	}
 
 	/**
