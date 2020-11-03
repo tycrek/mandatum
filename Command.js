@@ -71,7 +71,13 @@ class Command {
 		const server = msg.guild, channel = msg.channel, author = msg.author;
 		log.debug(`[NEW COMMAND] >${command} ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
 
-		this.execute(msg).catch((err) => handleError(msg, err));
+	help(msg) {
+		let args = Object.keys(this.getCommandData().getArguments().args).map((key) => this.getCommandData().getArgument(key))
+
+		return msg.channel.send(
+			new UsageEmbed(this.command, ' ', false, args.map((arg) => arg.getName()), args.map((arg) => `${arg.getDescription()} ${arg.getRequired() ? '(required)' : ''}`), this.commandData.getNotes()))
+			.then((botMsg) => this.trash(msg, botMsg))
+			.catch((err) => log.warn(err));
 	}
 
 	/**
