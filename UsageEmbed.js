@@ -30,9 +30,9 @@ class UsageEmbed extends MessageEmbed {
 				+ newLine +
 
 				//! STEP 2: Parameter text
-				(['**Parameters**'].concat(parameters.map((param) =>
+				(parameters.length > 0 ? (['**Parameters**'].concat(parameters.map((param) =>
 					`\`${(paramLead + param).padEnd(parameters.reduce((a, b) =>
-						a.length > b.length ? a : b).length + paramLead.length + (' '.length * 4))}\` ${descriptions[parameters.indexOf(param)]}`)).join('\n'))
+						a.length > b.length ? a : b).length + paramLead.length + (' '.length * 4))}\` ${descriptions[parameters.indexOf(param)]}`)).join('\n')) : '')
 
 				+ newLine +
 

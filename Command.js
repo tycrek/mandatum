@@ -86,7 +86,7 @@ class Command {
 	 */
 	help(msg) {
 		return new Promise((resolve, reject) => {
-			let args = Object.keys(this.getCommandData().getArguments().args).map((key) => this.getCommandData().getArgument(key));
+			let args = this.getCommandData().getArguments() ? Object.keys(this.getCommandData().getArguments().args).map((key) => this.getCommandData().getArgument(key)) : [];
 
 			return msg.channel.send(
 				new UsageEmbed(
