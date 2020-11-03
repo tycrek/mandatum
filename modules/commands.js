@@ -59,12 +59,15 @@ const searchCommand = new SearchCommand(new CommandData('search')
 	.setArguments(new CommandArguments()
 		.addArgument(new CommandArgument('query', 'What to search for', true))))
 	.loadConfig();
-//const uptimeCommand = new UptimeCommand()
+const uptimeCommand = new UptimeCommand(new CommandData('uptime')
+	.setCategory('utility')
+	.setDescription('Check the bot uptime'))
+	.loadConfig();
 //#endregion
 //#endregion
 
 const commands = {
-	//#region category test
+	//#region //*category test
 	test: new (require('./test/test'))(
 		new CommandData('test')
 			.setCategory('admin')
@@ -123,7 +126,8 @@ const commands = {
 	//#region //*utility
 	link: linkCommand,
 	uuid: uuidCommand,
-	search: searchCommand
+	search: searchCommand,
+	uptime: uptimeCommand
 	//#endregion
 };
 
