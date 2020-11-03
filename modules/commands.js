@@ -16,6 +16,12 @@ const UptimeCommand = require('./utility/uptime');
 const RolesCommand = require('./utility/roles');
 const RoleCommand = require('./utility/role');
 //#endregion
+const VJoinCommand = require('./voice/vjoin');
+const VLeaveCommand = require('./voice/vleave');
+const VSearchCommand = require('./voice/vsearch');
+const VPauseCommand = require('./voice/vpause');
+const VResumeCommand = require('./voice/vresume');
+const VSkipCommand = require('./voice/vskip');
 //#endregion
 
 //#region //* Commands
