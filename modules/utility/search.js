@@ -10,7 +10,7 @@ class commandname extends Command {
 				.setColor(0xE0632F)
 				.setAuthor(`Searching "${args.join(' ')}" for ${msg.author.username}`)
 				.setDescription(`https://duckduckgo.com/?q=${args.join('+')}`))
-			.then((botMsg) => this.trash(msg, botMsg));
+			.then((botMsg) => this.trash(msg, botMssg));
 	}
 }
 
