@@ -1,7 +1,7 @@
 const Command = require('../../Command');
 const { MessageEmbed } = require('discord.js');
 
-class commandname extends Command {
+class SearchCommand extends Command {
 	execute(msg) {
 		const { args } = this.parseArgs(msg);
 
@@ -14,4 +14,4 @@ class commandname extends Command {
 	}
 }
 
-module.exports = commandname;
+module.exports = SearchCommand;
