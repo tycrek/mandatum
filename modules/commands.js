@@ -13,6 +13,8 @@ const LinkCommand = require('./utility/link');
 const UuidCommand = require('./utility/uuid');
 const SearchCommand = require('./utility/search');
 const UptimeCommand = require('./utility/uptime');
+const RolesCommand = require('./utility/roles');
+const RoleCommand = require('./utility/role');
 //#endregion
 //#endregion
 
@@ -62,6 +64,16 @@ const searchCommand = new SearchCommand(new CommandData('search')
 const uptimeCommand = new UptimeCommand(new CommandData('uptime')
 	.setCategory('utility')
 	.setDescription('Check the bot uptime'))
+	.loadConfig();
+const rolesCommand = new RolesCommand(new CommandData('roles')
+	.setCategory('utility')
+	.setDescription('Display available programming language roles'))
+	.loadConfig();
+const roleCommand = new RoleCommand(new CommandData('role')
+	.setCategory('utility')
+	.setDescription('Apply programming roles to user')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('roles', 'Roles to apply, separated by space. Must *exactly* match as shown in roles command.', true))))
 	.loadConfig();
 //#endregion
 //#endregion
@@ -127,7 +139,9 @@ const commands = {
 	link: linkCommand,
 	uuid: uuidCommand,
 	search: searchCommand,
-	uptime: uptimeCommand
+	uptime: uptimeCommand,
+	roles: rolesCommand,
+	role: roleCommand
 	//#endregion
 };
 
