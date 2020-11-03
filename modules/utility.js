@@ -26,7 +26,7 @@ module.exports = {
 			.catch((err) => log.warn(err));
 	}), */
 
-	search: new Command(CATEGORY, new UsageEmbed('search', '', false, ['query'], ['Searches `query` using DuckDuckGo'], ['You can use [DuckDuckGo Bangs](https://duckduckgo.com/bang) to redirect your search']), (cmd, msg) => {
+	/* search: new Command(CATEGORY, new UsageEmbed('search', '', false, ['query'], ['Searches `query` using DuckDuckGo'], ['You can use [DuckDuckGo Bangs](https://duckduckgo.com/bang) to redirect your search']), (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 
 		if (args.length < 2)
@@ -40,16 +40,16 @@ module.exports = {
 				.setDescription(`https://duckduckgo.com/?q=${args.join('+')}`))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	}),
+	}), */
 
-	uuid: new Command(CATEGORY, null, (cmd, msg) =>
+	/* uuid: new Command(CATEGORY, null, (cmd, msg) =>
 		msg.channel.send(
 			new MessageEmbed()
 				.setTitle('Here\'s your UUID:')
 				.setColor(0x000000)
 				.setDescription(`\`${UUID()}\``))
 			.then((botMsg) => trash(msg, botMsg))
-			.catch((err) => log.warn(err))),
+			.catch((err) => log.warn(err))), */
 
 	uptime: new Command(CATEGORY, null, (cmd, msg) => {
 		let totalSeconds = client.uptime / 1000;

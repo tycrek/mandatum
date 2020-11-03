@@ -90,6 +90,21 @@ const commands = {
 			.setDescription('Creates a clickable link')
 			.setArguments(new CommandArguments()
 				.addArgument(new CommandArgument('url', 'URL to linkify (all this does is add https://)', true))))
+		.loadConfig(),
+
+	uuid: new (require('./utility/uuid'))(
+		new CommandData('uuid')
+			.setCategory('utility')
+			.setDescription('Generate a new v4 UUID'))
+		.loadConfig(),
+
+	search: new (require('./utility/search'))(
+		new CommandData('search')
+			.setCategory('utility')
+			.setDescription('Search DuckDuckGo')
+			.addNote('You can use [DuckDuckGo Bangs](https://duckduckgo.com/bang) to redirect your search')
+			.setArguments(new CommandArguments()
+				.addArgument(new CommandArgument('query', 'What to search for', true))))
 		.loadConfig()
 
 	//#endregion
