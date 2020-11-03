@@ -149,4 +149,5 @@ const commands = {
 module.exports = {
 	getCategories: () => categories,
 	getCommand: (command) => commands[command] ? commands[command] : null,
+	getCommands: (category) => categories.includes(category) ? Object.keys(commands).filter((command) => commands[command].getCommandData().getCategory() === category).map((commandKey) => commands[commandKey]) : null
 };
