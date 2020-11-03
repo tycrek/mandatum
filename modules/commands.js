@@ -78,9 +78,10 @@ const roleCommand = new RoleCommand(new CommandData('role')
 //#endregion
 //#endregion
 
+const categories = ['info', 'utility'];
 const commands = {
 	//#region //*category test
-	test: new (require('./test/test'))(
+	/* test: new (require('./test/test'))(
 		new CommandData('test')
 			.setCategory('admin')
 			.setDescription('A test command')
@@ -123,7 +124,7 @@ const commands = {
 			.setArguments(new CommandArguments()
 				.addArgument(new CommandArgument('length', 'Length to expand character to', false, 'length'))
 				.addArgument(new CommandArgument('character', 'Character to expand', true))))
-		.loadConfig(),
+		.loadConfig(), */
 
 	//#endregion
 
@@ -146,5 +147,6 @@ const commands = {
 };
 
 module.exports = {
-	getCommand: (command) => commands[command] ? commands[command] : null
+	getCategories: () => categories,
+	getCommand: (command) => commands[command] ? commands[command] : null,
 };
