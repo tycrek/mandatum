@@ -6,6 +6,10 @@
 	<h1>mandatum</h1>
 </div>
 
+**!!! Notice**: Mandatum is currently undergoing a refactor to a new command system. For the latest features, check out the [refactor branch](https://github.com/tycrek/mandatum/tree/command-refactor).
+
+---
+
 An open-source Discord bot. Primary goal is to ~~eliminate the human race~~ replace the big-name bots such as MEE6, Groovy and others, as well as incorporate my own ideas. 
 
 **Please note**: The only **legitimate** mandatum bot is `mandatum#2749`. Any others are clones and may not be safe to use.
