@@ -51,7 +51,7 @@ module.exports = {
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err))), */
 
-	uptime: new Command(CATEGORY, null, (cmd, msg) => {
+	/* uptime: new Command(CATEGORY, null, (cmd, msg) => {
 		let totalSeconds = client.uptime / 1000;
 		let hours = (totalSeconds / (60 * 60)).toString().split('.')[0];
 		let minutes = (totalSeconds / 60 % 60).toString().split('.')[0];
@@ -62,7 +62,7 @@ module.exports = {
 				.setTitle(`Bot has been active for ${hours} hours, ${minutes} minutes, ${seconds} seconds`))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	}),
+	}), */
 
 	roles: new Command(CATEGORY, null, (cmd, msg) => {
 		cmd.getConfig(msg, ['settings', 'langroles', 'langroles'])

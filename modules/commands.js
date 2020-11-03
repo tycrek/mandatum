@@ -1,4 +1,68 @@
 const { CommandData, CommandVariable, CommandVariables, CommandArgument, CommandArguments } = require('../CommandData');
+
+//#region //* Imports
+//#region //* info
+const HelpCommand = require('./info/help');
+const AboutCommand = require('./info/about');
+const SourceCommand = require('./info/source');
+const WebsiteCommand = require('./info/website');
+const GitHubCommand = require('./info/github');
+//#endregion
+//#region //* utility
+const LinkCommand = require('./utility/link');
+const UuidCommand = require('./utility/uuid');
+const SearchCommand = require('./utility/search');
+const UptimeCommand = require('./utility/uptime');
+//#endregion
+//#endregion
+
+//#region //* Commands
+//#region //* info
+const helpCommand = new HelpCommand(new CommandData('help')
+	.setCategory('info')
+	.setDescription('Displays all the commands')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('command', 'command to view help for'))))
+	.loadConfig();
+const aboutCommand = new AboutCommand(new CommandData('about')
+	.setCategory('info')
+	.setDescription('Display info about Mandatum'))
+	.loadConfig();
+const sourceCommand = new SourceCommand(new CommandData('source')
+	.setCategory('info')
+	.setDescription('Provide link to Mandatum source code'))
+	.loadConfig();
+const websiteCommand = new WebsiteCommand(new CommandData('website')
+	.setCategory('info')
+	.setDescription('Provide link to my website'))
+	.loadConfig();
+const githubCommand = new GitHubCommand(new CommandData('github')
+	.setCategory('info')
+	.setDescription('Provide link to my GitHub'))
+	.loadConfig();
+//#endregion
+//#region //* utility
+const linkCommand = new LinkCommand(new CommandData('link')
+	.setCategory('utility')
+	.setDescription('Creates a clickable link')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('url', 'URL to linkify (all this does is add https://)', true))))
+	.loadConfig();
+const uuidCommand = new UuidCommand(new CommandData('uuid')
+	.setCategory('utility')
+	.setDescription('Generate a new v4 UUID'))
+	.loadConfig();
+const searchCommand = new SearchCommand(new CommandData('search')
+	.setCategory('utility')
+	.setDescription('Search DuckDuckGo')
+	.addNote('You can use [DuckDuckGo Bangs](https://duckduckgo.com/bang) to redirect your search')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('query', 'What to search for', true))))
+	.loadConfig();
+//const uptimeCommand = new UptimeCommand()
+//#endregion
+//#endregion
+
 const commands = {
 	//#region category test
 	test: new (require('./test/test'))(
@@ -49,64 +113,17 @@ const commands = {
 	//#endregion
 
 	//#region //* info
-	help: new (require('./info/help'))(
-		new CommandData('help')
-			.setCategory('info')
-			.setDescription('Displays all the commands')
-			.setArguments(new CommandArguments()
-				.addArgument(new CommandArgument('command', 'command to view help for'))))
-		.loadConfig(),
-
-	website: new (require('./info/website'))(
-		new CommandData('website')
-			.setCategory('info')
-			.setDescription('Provide link to my website'))
-		.loadConfig(),
-
-	github: new (require('./info/github'))(
-		new CommandData('github')
-			.setCategory('info')
-			.setDescription('Provide link to my GitHub'))
-		.loadConfig(),
-
-	source: new (require('./info/source'))(
-		new CommandData('source')
-			.setCategory('info')
-			.setDescription('Provide link to Mandatum source code'))
-		.loadConfig(),
-
-	about: new (require('./info/about'))(
-		new CommandData('about')
-			.setCategory('info')
-			.setDescription('Display info about Mandatum'))
-		.loadConfig(),
-
+	help: helpCommand,
+	website: websiteCommand,
+	github: githubCommand,
+	source: sourceCommand,
+	about: aboutCommand,
 	//#endregion
 
 	//#region //*utility
-	link: new (require('./utility/link'))(
-		new CommandData('link')
-			.setCategory('utility')
-			.setDescription('Creates a clickable link')
-			.setArguments(new CommandArguments()
-				.addArgument(new CommandArgument('url', 'URL to linkify (all this does is add https://)', true))))
-		.loadConfig(),
-
-	uuid: new (require('./utility/uuid'))(
-		new CommandData('uuid')
-			.setCategory('utility')
-			.setDescription('Generate a new v4 UUID'))
-		.loadConfig(),
-
-	search: new (require('./utility/search'))(
-		new CommandData('search')
-			.setCategory('utility')
-			.setDescription('Search DuckDuckGo')
-			.addNote('You can use [DuckDuckGo Bangs](https://duckduckgo.com/bang) to redirect your search')
-			.setArguments(new CommandArguments()
-				.addArgument(new CommandArgument('query', 'What to search for', true))))
-		.loadConfig()
-
+	link: linkCommand,
+	uuid: uuidCommand,
+	search: searchCommand
 	//#endregion
 };
 
