@@ -158,6 +158,15 @@ const schlongCommand = new SchlongCommand(new CommandData('schlong')
 		.addArgument(new CommandArgument('length', 'Length of the schlong', true)))
 	.addNote('Limited to length `{{{max}}}`. Can be changed with the `max` variable.'))
 	.loadConfig();
+const xdCommand = new XdCommand(new CommandData('xd')
+	.setCategory('fun')
+	.setDescription('Prints "xd" or "XD" to `length`')
+	.setVariables(new CommandVariables()
+		.addVariable(new CommandVariable('max', 30)))
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('length', 'Length of the xd/XD', true)))
+	.addNote('Limited to length `{{{max}}}`. Can be changed with the `max` variable.'))
+	.loadConfig();
 //#endregion
 
 //#endregion
@@ -243,6 +252,8 @@ const commands = {
 	urban: urbanCommand,
 	morse: morseCommand,
 	schlong: schlongCommand,
+	xd: xdCommand,
+	XD: xdCommand,
 	//#endregion
 };
 

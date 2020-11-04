@@ -180,14 +180,14 @@ module.exports = {
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err))), */
 
-	xd: new Command(CATEGORY, null, (cmd, msg) => {
+	/* xd: new Command(CATEGORY, null, (cmd, msg) => {
 		let doUpper = msg.content[1] === msg.content[1].toUpperCase();
 		cmd.getConfig(msg, ['commands', 'xd', 'max'])
 			.then((max) => (doUpper ? 'XD' : 'xd').padEnd(Math.min(max ? max : 32, parseInt(msg.content.slice(prefix.length).trim().split(/ +/)[1])), doUpper ? 'D' : 'd'))
 			.then((schlong) => msg.channel.send(schlong))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	})
+	}) */
 }
 
 module.exports.XD = module.exports.xd;
