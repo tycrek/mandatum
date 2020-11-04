@@ -87,7 +87,7 @@ module.exports = {
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err))), */
 
-	meme: new Command(CATEGORY, null, (cmd, msg) =>
+	/* meme: new Command(CATEGORY, null, (cmd, msg) =>
 		fetch('https://imgflip.com/ajax_img_flip')
 			.then((res) => res.text())
 			.then((text) => text.split('/')[2])
@@ -97,7 +97,7 @@ module.exports = {
 				.setFooter('https://imgflip.com'))
 			.then((embed) => msg.channel.send(embed))
 			.then((botMsg) => trash(msg, botMsg))
-			.catch((err) => log.warn(err))),
+			.catch((err) => log.warn(err))), */
 
 	convert: new Command(CATEGORY, null, (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);

@@ -124,6 +124,10 @@ const inspireCommand = new InspireCommand(new CommandData('inspire')
 	.setCategory('fun')
 	.setDescription('Be inspired'))
 	.loadConfig();
+const memeCommand = new MemeCommand(new CommandData('meme')
+	.setCategory('fun')
+	.setDescription('Show a random meme from imgflip.com'))
+	.loadConfig();
 //#endregion
 
 //#endregion
@@ -204,6 +208,7 @@ const commands = {
 	mcskin: mcskinCommand,
 	shut: shutCommand,
 	inspire: inspireCommand,
+	meme: memeCommand,
 	//#endregion
 };
 
