@@ -128,6 +128,14 @@ const memeCommand = new MemeCommand(new CommandData('meme')
 	.setCategory('fun')
 	.setDescription('Show a random meme from imgflip.com'))
 	.loadConfig();
+const convertCommand = new ConvertCommand(new CommandData('convert')
+	.setCategory('fun')
+	.setDescription('Converts units')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('unit', 'Unit to convert', true))
+		.addArgument(new CommandArgument('value', 'Value to convert', true)))
+	.addNote('Currently only temperature is supported. Example: `convert temp 15c`'))
+	.loadConfig();
 //#endregion
 
 //#endregion
@@ -209,6 +217,7 @@ const commands = {
 	shut: shutCommand,
 	inspire: inspireCommand,
 	meme: memeCommand,
+	convert: convertCommand,
 	//#endregion
 };
 

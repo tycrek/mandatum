@@ -99,7 +99,7 @@ module.exports = {
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err))), */
 
-	convert: new Command(CATEGORY, null, (cmd, msg) => {
+	/* convert: new Command(CATEGORY, null, (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		args.shift();
 
@@ -115,7 +115,7 @@ module.exports = {
 						? (`${v1.replace('f', '')} Fahrenheit is ${((parseInt(v1.replace('f', '')) - 32) / 1.8).toFixed(2)} Celsius`)
 						: 'No units specified')
 				.then((botMsg) => trash(msg, botMsg));
-	}),
+	}), */
 
 	urban: new Command(CATEGORY, null, (cmd, msg) =>
 		fetch('https://api.urbandictionary.com/v0/random')
