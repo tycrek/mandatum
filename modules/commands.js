@@ -16,12 +16,27 @@ const UptimeCommand = require('./utility/uptime');
 const RolesCommand = require('./utility/roles');
 const RoleCommand = require('./utility/role');
 //#endregion
+//#region //* voice
 const VJoinCommand = require('./voice/vjoin');
 const VLeaveCommand = require('./voice/vleave');
 const VSearchCommand = require('./voice/vsearch');
 const VPauseCommand = require('./voice/vpause');
 const VResumeCommand = require('./voice/vresume');
 const VSkipCommand = require('./voice/vskip');
+//#endregion
+//#region //*fun
+const NameMCCommand = require('./fun/namemc');
+const BTCCommand = require('./fun/btc');
+const MCSkinCommand = require('./fun/mcskin');
+const ShutCommand = require('./fun/shut');
+const InspireCommand = require('./fun/inspire');
+const MemeCommand = require('./fun/meme');
+const ConvertCommand = require('./fun/convert');
+const UrbanCommand = require('./fun/urban');
+const MorseCommand = require('./fun/morse');
+const SchlongCommand = require('./fun/schlong');
+const XdCommand = require('./fun/xd');
+//#endregion
 //#endregion
 
 //#region //* Commands
