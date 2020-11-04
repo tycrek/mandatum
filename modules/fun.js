@@ -40,7 +40,7 @@ module.exports = {
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err))), */
 
-	mcskin: new Command(CATEGORY, new UsageEmbed('mcskin', '', false, ['username'], ['Minecraft username to display a skin for']), (cmd, msg) => {
+	/* mcskin: new Command(CATEGORY, new UsageEmbed('mcskin', '', false, ['username'], ['Minecraft username to display a skin for']), (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let command = args.shift();
 
@@ -55,7 +55,7 @@ module.exports = {
 				.setFooter('https://minotar.net'))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	}),
+	}), */
 
 	shut: new Command(CATEGORY, null, (cmd, msg) =>
 		msg.channel.send(

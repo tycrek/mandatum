@@ -110,7 +110,14 @@ const btcCommand = new BTCCommand(new CommandData('btc')
 	.setCategory('fun')
 	.setDescription('Get the current price of Bitcoin'))
 	.loadConfig();
+const mcskinCommand = new MCSkinCommand(new CommandData('mcskin')
+	.setCategory('fun')
+	.setDescription('Show a Minecraft user skin')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('username', 'Minecraft username to display a skin for', true))))
+	.loadConfig();
 //#endregion
+
 //#endregion
 
 const categories = ['info', 'utility', 'fun'];
@@ -186,6 +193,7 @@ const commands = {
 	//#region //* fun
 	namemc: nameMCCommand,
 	btc: btcCommand,
+	mcskin: mcskinCommand,
 	//#endregion
 };
 
