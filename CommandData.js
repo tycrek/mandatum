@@ -76,6 +76,10 @@ class CommandData {
 		return this.description;
 	}
 
+	getVariables() {
+		return this.variables;
+	}
+
 	getArguments() {
 		return this.args;
 	}
