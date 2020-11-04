@@ -57,13 +57,13 @@ module.exports = {
 			.catch((err) => log.warn(err));
 	}), */
 
-	shut: new Command(CATEGORY, null, (cmd, msg) =>
+	/* shut: new Command(CATEGORY, null, (cmd, msg) =>
 		msg.channel.send(
 			new MessageEmbed()
 				.setColor(0x0B1308)
 				.setImage('https://shutplea.se/'))
 			.then((botMsg) => Promise.all([trash(msg, botMsg, false), msg.delete()]))
-			.catch((err) => log.warn(err))),
+			.catch((err) => log.warn(err))), */
 
 	/*
 	face: (cmd, msg) =>

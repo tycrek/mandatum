@@ -116,6 +116,10 @@ const mcskinCommand = new MCSkinCommand(new CommandData('mcskin')
 	.setArguments(new CommandArguments()
 		.addArgument(new CommandArgument('username', 'Minecraft username to display a skin for', true))))
 	.loadConfig();
+const shutCommand = new ShutCommand(new CommandData('shut')
+	.setCategory('fun')
+	.setDescription('Shut up'))
+	.loadConfig();
 //#endregion
 
 //#endregion
@@ -194,6 +198,7 @@ const commands = {
 	namemc: nameMCCommand,
 	btc: btcCommand,
 	mcskin: mcskinCommand,
+	shut: shutCommand,
 	//#endregion
 };
 
