@@ -147,7 +147,7 @@ const morseCommand = new MorseCommand(new CommandData('morse')
 		.addVariable(new CommandVariable('max', 30)))
 	.setArguments(new CommandArguments()
 		.addArgument(new CommandArgument('text', 'String of words to convert to morse code', true)))
-	.addNote('Limited to length `max`. Can be changed.'))
+	.addNote('Limited to length `{{{max}}}`. Can be changed with the `max` variable.'))
 	.loadConfig();
 //#endregion
 

@@ -94,8 +94,8 @@ class Command {
 					' ',
 					false,
 					args.map((arg) => arg.getName()),
-					args.map((arg) => `${arg.getDescription()} ${arg.getRequired() ? '(required)' : ''}`),
-					this.commandData.getNotes()))
+					args.map((arg) => buildHelpSections(`${arg.getDescription()} ${arg.getRequired() ? '(required)' : ''}`, this.getPrefix(msg.guild.id), this.getCommandData().getVariables())),
+					this.getCommandData().getNotes().map((note) => buildHelpSections(note, this.getPrefix(msg.guild.id), this.getCommandData().getVariables()))))
 				.then((botMsg) => this.trash(msg, botMsg))
 				.then(resolve)
 				.catch(reject);
@@ -224,4 +224,18 @@ function handleError(msg, err) {
 	)
 		.then((botMsg) => trash(msg, botMsg))
 		.catch((err) => log.warn(err));
+}
+
+function buildHelpSections(text, prefix, variables) {
+	if (!text.includes('{{{')) return text;
+
+	text = text.replace(/\{\{\{prefix\}\}\}/g, prefix);
+	let count = (text.match(/\{\{\{(.*?)\}\}\}/g) || []).length;
+
+	for (let i = 0; i < count; i++) {
+		let key = text.split('{{{')[1].split('}}}')[0];
+		text = text.replace(`{{{${key}}}}`, variables.getVariable(key));
+	}
+
+	return text;
 }
