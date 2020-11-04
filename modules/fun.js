@@ -27,7 +27,7 @@ module.exports = {
 			.catch((err) => log.warn(err));
 	}), */
 
-	btc: new Command(CATEGORY, null, (cmd, msg) =>
+	/* btc: new Command(CATEGORY, null, (cmd, msg) =>
 		fetch('https://api.coindesk.com/v1/bpi/currentprice.json')
 			.then((res) => res.json())
 			.then((json) => json.bpi.USD.rate)
@@ -38,7 +38,7 @@ module.exports = {
 				.setFooter('https://www.coindesk.com/coindesk-api'))
 			.then((embed) => msg.channel.send(embed))
 			.then((botMsg) => trash(msg, botMsg))
-			.catch((err) => log.warn(err))),
+			.catch((err) => log.warn(err))), */
 
 	mcskin: new Command(CATEGORY, new UsageEmbed('mcskin', '', false, ['username'], ['Minecraft username to display a skin for']), (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);

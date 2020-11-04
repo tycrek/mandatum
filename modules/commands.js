@@ -106,6 +106,10 @@ const nameMCCommand = new NameMCCommand(new CommandData('namemc')
 	.setArguments(new CommandArguments()
 		.addArgument(new CommandArgument('username', 'Minecraft username to get a link for from NameMC', true))))
 	.loadConfig();
+const btcCommand = new BTCCommand(new CommandData('btc')
+	.setCategory('fun')
+	.setDescription('Get the current price of Bitcoin'))
+	.loadConfig();
 //#endregion
 //#endregion
 
@@ -180,7 +184,8 @@ const commands = {
 	//#endregion
 
 	//#region //* fun
-	namemc: nameMCCommand
+	namemc: nameMCCommand,
+	btc: btcCommand,
 	//#endregion
 };
 
