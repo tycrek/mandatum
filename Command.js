@@ -94,8 +94,8 @@ class Command {
 					' ',
 					false,
 					args.map((arg) => arg.getName()),
-					args.map((arg) => buildHelpSections(`${arg.getDescription()} ${arg.getRequired() ? '(required)' : ''}`, this.getPrefix(msg.guild.id), this.getCommandData().getVariables())),
-					this.getCommandData().getNotes().map((note) => buildHelpSections(note, this.getPrefix(msg.guild.id), this.getCommandData().getVariables()))))
+					args.map((arg) => buildHelpSections(`${arg.getDescription()} ${arg.getRequired() ? '(required)' : ''}`, this, msg.guild.id)),
+					this.getCommandData().getNotes().map((note) => buildHelpSections(note, this, msg.guild.id))))
 				.then((botMsg) => this.trash(msg, botMsg))
 				.then(resolve)
 				.catch(reject);
@@ -226,15 +226,15 @@ function handleError(msg, err) {
 		.catch((err) => log.warn(err));
 }
 
-function buildHelpSections(text, prefix, variables) {
+function buildHelpSections(text, command, guildId) {
 	if (!text.includes('{{{')) return text;
 
-	text = text.replace(/\{\{\{prefix\}\}\}/g, prefix);
+	text = text.replace(/\{\{\{prefix\}\}\}/g, command.getPrefix(guildId));
 	let count = (text.match(/\{\{\{(.*?)\}\}\}/g) || []).length;
 
 	for (let i = 0; i < count; i++) {
 		let key = text.split('{{{')[1].split('}}}')[0];
-		text = text.replace(`{{{${key}}}}`, variables.getVariable(key));
+		text = text.replace(`{{{${key}}}}`, command.getVariable(key, guildId));
 	}
 
 	return text;
