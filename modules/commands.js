@@ -149,6 +149,15 @@ const morseCommand = new MorseCommand(new CommandData('morse')
 		.addArgument(new CommandArgument('text', 'String of words to convert to morse code', true)))
 	.addNote('Limited to length `{{{max}}}`. Can be changed with the `max` variable.'))
 	.loadConfig();
+const schlongCommand = new SchlongCommand(new CommandData('schlong')
+	.setCategory('fun')
+	.setDescription('...')
+	.setVariables(new CommandVariables()
+		.addVariable(new CommandVariable('max', 30)))
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('length', 'Length of the schlong', true)))
+	.addNote('Limited to length `{{{max}}}`. Can be changed with the `max` variable.'))
+	.loadConfig();
 //#endregion
 
 //#endregion
@@ -233,6 +242,7 @@ const commands = {
 	convert: convertCommand,
 	urban: urbanCommand,
 	morse: morseCommand,
+	schlong: schlongCommand,
 	//#endregion
 };
 
