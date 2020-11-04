@@ -136,6 +136,10 @@ const convertCommand = new ConvertCommand(new CommandData('convert')
 		.addArgument(new CommandArgument('value', 'Value to convert', true)))
 	.addNote('Currently only temperature is supported. Example: `convert temp 15c`'))
 	.loadConfig();
+const urbanCommand = new UrbanCommand(new CommandData('urban')
+	.setCategory('fun')
+	.setDescription('Show a random definition from Urban Dictionary'))
+	.loadConfig();
 //#endregion
 
 //#endregion
@@ -218,6 +222,7 @@ const commands = {
 	inspire: inspireCommand,
 	meme: memeCommand,
 	convert: convertCommand,
+	urban: urbanCommand,
 	//#endregion
 };
 

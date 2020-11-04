@@ -117,7 +117,7 @@ module.exports = {
 				.then((botMsg) => trash(msg, botMsg));
 	}), */
 
-	urban: new Command(CATEGORY, null, (cmd, msg) =>
+	/* urban: new Command(CATEGORY, null, (cmd, msg) =>
 		fetch('https://api.urbandictionary.com/v0/random')
 			.then((res) => res.json())
 			.then((json) => json.list[0])
@@ -129,7 +129,7 @@ module.exports = {
 						.setDescription(`${word.definition.replace(/[\[\]]/g, '').substring(0, 200)}\n>>> ${word.example.replace(/[\[\]]/g, '').substring(0, 200)}`)
 						.setTimestamp(word.written_on)
 						.setFooter(`Definition by: ${word.author}`)))
-			.then((botMsg) => trash(msg, botMsg))),
+			.then((botMsg) => trash(msg, botMsg))), */
 
 	morse: new Command(CATEGORY, new UsageEmbed('morse', '', false, ['text'], ['String of words to convert to morse'], [`Max of \`${'max'}\` characters`]), (cmd, msg) => { //todo: fix max parameter
 		let args = msg.content.slice(prefix.length).trim().split(/ +/);
