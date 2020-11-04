@@ -10,7 +10,7 @@ const { log, trash, Command } = require('../utils');
 // export command functions
 module.exports = {
 
-	namemc: new Command(CATEGORY, new UsageEmbed('namemc', '', false, ['username'], ['Minecraft username to get a link from NameMC']), (cmd, msg) => {
+	/* namemc: new Command(CATEGORY, new UsageEmbed('namemc', '', false, ['username'], ['Minecraft username to get a link from NameMC']), (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let command = args.shift();
 
@@ -25,7 +25,7 @@ module.exports = {
 				.setFooter('https://namemc.com'))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	}),
+	}), */
 
 	btc: new Command(CATEGORY, null, (cmd, msg) =>
 		fetch('https://api.coindesk.com/v1/bpi/currentprice.json')

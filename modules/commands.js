@@ -97,9 +97,19 @@ const roleCommand = new RoleCommand(new CommandData('role')
 		.addArgument(new CommandArgument('roles', 'Roles to apply, separated by space. Must *exactly* match as shown in roles command.', true))))
 	.loadConfig();
 //#endregion
+//#region //* voice
+//#endregion
+//#region //* fun
+const nameMCCommand = new NameMCCommand(new CommandData('namemc')
+	.setCategory('fun')
+	.setDescription('Get a link to a NameMC profile')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('username', 'Minecraft username to get a link for from NameMC', true))))
+	.loadConfig();
+//#endregion
 //#endregion
 
-const categories = ['info', 'utility'];
+const categories = ['info', 'utility', 'fun'];
 const commands = {
 	//#region //*category test
 	/* test: new (require('./test/test'))(
@@ -157,13 +167,20 @@ const commands = {
 	about: aboutCommand,
 	//#endregion
 
-	//#region //*utility
+	//#region //* utility
 	link: linkCommand,
 	uuid: uuidCommand,
 	search: searchCommand,
 	uptime: uptimeCommand,
 	roles: rolesCommand,
-	role: roleCommand
+	role: roleCommand,
+	//#endregion
+
+	//#region //* voice
+	//#endregion
+
+	//#region //* fun
+	namemc: nameMCCommand
 	//#endregion
 };
 
