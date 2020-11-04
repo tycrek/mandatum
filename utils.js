@@ -177,7 +177,7 @@ module.exports = {
 
 	trash: trash,
 
-	categories: [/* 'info', */ 'fun', /* 'utility', */ 'voice', 'moderator', 'admin'],
+	categories: [/* 'info', */ 'fun', /* 'utility', */ /* 'voice', */ 'moderator', 'admin'],
 
 	splitArgs: (msg, prefix) => msg.content.slice(prefix.length).trim().split(/ +/)
 };
@@ -231,7 +231,7 @@ function neoFilter(msg) {
 
 				//! STEP 1
 				// Get a list of modules
-				let modules = [/* 'info', */ 'fun', /* 'utility', */ 'voice', 'moderator', 'admin'].map(category => ({
+				let modules = [/* 'info', */ 'fun', /* 'utility', */ /* 'voice', */ 'moderator', 'admin'].map(category => ({
 					module: category,
 					commands: Object.keys(require('./modules/' + category))
 				}));
