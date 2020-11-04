@@ -131,7 +131,7 @@ module.exports = {
 						.setFooter(`Definition by: ${word.author}`)))
 			.then((botMsg) => trash(msg, botMsg))), */
 
-	morse: new Command(CATEGORY, new UsageEmbed('morse', '', false, ['text'], ['String of words to convert to morse'], [`Max of \`${'max'}\` characters`]), (cmd, msg) => { //todo: fix max parameter
+	/* morse: new Command(CATEGORY, new UsageEmbed('morse', '', false, ['text'], ['String of words to convert to morse'], [`Max of \`${'max'}\` characters`]), (cmd, msg) => { //todo: fix max parameter
 		let args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let command = args.shift();
 
@@ -171,7 +171,7 @@ module.exports = {
 			})
 			.then(({ paddedOriginal, converted }) => msg.channel.send(`\`${paddedOriginal.join('  ')}\`\n\`${converted.join('  ')}\``))
 			.then((botMsg) => trash(msg, botMsg));
-	}),
+	}), */
 
 	schlong: new Command(CATEGORY, null, (cmd, msg) =>
 		cmd.getConfig(msg, ['commands', 'schlong', 'max'])

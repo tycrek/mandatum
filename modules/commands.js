@@ -140,6 +140,15 @@ const urbanCommand = new UrbanCommand(new CommandData('urban')
 	.setCategory('fun')
 	.setDescription('Show a random definition from Urban Dictionary'))
 	.loadConfig();
+const morseCommand = new MorseCommand(new CommandData('morse')
+	.setCategory('fun')
+	.setDescription('Convert text into morse code')
+	.setVariables(new CommandVariables()
+		.addVariable(new CommandVariable('max', 30)))
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('text', 'String of words to convert to morse code', true)))
+	.addNote('Limited to length `max`. Can be changed.'))
+	.loadConfig();
 //#endregion
 
 //#endregion
@@ -155,31 +164,31 @@ const commands = {
 				.addVariable(new CommandVariable('message', 'Hello bitch'))
 				.addVariable(new CommandVariable('number', 55))))
 		.loadConfig(),
-
+	
 	neoSetConfig: new (require('./test/neoSetConfig'))(
 		new CommandData('neoSetConfig')
 			.setCategory('admin')
 			.setDescription('foo'))
 		.loadConfig(),
-
+	
 	prefix: new (require('./test/prefix'))(
 		new CommandData('prefix')
 			.setCategory('admin')
 			.setDescription('Set the server prefix'))
 		.loadConfig(),
-
+	
 	noexectest: new (require('./test/noexectest'))(
 		new CommandData('noexectest')
 			.setCategory('admin')
 			.setDescription('test'))
 		.loadConfig(),
-
+	
 	bad: new (require('./test/bad'))(
 		new CommandData('bad')
 			.setCategory('admin')
 			.setDescription('another test'))
 		.loadConfig(),
-
+	
 	argtest: new (require('./test/argtest'))(
 		new CommandData('argtest')
 			.setCategory('admin')
@@ -223,6 +232,7 @@ const commands = {
 	meme: memeCommand,
 	convert: convertCommand,
 	urban: urbanCommand,
+	morse: morseCommand,
 	//#endregion
 };
 
