@@ -1,6 +1,5 @@
 const Command = require('../../Command');
 const { MessageEmbed } = require('discord.js');
-const fun = require('../fun');
 
 class HelpCommand extends Command {
 	execute(msg) {
