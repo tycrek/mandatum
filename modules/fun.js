@@ -75,7 +75,7 @@ module.exports = {
 				.setFooter('https://thispersondoesnotexist.com/')),
 	*/
 
-	inspire: new Command(CATEGORY, null, (cmd, msg) =>
+	/* inspire: new Command(CATEGORY, null, (cmd, msg) =>
 		fetch('https://inspirobot.me/api?generate=true')
 			.then((res) => res.text())
 			.then((text) => new MessageEmbed()
@@ -85,7 +85,7 @@ module.exports = {
 				.setFooter('https://inspirobot.me/'))
 			.then((embed) => msg.channel.send(embed))
 			.then((botMsg) => trash(msg, botMsg))
-			.catch((err) => log.warn(err))),
+			.catch((err) => log.warn(err))), */
 
 	meme: new Command(CATEGORY, null, (cmd, msg) =>
 		fetch('https://imgflip.com/ajax_img_flip')

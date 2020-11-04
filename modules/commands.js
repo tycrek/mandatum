@@ -120,6 +120,10 @@ const shutCommand = new ShutCommand(new CommandData('shut')
 	.setCategory('fun')
 	.setDescription('Shut up'))
 	.loadConfig();
+const inspireCommand = new InspireCommand(new CommandData('inspire')
+	.setCategory('fun')
+	.setDescription('Be inspired'))
+	.loadConfig();
 //#endregion
 
 //#endregion
@@ -199,6 +203,7 @@ const commands = {
 	btc: btcCommand,
 	mcskin: mcskinCommand,
 	shut: shutCommand,
+	inspire: inspireCommand,
 	//#endregion
 };
 
