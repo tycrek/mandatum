@@ -68,11 +68,11 @@ class Command {
 	 * @param {Message} msg Message to use in execution
 	 */
 	async superExec(msg) {
-		const command = this.parseArgs(msg, true).command;
-		const server = msg.guild, channel = msg.channel, author = msg.author;
-		log.debug(`[NEW COMMAND] >${command} ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
-
 		try {
+			const command = this.parseArgs(msg, true).command;
+			const server = msg.guild, channel = msg.channel, author = msg.author;
+			log.debug(`[NEW COMMAND] >${command} ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
+
 			await this.execute(msg).catch((err) => { throw err; });
 		} catch (err) {
 			if (err.name === 'RequiredError') this.help(msg).catch((err) => handleError(msg, err));

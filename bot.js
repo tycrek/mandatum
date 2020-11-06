@@ -186,15 +186,7 @@ client.on('message', (msg) => {
 			catch (err) { !(err instanceof TypeError) && log.warn(err) }
 
 			//* new command system
-			try { neocom.getCommand(msg.content.slice(pre.length).trim().split(/ +/)[0]).superExec(msg); }
-			catch (err) {
-				if (!(err instanceof TypeError)) {
-					log.warn(err);
-					msg.channel.send(`Error: \`${err.message}\``)
-						.then((botMsg) => trash(msg, botMsg))
-						.catch((err) => log.warn(err));
-				}
-			}
+			neocom.getCommand(msg.content.slice(pre.length).trim().split(/ +/)[0]).superExec(msg);
 		})
 		.catch((err) => log.warn(err));
 });
