@@ -93,7 +93,7 @@ class CommandData {
 	}
 
 	getNotes() {
-		return this.notes;
+		return this.notes || [];
 	}
 
 	//#endregion
