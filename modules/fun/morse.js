@@ -35,7 +35,8 @@ class MorseCommand extends Command {
 			paddedOriginal.push(args[i].padStart(parseInt(morseLength - cutLength), ' ').padEnd(morseLength, ' '));
 		}
 
-		return msg.channel.send(`\`${paddedOriginal.join('  ')}\`\n\`${converted.join('  ')}\``)
+		const empty = '‎'; //* There is a character here!! It comes from: https://emptycharacter.com/
+		return msg.channel.send(`\`${empty}${paddedOriginal.join('  ')}\`\n\`${converted.join('  ')}\``)
 			.then((botMsg) => this.trash(msg, botMsg));
 	}
 }
