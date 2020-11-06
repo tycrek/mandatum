@@ -74,7 +74,7 @@ var commands = {
 	//...require('./modules/fun'),
 	//...require('./modules/utility'),
 	//...require('./modules/voice'),
-	...require('./modules/moderator'),
+	//...require('./modules/moderator'),
 	...require('./modules/admin')
 };
 var neocom = require('./modules/commands');

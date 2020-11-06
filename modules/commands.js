@@ -37,6 +37,15 @@ const MorseCommand = require('./fun/morse');
 const SchlongCommand = require('./fun/schlong');
 const XdCommand = require('./fun/xd');
 //#endregion
+//#region //* moderator
+const ClearCommand = require('./moderator/clear');
+const KickCommand = require('./moderator/kick');
+const DroleCommand = require('./moderator/drole');
+const CroleCommand = require('./moderator/crole');
+const StealCommand = require('./moderator/steal');
+const VoteCommand = require('./moderator/vote');
+const ColoursCommand = require('./moderator/colours');
+//#endregion
 //#endregion
 
 //#region //* Commands
@@ -168,10 +177,64 @@ const xdCommand = new XdCommand(new CommandData('xd')
 	.addNote('Limited to length `{{{max}}}`. Can be changed with the `max` variable.'))
 	.loadConfig();
 //#endregion
-
+//#region //* moderator
+const clearCommand = new ClearCommand(new CommandData('clear')
+	.setCategory('moderator')
+	.setDescription('Bulk delete messages')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('amount', 'Number of messages to delete', true)))
+	.addNote('This command may take a while to run due to Discord rate limiting'))
+	.loadConfig();
+const kickCommand = new KickCommand(new CommandData('kick')
+	.setCategory('moderator')
+	.setDescription('Kick a user from the server')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('@user', 'User to kick', true))
+		.addArgument(new CommandArgument('reason', 'Reason for kick', true))))
+	.loadConfig();
+const droleCommand = new DroleCommand(new CommandData('drole')
+	.setCategory('moderator')
+	.setDescription('Delete a role')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('@role', 'Role to delete', true))))
+	.loadConfig();
+const croleCommand = new CroleCommand(new CommandData('crole')
+	.setCategory('moderator')
+	.setDescription('Create a role')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('"name"', 'Role name (can have spaces)', true))
+		.addArgument(new CommandArgument('"color"', 'Must be a [ColorResolvable](https://discord.js.org/#/docs/main/stable/typedef/ColorResolvable)', true))
+		.addArgument(new CommandArgument('"permissions"', 'Must be `NONE` or a [PermissionResolvable](https://discord.js.org/#/docs/main/stable/typedef/PermissionResolvable)', true))
+		.addArgument(new CommandArgument('"mentionable"', 'Whether or not the role can be mentioned by any users. Must be either `true` or `false`', true)))
+	.addNote('All parameters must be contained within "quotes"'))
+	.loadConfig();
+const stealCommand = new StealCommand(new CommandData('steal')
+	.setCategory('moderator')
+	.setDescription('Steal emojis from other servers (Nitro required)')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('emojis', 'Emojis to steal, separated by space', true)))
+	.addNote('Due to Discord rate limiting, only 5 emoji can be added at a time')
+	.addNote(
+		'If you do not have access to the server an emoji is from (another Nitro user used it), you can use any of the following format formats:' + '\n' +
+		'`  {{{prefix}}}steal emojiname:https://cdn.discord.com/emojis/......`' + '\n' +
+		'`  {{{prefix}}}steal :emojiname:emojiID`' + '\n' +
+		'`  {{{prefix}}}steal a:emojiname:emojiID` (used for animated emoji)'
+	))
+	.loadConfig();
+const voteCommand = new VoteCommand(new CommandData('vote')
+	.setCategory('moderator')
+	.setDescription('Vote on a topic using 👍 and 👎')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('time', 'Time in seconds to run vote for', true))
+		.addArgument(new CommandArgument('topic', 'Topic to vote on', true))))
+	.loadConfig();
+const coloursCommand = new ColoursCommand(new CommandData('colours')
+	.setCategory('moderator')
+	.setDescription('Display available colours Discord supports (not including hex values)'))
+	.loadConfig();
+//#endregion
 //#endregion
 
-const categories = ['info', 'utility', 'fun'];
 const commands = {
 	//#region //*category test
 	/* test: new (require('./test/test'))(
@@ -255,7 +318,20 @@ const commands = {
 	xd: xdCommand,
 	XD: xdCommand,
 	//#endregion
+
+	//#region //* moderator
+	clear: clearCommand,
+	kick: kickCommand,
+	drole: droleCommand,
+	crole: croleCommand,
+	steal: stealCommand,
+	vote: voteCommand,
+	colours: coloursCommand,
+	colors: coloursCommand,
+	//#endregion
 };
+
+const categories = ['info', 'utility', 'fun', 'moderator'];
 
 module.exports = {
 	getCategories: () => categories,
