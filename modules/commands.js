@@ -46,6 +46,9 @@ const StealCommand = require('./moderator/steal');
 const VoteCommand = require('./moderator/vote');
 const ColoursCommand = require('./moderator/colours');
 //#endregion
+//#region //* admin
+
+//#endregion
 //#endregion
 
 //#region //* Commands
@@ -232,6 +235,9 @@ const coloursCommand = new ColoursCommand(new CommandData('colours')
 	.setCategory('moderator')
 	.setDescription('Display available colours Discord supports (not including hex values)'))
 	.loadConfig();
+//#endregion
+//#region //* admin
+
 //#endregion
 //#endregion
 
