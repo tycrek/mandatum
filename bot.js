@@ -137,7 +137,7 @@ client.once('ready', () => {
 	});
 
 	// Custom status
-	client.user.setActivity(`the world burn (${prefix})`, { type: "WATCHING" })
+	client.user.setActivity(`the world burn (refactor)`, { type: "WATCHING" })
 		.catch((err) => log.warn(err));
 });
 
