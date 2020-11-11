@@ -47,7 +47,9 @@ const VoteCommand = require('./moderator/vote');
 const ColoursCommand = require('./moderator/colours');
 //#endregion
 //#region //* admin
-
+const PrefixCommand = require('./admin/prefix');
+const SetConfigCommand = require('./admin/setconfig');
+const GetConfigCommand = require('./admin/getconfig');
 //#endregion
 //#endregion
 
@@ -237,7 +239,33 @@ const coloursCommand = new ColoursCommand(new CommandData('colours')
 	.loadConfig();
 //#endregion
 //#region //* admin
-
+const prefixCommand = new PrefixCommand(new CommandData('prefix')
+	.setCategory('admin')
+	.setDescription('Change the bot prefix for this server')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('prefix', 'Prefix to use for this server', false)))
+	.addNote('Leaving `prefix` blank will set it to the global bot default: `>`'))
+	.loadConfig();
+const setConfigCommand = new SetConfigCommand(new CommandData('setconfig')
+	.setCategory('admin')
+	.setDescription('Sets a value in the server config file')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('section', 'Section of the config to edit. Either `settings` or `commands`', true))
+		.addArgument(new CommandArgument('setting', 'Item in `section` to set a value for', true))
+		.addArgument(new CommandArgument('key', 'Key to set a value for', true))
+		.addArgument(new CommandArgument('value', 'Value to set for `key` in `setting`', true)))
+	.addNote('`s` and `c` can be used in place of `settings` and `commands`')
+	.addNote('To remove something from the config, use `-` in place of either `value` or `key`'))
+	.loadConfig();
+const getConfigCommand = new GetConfigCommand(new CommandData('getconfig')
+	.setCategory('admin')
+	.setDescription('Get the server config')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('section', 'Section of the config to retrieve', false))
+		.addArgument(new CommandArgument('setting', 'Setting in `section` to retrieve', false))
+		.addArgument(new CommandArgument('key', 'Key to retrieve', false)))
+	.addNote('Any of these arguments may be omitted'))
+	.loadConfig();
 //#endregion
 //#endregion
 
@@ -335,9 +363,15 @@ const commands = {
 	colours: coloursCommand,
 	colors: coloursCommand,
 	//#endregion
+
+	//#region //* admin
+	prefix: prefixCommand,
+	setconfig: setConfigCommand,
+	getconfig: getConfigCommand,
+	//#endregion
 };
 
-const categories = ['info', 'utility', 'fun', 'moderator'];
+const categories = ['info', 'utility', 'fun', 'moderator', 'admin'];
 
 module.exports = {
 	getCategories: () => categories,

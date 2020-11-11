@@ -13,23 +13,23 @@ const TycrekCert = require('tycrek-certs-custom');
 // export command functions
 module.exports = {
 
-	getconfig: new Command(CATEGORY, null, (cmd, msg) => {
+	/* getconfig: new Command(CATEGORY, null, (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		args.shift();
 
 		cmd.getConfig(msg, args)
 			.then((result) => msg.channel.send(`\`\`\`json\n${JSON.stringify(result, null, 2)}\`\`\``))
 			.then((botMsg) => trash(msg, botMsg));
-	}),
+	}), */
 
-	setconfig: new Command(CATEGORY, null, (cmd, msg) => {
+	/* setconfig: new Command(CATEGORY, null, (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		args.shift();
 
 		cmd.setConfig(msg, args)
 			.then((result) => msg.channel.send(result))
 			.then((botMsg) => trash(msg, botMsg));
-	}),
+	}), */
 
 	release: new Command(CATEGORY, null, (cmd, msg) => {
 		if (!filter.author(msg, owner)) return noPermission(msg);
