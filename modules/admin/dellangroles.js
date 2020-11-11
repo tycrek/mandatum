@@ -1,9 +1,13 @@
 const Command = require('../../Command');
-const { MessageEmbed } = require('discord.js');
 
 class DelLangRolesCommand extends Command {
 	execute(msg) {
-		return;
+		let config = this.getConfig(msg.guild.id).settings.langroles.langroles;
+		return Promise.all(Object.keys(config).map((roleData) => msg.guild.roles.fetch(config[roleData])))
+			.then((roles) => Promise.all(roles.map((role) => role.delete())))
+			.then(() => this.setConfig(msg, 'settings', 'langroles', '-'))
+			.then((_results) => msg.channel.send('Deleted language roles'))
+			.then((botMsg) => this.trash(msg, botMsg));
 	}
 }
 
