@@ -51,6 +51,8 @@ const PrefixCommand = require('./admin/prefix');
 const SetConfigCommand = require('./admin/setconfig');
 const GetConfigCommand = require('./admin/getconfig');
 const SendCommand = require('./admin/send');
+const StatsCommand = require('./admin/stats');
+const DelStatsCommand = require('./admin/delstats');
 //#endregion
 //#endregion
 
@@ -274,6 +276,17 @@ const sendCommand = new SendCommand(new CommandData('send')
 		.addArgument(new CommandArgument('count', 'Number of messages to send', true)))
 	.addNote('Messages may only appear to send 5 at a time; this is due to Discord rate limiting and is unavoidable'))
 	.loadConfig();
+const statsCommand = new StatsCommand(new CommandData('stats')
+	.setCategory('admin')
+	.setDescription('Create locked "voice" channels to view server stats such as Member count, Bot count, and server creation date')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('category-name', 'Title of the category for the stats channels', true)))
+	.addNote('Spaces are permitted in `category-name`'))
+	.loadConfig();
+const delStatsCommand = new DelStatsCommand(new CommandData('delstats')
+	.setCategory('admin')
+	.setDescription('Delete the stats channels'))
+	.loadConfig();
 //#endregion
 //#endregion
 
@@ -377,6 +390,8 @@ const commands = {
 	setconfig: setConfigCommand,
 	getconfig: getConfigCommand,
 	send: sendCommand,
+	stats: statsCommand,
+	delstats: delStatsCommand,
 	//#endregion
 };
 

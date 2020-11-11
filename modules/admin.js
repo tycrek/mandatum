@@ -92,7 +92,7 @@ module.exports = {
 			.catch((err) => log.warn(err));
 	}), */
 
-	stats: new Command(CATEGORY, null, (cmd, msg) => {
+	/* stats: new Command(CATEGORY, null, (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let command = args.shift();
 		let category = args.join('-');
@@ -127,9 +127,9 @@ module.exports = {
 			.then(() => msg.channel.send('Stats channels created successfully.'))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	}),
+	}), */
 
-	delstats: new Command(CATEGORY, null, (cmd, msg) => {
+	/* delstats: new Command(CATEGORY, null, (cmd, msg) => {
 		let configPath = path.join(__dirname, `../config/servers/guild.${msg.guild.id}.json`);
 
 		let config;
@@ -142,7 +142,7 @@ module.exports = {
 			.then((_results) => msg.channel.send('Deleted stats channels'))
 			.then((botMsg) => trash(msg, botMsg))
 			.catch((err) => log.warn(err));
-	}),
+	}), */
 
 	/* 'jmdev:certs': new Command(CATEGORY, null, (cmd, msg) => {
 		if (!filter.author(msg, owner)) return noPermission(msg);
