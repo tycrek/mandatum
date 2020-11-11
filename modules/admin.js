@@ -31,7 +31,7 @@ module.exports = {
 			.then((botMsg) => trash(msg, botMsg));
 	}), */
 
-	release: new Command(CATEGORY, null, (cmd, msg) => {
+	/* release: new Command(CATEGORY, null, (cmd, msg) => {
 		if (!filter.author(msg, owner)) return noPermission(msg);
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let project = args[1];
@@ -54,7 +54,7 @@ module.exports = {
 
 		msg.channel.send(embed)
 			.catch((err) => log.warn(err));
-	}),
+	}), */
 
 	/* send: new Command(CATEGORY, new UsageEmbed('send', '', false, ['count'], ['How many messages to send']), (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
@@ -144,7 +144,7 @@ module.exports = {
 			.catch((err) => log.warn(err));
 	}),
 
-	'jmdev:certs': new Command(CATEGORY, null, (cmd, msg) => {
+	/* 'jmdev:certs': new Command(CATEGORY, null, (cmd, msg) => {
 		if (!filter.author(msg, owner)) return noPermission(msg);
 
 		let testing = require('os').hostname() !== 'ubuntu-s-1vcpu-1gb-tor1-01';
@@ -197,7 +197,7 @@ module.exports = {
 		function numberWithCommas(x) {
 			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		}
-	}),
+	}), */
 
 	langroles: new Command(CATEGORY, null, (cmd, msg) => {
 		const labelRole = {
