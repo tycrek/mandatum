@@ -56,7 +56,7 @@ module.exports = {
 			.catch((err) => log.warn(err));
 	}),
 
-	send: new Command(CATEGORY, new UsageEmbed('send', '', false, ['count'], ['How many messages to send']), (cmd, msg) => {
+	/* send: new Command(CATEGORY, new UsageEmbed('send', '', false, ['count'], ['How many messages to send']), (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);
 		let count = parseInt(args[1]);
 
@@ -90,7 +90,7 @@ module.exports = {
 			.then(() => msg.member.createDM())
 			.then((channel) => channel.send(`**${count}** messages created!`))
 			.catch((err) => log.warn(err));
-	}),
+	}), */
 
 	stats: new Command(CATEGORY, null, (cmd, msg) => {
 		const args = msg.content.slice(prefix.length).trim().split(/ +/);

@@ -50,6 +50,7 @@ const ColoursCommand = require('./moderator/colours');
 const PrefixCommand = require('./admin/prefix');
 const SetConfigCommand = require('./admin/setconfig');
 const GetConfigCommand = require('./admin/getconfig');
+const SendCommand = require('./admin/send');
 //#endregion
 //#endregion
 
@@ -266,6 +267,13 @@ const getConfigCommand = new GetConfigCommand(new CommandData('getconfig')
 		.addArgument(new CommandArgument('key', 'Key to retrieve', false)))
 	.addNote('Any of these arguments may be omitted'))
 	.loadConfig();
+const sendCommand = new SendCommand(new CommandData('send')
+	.setCategory('admin')
+	.setDescription('Send a certain number of messages (useful for testing auto deletion or spam detection')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('count', 'Number of messages to send', true)))
+	.addNote('Messages may only appear to send 5 at a time; this is due to Discord rate limiting and is unavoidable'))
+	.loadConfig();
 //#endregion
 //#endregion
 
@@ -368,6 +376,7 @@ const commands = {
 	prefix: prefixCommand,
 	setconfig: setConfigCommand,
 	getconfig: getConfigCommand,
+	send: sendCommand,
 	//#endregion
 };
 
