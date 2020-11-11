@@ -172,10 +172,12 @@ client.on('guildMemberRemove', (member) => statsUpdate(member, 1));
 
 // Command processor
 client.on('message', (msg) => {
+	if (msg.channel.type === 'dm' || msg.author.bot) return;
+
 	let guildConfig = readJson(path.join(__dirname, `./config/servers/guild.${msg.guild.id}.json`));
 	let pre = guildConfig.prefix || prefix;
 
-	if (!msg.content.startsWith(pre) || msg.channel.type === 'dm' || msg.author.bot || msg.content[1] === ' ' || msg.content.length < 2) return;
+	if (!msg.content.startsWith(pre) || msg.content[1] === ' ' || msg.content.length < 2) return;
 
 	// Filter the command using the new filter system
 	neoFilter(msg)
