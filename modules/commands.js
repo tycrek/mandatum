@@ -53,6 +53,8 @@ const GetConfigCommand = require('./admin/getconfig');
 const SendCommand = require('./admin/send');
 const StatsCommand = require('./admin/stats');
 const DelStatsCommand = require('./admin/delstats');
+const LangRolesCommand = require('./admin/langroles');
+const DelLangRolesCommand = require('./admin/dellangroles');
 //#endregion
 //#endregion
 
