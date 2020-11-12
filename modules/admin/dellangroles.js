@@ -6,7 +6,7 @@ class DelLangRolesCommand extends Command {
 		return Promise.all(Object.keys(config).map((roleData) => msg.guild.roles.fetch(config[roleData])))
 			.then((roles) => Promise.all(roles.map((role) => role.delete())))
 			.then(() => this.setConfig(msg, 'settings', 'langroles', '-'))
-			.then((_results) => msg.channel.send('Deleted language roles'))
+			.then(() => msg.channel.send('Deleted language roles'))
 			.then((botMsg) => this.trash(msg, botMsg));
 	}
 }
