@@ -71,7 +71,7 @@ class Command {
 		try {
 			const command = this.parseArgs(msg, true).command;
 			const server = msg.guild, channel = msg.channel, author = msg.author;
-			log.debug(`[NEW COMMAND] >${command} ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
+			log.debug(`[COMMAND] >${command} ran in [${server.name}:${channel.name}] [${server.id}:${channel.id}] by @${author.tag}`);
 
 			await this.execute(msg).catch((err) => { throw err; });
 		} catch (err) {
