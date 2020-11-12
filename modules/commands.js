@@ -289,6 +289,14 @@ const delStatsCommand = new DelStatsCommand(new CommandData('delstats')
 	.setCategory('admin')
 	.setDescription('Delete the stats channels'))
 	.loadConfig();
+const langRolesCommand = new LangRolesCommand(new CommandData('langroles')
+	.setCategory('admin')
+	.setDescription('Creates programming languages roles for the server'))
+	.loadConfig();
+const delLangRolesCommand = new DelLangRolesCommand(new CommandData('dellangroles')
+	.setCategory('admin')
+	.setDescription('Deletes programming languages roles'))
+	.loadConfig();
 //#endregion
 //#endregion
 
@@ -394,6 +402,8 @@ const commands = {
 	send: sendCommand,
 	stats: statsCommand,
 	delstats: delStatsCommand,
+	langroles: langRolesCommand,
+	dellangroles: delLangRolesCommand
 	//#endregion
 };
 
