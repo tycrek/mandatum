@@ -177,7 +177,9 @@ module.exports = {
 
 	trash: trash,
 
-	categories: ['info', 'fun', 'utility', 'voice', 'moderator', 'admin']
+	categories: [/* 'info', */ /* 'fun', */ /* 'utility', */ /* 'voice', */ /* 'moderator', */ /* 'admin' */],
+
+	splitArgs: (msg, prefix) => msg.content.slice(prefix.length).trim().split(/ +/)
 };
 
 function trash(userMsg, botMsg, deleteUser = true) {
@@ -190,8 +192,11 @@ function trash(userMsg, botMsg, deleteUser = true) {
 function neoFilter(msg) {
 	return new Promise((resolve, reject) => {
 
+		let guildConfig = fs.readJsonSync(path.join(__dirname, `./config/servers/guild.${msg.guild.id}.json`));
+		let pre = guildConfig.prefix || require('./bot').prefix;
+
 		// Extract the command string without the prefix
-		const args = msg.content.slice(require('./bot').prefix.length).trim().split(/ +/);
+		const args = msg.content.slice(pre.length).trim().split(/ +/);
 		let cmd = args.shift();
 
 		// Prep ID's for later use
@@ -216,9 +221,17 @@ function neoFilter(msg) {
 			// Process the filters
 			.then((settings) => {
 
+
+				//* testing for new command system
+				let neocmd = require('./modules/commands').getCommand(cmd);
+				if (neocmd && (neocmd.getCommandData().getCategory() === 'admin' || neocmd.getCommandData().getCategory() === 'moderator'))
+					return resolve(false);
+				//* end new system test
+
+
 				//! STEP 1
 				// Get a list of modules
-				let modules = ['info', 'fun', 'utility', 'voice', 'moderator', 'admin'].map(category => ({
+				let modules = [/* 'info', */ /* 'fun', */ /* 'utility', */ /* 'voice', */ /* 'moderator', */ /* 'admin' */].map(category => ({
 					module: category,
 					commands: Object.keys(require('./modules/' + category))
 				}));
