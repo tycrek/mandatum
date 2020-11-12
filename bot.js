@@ -27,7 +27,6 @@ const USING_VPN = false;
 if (USING_VPN && process.env.NODE_ENV !== 'production') process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 //#region  Imports
-
 // discord.js for Discord API
 const { Client } = require('discord.js');
 
@@ -35,57 +34,41 @@ const { Client } = require('discord.js');
 const path = require('path');
 const fs = require('fs-extra');
 
-const { log, readJson, writeJson, neoFilter, noPermission, trash } = require('./utils');
-
+// My own stuff from utils.js
+const { log, readJson, writeJson, neoFilter, noPermission } = require('./utils');
 //#endregion
 
 //#region Variables
-
-// servers where the bot is active
+// Servers where the bot is active //todo: automate this
 const guilds = require('./config/guilds');
 
-// bot owner, has access to everything; prefix for bot commands
 const { owner, prefix } = require('./config/config');
 
 // Discord client
 const client = new Client();
 
+// Bot commands
+var commands = require('./modules/commands');
 //#endregion
 
 //#region Startup tasks
-
-//* (1/4) Version check (need node 11 or later)
+//* Version check (need node 11 or later)
 if (process.version.match(/^v(\d+\.\d+)/)[1].split('.')[0] <= 11) {
 	log.fatal(`Must be using Node.js 11 or later! Current version: ${process.version}`);
 	return process.exit(1);
 }
 
-//* (2/4) Export everything
+//* Export everything
+//todo: revist; this may not be required
 module.exports = {
 	client: client,
 	owner: owner,
 	guilds: guilds,
 	prefix: prefix
 };
-
-//* (3/4) Set up commands
-var commands = {
-	//...require('./modules/info'),
-	//...require('./modules/fun'),
-	//...require('./modules/utility'),
-	//...require('./modules/voice'),
-	//...require('./modules/moderator'),
-	//...require('./modules/admin')
-};
-var neocom = require('./modules/commands');
-
-//* (4/4) Add commands to exports
-module.exports.commands = commands;
-
 //#endregion
 
-//#region client events
-
+//#region Client events
 // When client is ready (after it logs in)
 client.once('ready', () => {
 	log.info('Beep, boop! mandatum is ready :)');
@@ -184,15 +167,10 @@ client.on('message', (msg) => {
 		.then((allowed) => {
 			if (typeof allowed === typeof [] && !allowed[0] && !allowed[1]) return;
 			else if (!allowed) return noPermission(msg);
-			try { commands[msg.content.slice(pre.length).trim().split(/ +/)[0]].execute(msg) }
-			catch (err) { !(err instanceof TypeError) && log.warn(err) }
-
-			//* new command system
-			neocom.getCommand(msg.content.slice(pre.length).trim().split(/ +/)[0]).superExec(msg);
+			commands.getCommand(msg.content.slice(pre.length).trim().split(/ +/)[0]).superExec(msg);
 		})
 		.catch((err) => log.warn(err));
 });
-
 //#endregion
 
 //* Log in to Discord using token
