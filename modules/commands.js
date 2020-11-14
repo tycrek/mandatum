@@ -55,6 +55,7 @@ const StatsCommand = require('./admin/stats');
 const DelStatsCommand = require('./admin/delstats');
 const LangRolesCommand = require('./admin/langroles');
 const DelLangRolesCommand = require('./admin/dellangroles');
+const RulesReactionCommand = require('./admin/rulesreaction');
 //#endregion
 //#endregion
 
@@ -297,6 +298,12 @@ const delLangRolesCommand = new DelLangRolesCommand(new CommandData('dellangrole
 	.setCategory('admin')
 	.setDescription('Deletes programming languages roles'))
 	.loadConfig();
+const rulesReactionCommand = new RulesReactionCommand(new CommandData('rulesreaction')
+	.setCategory('admin')
+	.setDescription('React to a message to confirm a user read the rules')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('@role', 'Role to assign', true))))
+	.loadConfig();
 //#endregion
 //#endregion
 
@@ -403,7 +410,8 @@ const commands = {
 	stats: statsCommand,
 	delstats: delStatsCommand,
 	langroles: langRolesCommand,
-	dellangroles: delLangRolesCommand
+	dellangroles: delLangRolesCommand,
+	rulesreaction: rulesReactionCommand
 	//#endregion
 };
 

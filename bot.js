@@ -119,6 +119,31 @@ client.once('ready', () => {
 			.catch((err) => log.warn(err.message));
 	});
 
+	// Rules reaction listener
+	client.guilds.cache.each((guild) => {
+		let configPath = path.join(__dirname, `config/servers/guild.${guild.id}.json`);
+		fs.readJson(configPath)
+			.then((config) => {
+				if (!config.settings.rulesreaction) throw new Error('IGNORE');
+				else return config.settings.rulesreaction;
+			})
+			.then((rulesreaction) => Promise.all([rulesreaction, guild.channels.resolve(rulesreaction.channelId).messages.fetch(rulesreaction.messageId)]))
+			.then((results) => {
+				let rulesreaction = results[0];
+				let message = results[1];
+
+				let collector = message.createReactionCollector((mReaction, user) => mReaction.emoji.name == rulesreaction.emojiName);
+				collector.on('collect', (reaction, user) => {
+					reaction.message.reactions.resolve(reaction).users.remove(user.id);
+					reaction.message.guild.members.resolve(user.id).roles.add(rulesreaction.roleId);
+				});
+			})
+			.catch((err) => {
+				if (err.message === 'IGNORE') return;
+				else log.warn(err);
+			});
+	});
+
 	// Custom status
 	client.user.setActivity(`the world burn`, { type: "WATCHING" })
 		.catch((err) => log.warn(err));
