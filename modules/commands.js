@@ -128,7 +128,11 @@ const nameMCCommand = new NameMCCommand(new CommandData('namemc')
 	.loadConfig();
 const btcCommand = new BTCCommand(new CommandData('btc')
 	.setCategory('fun')
-	.setDescription('Get the current price of Bitcoin'))
+	.setDescription('Get the current price of Bitcoin')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('[currency]/bal', 'Specific currency to see the current price of Bitcoin, or `bal` to check a wallet balance', false))
+		.addArgument(new CommandArgument('address', 'Address to check when using `bal` mode. This is NOT required for a simple value check.', true))
+		.addArgument(new CommandArgument('currency', 'Used to check a specific currency when using `bal` mode.', false))))
 	.loadConfig();
 const mcskinCommand = new MCSkinCommand(new CommandData('mcskin')
 	.setCategory('fun')
