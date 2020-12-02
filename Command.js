@@ -141,6 +141,11 @@ class Command {
 			} else if (key === 'cooldown') {
 				if (!config[configType][setting][key]) config[configType][setting][key] = {};
 				config[configType][setting][key][msg.guild.id] = value;
+			} else if (key === 'roles') {
+				if (!config[configType][setting][key]) config[configType][setting][key] = [];
+				value.startsWith('+')
+					? config[configType][setting][key].push(value.replace('+', ''))
+					: config[configType][setting][key].splice(config[configType][setting][key].indexOf(value.replace('-', '')), 1)
 			} else {
 				config[configType][setting][key] = value;
 			}
