@@ -44,8 +44,15 @@ class LangRolesCommand extends Command {
 			{ name: 'Vue', color: '#41B883' }
 		];
 
-		return msg.guild.roles.create({ data: labelRole })
-			.then((role) => Promise.all([role].concat(languages.map((language) => msg.guild.roles.create({ data: language })))))
+		let settings = this.getConfig(msg.guild.id).settings;
+
+		let labelPromise = !settings.langroles ? msg.guild.roles.create({ data: labelRole }) : new Promise((resolve) => resolve({ name: labelRole.name, id: settings.langroles.langroles[labelRole.name] }));
+
+		return labelPromise
+			.then((role) => Promise.all([role].concat(languages.map((language) =>
+				!settings.langroles || !settings.langroles.langroles[language.name]
+					? msg.guild.roles.create({ data: language })
+					: new Promise((resolve) => resolve({ name: language.name, id: settings.langroles.langroles[language.name] }))))))
 			.then((results) => {
 				let saveData = {};
 				results.forEach((result) => saveData[result.name] = result.id);
