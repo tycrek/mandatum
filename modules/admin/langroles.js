@@ -29,6 +29,7 @@ class LangRolesCommand extends Command {
 			{ name: 'Perl', color: '#004065' },
 			{ name: 'PHP', color: '#787CB4' },
 			{ name: 'PowerShell', color: '#0274B9' },
+			{ name: 'Pug.js', color: '#56332B' },
 			{ name: 'Python', color: '#3471A2' },
 			{ name: 'R', color: '#246ABF' },
 			{ name: 'React', color: '#05CFF9' },
