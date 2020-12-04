@@ -114,7 +114,7 @@ const roleCommand = new RoleCommand(new CommandData('role')
 	.setCategory('utility')
 	.setDescription('Apply programming roles to user')
 	.setArguments(new CommandArguments()
-		.addArgument(new CommandArgument('roles', 'Roles to apply, separated by space. Must *exactly* match as shown in roles command.', true))))
+		.addArgument(new CommandArgument('roles', 'Roles to apply, separated by space (case-insensitive). Up to 10 at a time', true))))
 	.loadConfig();
 //#endregion
 //#region //* voice
