@@ -108,13 +108,15 @@ const uptimeCommand = new UptimeCommand(new CommandData('uptime')
 	.loadConfig();
 const rolesCommand = new RolesCommand(new CommandData('roles')
 	.setCategory('utility')
-	.setDescription('Display available programming language roles'))
+	.setDescription('Display available programming language roles')
+	.addNote('Run `{{{prefix}}}role` to assign roles'))
 	.loadConfig();
 const roleCommand = new RoleCommand(new CommandData('role')
 	.setCategory('utility')
 	.setDescription('Apply programming roles to user')
 	.setArguments(new CommandArguments()
-		.addArgument(new CommandArgument('roles', 'Roles to apply, separated by space (case-insensitive). Up to 10 at a time', true))))
+		.addArgument(new CommandArgument('roles', 'Roles to apply, separated by space (case-insensitive). Up to 10 at a time', true)))
+	.addNote('Run `{{{prefix}}}roles` to see available roles'))
 	.loadConfig();
 //#endregion
 //#region //* voice
