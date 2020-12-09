@@ -33,6 +33,7 @@ class LangRolesCommand extends Command {
 			{ name: 'Python', color: '#3471A2' },
 			{ name: 'R', color: '#246ABF' },
 			{ name: 'React', color: '#05CFF9' },
+			{ name: 'Regex', color: '#64DD17' },
 			{ name: 'Ruby', color: '#AD1300' },
 			{ name: 'Rust', color: '#000000' },
 			{ name: 'Sass', color: '#CC6699' },
@@ -41,6 +42,7 @@ class LangRolesCommand extends Command {
 			{ name: 'Swift', color: '#FB4227' },
 			{ name: 'SQL', color: '#318CC9' },
 			{ name: 'TypeScript', color: '#007ACC' },
+			{ name: 'V', color: '#5D87BF' },
 			{ name: 'VBA', color: '#4477B9' },
 			{ name: 'Vue', color: '#41B883' }
 		];
