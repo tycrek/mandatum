@@ -1,0 +1,16 @@
+{
+	"name": "ttRMS",
+	"id": "790994004493074432",
+	"admins": [],
+	"settings": {
+		"rulesreaction": {
+			"roleId": "792567793718526024",
+			"guildId": "790994004493074432",
+			"channelId": "792609665146028082",
+			"messageId": "803330665042542702",
+			"emojiName": "👍"
+		}
+	},
+	"commands": {},
+	"prefix": ">"
+}
