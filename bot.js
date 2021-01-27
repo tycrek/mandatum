@@ -39,16 +39,13 @@ const { log, readJson, writeJson, neoFilter, noPermission } = require('./utils')
 //#endregion
 
 //#region Variables
-// Servers where the bot is active //todo: automate this
-const guilds = require('./config/guilds');
-
 const { owner, prefix } = require('./config/config');
 
 // Discord client
 const client = new Client();
 
 // Bot commands
-var commands = require('./modules/commands');
+var commands;
 //#endregion
 
 //#region Startup tasks
@@ -61,10 +58,9 @@ if (process.version.match(/^v(\d+\.\d+)/)[1].split('.')[0] <= 11) {
 //* Export everything
 //todo: revist; this may not be required
 module.exports = {
-	client: client,
-	owner: owner,
-	guilds: guilds,
-	prefix: prefix
+	client,
+	owner,
+	prefix
 };
 //#endregion
 
@@ -73,10 +69,14 @@ module.exports = {
 client.once('ready', () => {
 	log.info('Beep, boop! mandatum is ready :)');
 
-	// Check configurations
-	client.guilds.cache.each((guild) => {
+	// Guild operations
+	client.guilds.cache.forEach((guild) => {
+		let config;
+
 		let configPath = path.join(__dirname, `config/servers/guild.${guild.id}.json`);
 		fs.exists(configPath)
+
+			// Write configs
 			.then((exists) => {
 				if (!exists) {
 					let template = readJson(path.join(__dirname, 'config/servers/__template.json'));
@@ -85,19 +85,13 @@ client.once('ready', () => {
 					writeJson(configPath, template);
 					log.info(`Wrote new config for guild ${guild.name} (${guild.id})`);
 				}
-				else log.info(`Found config for guild ${guild.name} (${guild.id})`);
-			});
-	});
-
-	// Update members if needed
-	client.guilds.cache.each((guild) => {
-		let configPath = path.join(__dirname, `config/servers/guild.${guild.id}.json`);
-		fs.exists(configPath)
-			.then((exists) => {
-				if (!exists) throw Error('');
-				else return fs.readJson(configPath);
+				else log.debug(`Found config for guild ${guild.name} (${guild.id})`);
 			})
-			.then((config) => {
+			.then(() => fs.readJson(configPath))
+			.then((c) => config = c)
+
+			// Update stats
+			.then(() => {
 				if (!config.stats) throw Error(`No stats for guild [${guild.id}], ignoring`);
 				else return Promise.all([
 					client.guilds.resolve(guild.id).members.fetch(),
@@ -116,14 +110,9 @@ client.once('ready', () => {
 
 				return Promise.all([results[1].setName(newMembers), results[2].setName(newBots)]);
 			})
-			.catch((err) => log.warn(err.message));
-	});
 
-	// Rules reaction listener
-	client.guilds.cache.each((guild) => {
-		let configPath = path.join(__dirname, `config/servers/guild.${guild.id}.json`);
-		fs.readJson(configPath)
-			.then((config) => {
+			// Rules reaction listener
+			.then(() => {
 				if (!config.settings.rulesreaction) throw new Error('IGNORE');
 				else return config.settings.rulesreaction;
 			})
@@ -140,9 +129,10 @@ client.once('ready', () => {
 			})
 			.catch((err) => {
 				if (err.message === 'IGNORE') return;
-				else log.warn(err);
+				else log.warn(err.message);
 			});
 	});
+	commands = require('./modules/commands');
 
 	// Custom status
 	client.user.setActivity(`the world burn`, { type: "WATCHING" })

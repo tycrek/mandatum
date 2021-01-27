@@ -5,6 +5,7 @@ const { CommandData, CommandVariables, CommandVariable } = require('./CommandDat
 const { readJson, writeJson, log, splitArgs, trash } = require('./utils');
 const RequiredError = require('./RequiredError');
 const Message = require('discord.js').Message;
+const client = require('./bot').client;
 
 class Command {
 
@@ -23,8 +24,8 @@ class Command {
 	 * @returns {Command} This command
 	 */
 	loadConfig() {
-		let guilds = require('./config/guilds.json').guilds;
-		guilds.forEach((guildId) => {
+		client.guilds.cache.forEach((guild) => {
+			let guildId = guild.id;
 			let guildConfigPath = path.join(__dirname, `./config/servers/guild.${guildId}.json`);
 			if (fs.existsSync(guildConfigPath)) this.config[guildId] = require(guildConfigPath);
 			else {
