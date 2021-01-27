@@ -56,6 +56,8 @@ const DelStatsCommand = require('./admin/delstats');
 const LangRolesCommand = require('./admin/langroles');
 const DelLangRolesCommand = require('./admin/dellangroles');
 const RulesReactionCommand = require('./admin/rulesreaction');
+const PromoteCommand = require('./admin/promote');
+const DemoteCommand = require('./admin/demote');
 //#endregion
 //#endregion
 
@@ -310,57 +312,22 @@ const rulesReactionCommand = new RulesReactionCommand(new CommandData('rulesreac
 	.setArguments(new CommandArguments()
 		.addArgument(new CommandArgument('@role', 'Role to assign', true))))
 	.loadConfig();
+const promoteCommand = new PromoteCommand(new CommandData('promote')
+	.setCategory('admin')
+	.setDescription('Promotes a user to Admin status (for Mandatum permissions only)')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('snowflake', 'The user or role ID to promote', true))))
+	.loadConfig();
+const demoteCommand = new DemoteCommand(new CommandData('demote')
+	.setCategory('admin')
+	.setDescription('Demotes a user from Admin status (for Mandatum permissions only)')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('snowflake', 'The user or role ID to demote', true))))
+	.loadConfig();
 //#endregion
 //#endregion
 
 const commands = {
-	//#region //*category test
-	/* test: new (require('./test/test'))(
-		new CommandData('test')
-			.setCategory('admin')
-			.setDescription('A test command')
-			.setVariables(new CommandVariables()
-				.addVariable(new CommandVariable('message', 'Hello bitch'))
-				.addVariable(new CommandVariable('number', 55))))
-		.loadConfig(),
-	
-	neoSetConfig: new (require('./test/neoSetConfig'))(
-		new CommandData('neoSetConfig')
-			.setCategory('admin')
-			.setDescription('foo'))
-		.loadConfig(),
-	
-	prefix: new (require('./test/prefix'))(
-		new CommandData('prefix')
-			.setCategory('admin')
-			.setDescription('Set the server prefix'))
-		.loadConfig(),
-	
-	noexectest: new (require('./test/noexectest'))(
-		new CommandData('noexectest')
-			.setCategory('admin')
-			.setDescription('test'))
-		.loadConfig(),
-	
-	bad: new (require('./test/bad'))(
-		new CommandData('bad')
-			.setCategory('admin')
-			.setDescription('another test'))
-		.loadConfig(),
-	
-	argtest: new (require('./test/argtest'))(
-		new CommandData('argtest')
-			.setCategory('admin')
-			.setDescription('another test')
-			.setVariables(new CommandVariables()
-				.addVariable(new CommandVariable('length', 30))
-				.addVariable(new CommandVariable('max', 50)))
-			.setArguments(new CommandArguments()
-				.addArgument(new CommandArgument('length', 'Length to expand character to', false, 'length'))
-				.addArgument(new CommandArgument('character', 'Character to expand', true))))
-		.loadConfig(), */
-
-	//#endregion
 
 	//#region //* info
 	help: helpCommand,
@@ -417,7 +384,9 @@ const commands = {
 	delstats: delStatsCommand,
 	langroles: langRolesCommand,
 	dellangroles: delLangRolesCommand,
-	rulesreaction: rulesReactionCommand
+	rulesreaction: rulesReactionCommand,
+	promote: promoteCommand,
+	demote: demoteCommand
 	//#endregion
 };
 

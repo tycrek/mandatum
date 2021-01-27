@@ -177,9 +177,13 @@ module.exports = {
 
 	trash: trash,
 
-	categories: [/* 'info', */ /* 'fun', */ /* 'utility', */ /* 'voice', */ /* 'moderator', */ /* 'admin' */],
+	splitArgs: (msg, prefix) => msg.content.slice(prefix.length).trim().split(/ +/),
 
-	splitArgs: (msg, prefix) => msg.content.slice(prefix.length).trim().split(/ +/)
+	removeItemOnce: (arr, value) => {
+		let index = arr.indexOf(value)
+		if (index > -1) arr.splice(index, 1);
+		return arr;
+	}
 };
 
 function trash(userMsg, botMsg, deleteUser = true) {
@@ -202,7 +206,6 @@ function neoFilter(msg) {
 		// Prep ID's for later use
 		let guild = msg.guild.id;
 		let channel = msg.channel.id;
-		let category = msg.channel.parentID;
 		let author = msg.member.id;
 		let roles = msg.member.roles.cache;
 
@@ -220,55 +223,24 @@ function neoFilter(msg) {
 
 			// Process the filters
 			.then((settings) => {
+				let commands = require('./modules/commands');
+				let category = commands.getCommand(cmd).getCommandData().getCategory();
 
-
-				//* testing for new command system
-				let neocmd = require('./modules/commands').getCommand(cmd);
-				if (neocmd && (neocmd.getCommandData().getCategory() === 'admin' || neocmd.getCommandData().getCategory() === 'moderator'))
+				//! Step 1: Check if admin-only command is run by admin
+				let isAdmin = false;
+				config.admins.length !== 0 && !isAdmin && roles.each((role) => !isAdmin && config.admins.includes(role.id) || config.admins.includes(author) ? isAdmin = true : {});
+				if ((category === 'admin' || category === 'moderator') && !isAdmin)
 					return resolve(false);
-				//* end new system test
 
-
-				//! STEP 1
-				// Get a list of modules
-				let modules = [/* 'info', */ /* 'fun', */ /* 'utility', */ /* 'voice', */ /* 'moderator', */ /* 'admin' */].map(category => ({
-					module: category,
-					commands: Object.keys(require('./modules/' + category))
-				}));
-
-				// Check admin/moderator commands. These commands MUST have roles assigned
-				for (let module in modules) {
-					module = modules[module];
-					if (
-						//* First check: is the current iteration admin or moderator
-						(module.module === 'admin' || module.module === 'moderator') &&
-
-						//* Second check: does the current module iteration have the command being run
-						module.commands.includes(cmd) &&
-
-						//* Third check: both admins and roles don't exist for this guild/command
-						((config.admins.length === 0) && (!settings || !settings.roles || settings.roles.length === 0))
-					)
-						return resolve(false);
-				}
-
-				//! STEP idk: command might be disabled on server
+				//! Step 2: Check if command is diabled for server
 				if (settings && settings.enabled != null && settings.enabled == 'false')
 					return resolve([false, false]);
 
-				//! STEP 2: Is user admin
-				// Admins as they can run everything
-				let isAdmin = false;
-				config.admins.length !== 0 && !isAdmin && roles.each((role) => !isAdmin && config.admins.includes(role.id) || config.admins.includes(author) ? isAdmin = true : {});
-				if (isAdmin)
-					return resolve(true);
-
-				//! STEP 3: Excluded channel/category
-				// Check if channel or category is excluded
+				//! Step 3: Check if channel or category doesn't allow command
 				if (settings && settings.excludedChannels && (settings.excludedChannels.includes(channel) || settings.excludedChannels.includes(category)))
 					return resolve(false);
 
-				//! STEP 4: Check roles
+				//! Step 4: Check roles
 				// If no roles are assigned, assume everyone can run the command
 				if (!settings || !settings.roles || settings.roles.length === 0) resolve(true);
 				else {

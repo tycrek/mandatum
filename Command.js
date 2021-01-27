@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const UsageEmbed = require('./UsageEmbed');
 const { CommandData, CommandVariables, CommandVariable } = require('./CommandData');
-const { readJson, writeJson, log, splitArgs, trash } = require('./utils');
+const { readJson, writeJson, log, splitArgs, trash, removeItemOnce } = require('./utils');
 const RequiredError = require('./RequiredError');
 const Message = require('discord.js').Message;
 const client = require('./bot').client;
@@ -128,6 +128,8 @@ class Command {
 		let config = this.getConfig(msg.guild.id);
 
 		if (configType === 'prefix') config.prefix = setting;
+		else if (configType === 'promote') config.admins.push(setting);
+		else if (configType === 'demote') config.admins = removeItemOnce(config.admins, setting);
 		else if (!(configType.startsWith('c') || configType.startsWith('s'))) return 'Not implemented';
 		else {
 			configType = configType.startsWith('c') ? 'commands' : 'settings';
