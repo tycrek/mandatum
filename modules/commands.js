@@ -58,6 +58,7 @@ const DelLangRolesCommand = require('./admin/dellangroles');
 const RulesReactionCommand = require('./admin/rulesreaction');
 const PromoteCommand = require('./admin/promote');
 const DemoteCommand = require('./admin/demote');
+const RoleFixCommand = require('./admin/rolefix');
 //#endregion
 //#endregion
 
@@ -324,6 +325,12 @@ const demoteCommand = new DemoteCommand(new CommandData('demote')
 	.setArguments(new CommandArguments()
 		.addArgument(new CommandArgument('snowflake', 'The user or role ID to demote', true))))
 	.loadConfig();
+const roleFixCommand = new RoleFixCommand(new CommandData('rolefix')
+	.setCategory('admin')
+	.setDescription('Applies a role to everyone')
+	.setArguments(new CommandArguments()
+		.addArgument(new CommandArgument('roleId', 'ID of role to apply', true))))
+	.loadConfig();
 //#endregion
 //#endregion
 
@@ -386,7 +393,8 @@ const commands = {
 	dellangroles: delLangRolesCommand,
 	rulesreaction: rulesReactionCommand,
 	promote: promoteCommand,
-	demote: demoteCommand
+	demote: demoteCommand,
+	rolefix: roleFixCommand
 	//#endregion
 };
 
