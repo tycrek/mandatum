@@ -1,7 +1,9 @@
 {
 	"name": "Coding Crew",
 	"id": "751793035565727816",
-	"admins": [],
+	"admins": [
+		"754051405571948705"
+	],
 	"settings": {
 		"langroles": {
 			"langroles": {
